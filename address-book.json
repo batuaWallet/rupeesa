@@ -1,0 +1,10 @@
+{
+  "1337": {
+    "TestToken": {
+      "address": "0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0",
+      "creationCodeHash": "0x7718e66b61f46f4706f29ddfc408436b7cf98af2c4fb1a8b1511966a4eaa2a46",
+      "runtimeCodeHash": "0xa8f843e319622eb671cc86c1b222536f725b2bd9938fb72127cb670e08415f78",
+      "txHash": "0xde229e0d4aa6f0473110b460058012955d5d02151e50110aa7135b33e800c0cf"
+    }
+  }
+}

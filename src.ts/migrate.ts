@@ -7,9 +7,7 @@ import { isContractDeployed, deployContract } from "./deployContract";
 
 const { formatEther } = utils;
 
-export const migrate = async (ethProviderUrl: string, addressBookPath: string): Promise<void> => {
-
-  const mnemonic = process.env.ETH_MNEMONIC || "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat";
+export const migrate = async (ethProviderUrl: string, mnemonic: string, addressBookPath: string): Promise<void> => {
 
   const provider = new providers.JsonRpcProvider(ethProviderUrl);
   const wallet = Wallet.fromMnemonic(mnemonic).connect(provider);

@@ -35,7 +35,18 @@ restart-oracle: stop-oracle
 stop-oracle:
 	bash ops/stop.sh oracle
 
-clean:
+start-ethprovider:
+	bash ops/start-ethprovider.sh
+restart-ethprovider: stop-ethprovider
+	bash ops/start-ethprovider.sh
+stop-ethprovider:
+	bash ops/stop.sh ethprovider
+
+stop-all:
+	bash ops/stop.sh oracle
+	bash ops/stop.sh ethprovider
+
+clean: stop-all
 	rm -rf .flags/*
 	rm -rf artifacts/*
 	rm -rf dist/*
