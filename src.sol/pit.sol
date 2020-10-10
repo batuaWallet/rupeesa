@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2017  Rain Break <rainbreak@riseup.net>
 
 // pit.sol -- a simple token burner

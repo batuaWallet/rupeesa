@@ -1,12 +1,13 @@
-pragma solidity =0.6.6;
+// SPDX-License-Identifier: GPL-3.0-or-later
 
-import '@uniswap/lib/contracts/libraries/TransferHelper.sol';
+pragma solidity ^0.7.0;
 
-import '../interfaces/IUniswapV2Factory.sol';
 import '../interfaces/IERC20.sol';
+import '../interfaces/IUniswapV2Factory.sol';
 import '../interfaces/IUniswapV2Router.sol';
 import '../interfaces/IWETH.sol';
 import '../lib/SafeMath.sol';
+import '../lib/TransferHelper.sol';
 import '../lib/UniswapV2Library.sol';
 
 contract UniswapV2Router02 is IUniswapV2Router {

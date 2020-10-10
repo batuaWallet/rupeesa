@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2017  Nikolai Mushegian <nikolai@dapphub.com>
 // Copyright (C) 2017  Daniel Brockman <daniel@dapphub.com>
 // Copyright (C) 2017  Rain Break <rainbreak@riseup.net>
