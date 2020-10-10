@@ -2,9 +2,9 @@
 
 pragma solidity ^0.7.0;
 
-import "./IUniswapV2ERC20.sol";
+import "./IUniswapERC20.sol";
 
-interface IUniswapV2Pair is IUniswapV2ERC20 {
+interface IUniswapPair is IUniswapERC20 {
 
     event Mint(address indexed sender, uint amount0, uint amount1);
     event Burn(address indexed sender, uint amount0, uint amount1, address indexed to);

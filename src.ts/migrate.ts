@@ -34,8 +34,8 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
   const schema = [
     ["WETH", []],
     ["DSToken", [hexlify(zeroPad(toUtf8Bytes("GOV"),32))]],
-    ["UniswapV2Factory", [wallet.address]],
-    ["UniswapV2Router", [wallet.address]],
+    ["UniswapFactory", [wallet.address]],
+    ["UniswapRouter", [wallet.address]],
     ["Pip", []],
     ["Pep", []],
     ["GemFab", []],
@@ -107,8 +107,8 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
   // Create Uniswap Pools
   console.log("\nChecking Uniswap Pools..");
 
-  const uniswapFactory = registry.UniswapV2Factory;
-  const uniswapRouter = registry.UniswapV2Router;
+  const uniswapFactory = registry.UniswapFactory;
+  const uniswapRouter = registry.UniswapRouter;
 
   let pairAddress = await uniswapFactory.getPair(gem.address, gov.address);
   if (!pairAddress || pairAddress === AddressZero) {
@@ -123,7 +123,7 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
     } as AddressBookEntry);
   }
   console.log(`Uniswap pair is at ${pairAddress} for ${gem.address}:${gov.address}`);
-  const pair = new Contract(pairAddress, artifacts["UniswapV2Pair"].abi, wallet);
+  const pair = new Contract(pairAddress, artifacts["UniswapPair"].abi, wallet);
 
   const gemAmt = formatEther("100");
   const govAmt = formatEther("1000");

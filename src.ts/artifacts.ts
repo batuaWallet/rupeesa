@@ -36,8 +36,8 @@ import * as TapFab from "../artifacts/TapFab.json";
 import * as TestToken from "../artifacts/TestToken.json";
 import * as TopFab from "../artifacts/TopFab.json";
 import * as TubFab from "../artifacts/TubFab.json";
-import * as UniswapV2Factory from "../artifacts/UniswapV2Factory.json";
-import * as UniswapV2Router from "../artifacts/UniswapV2Router.json";
+import * as UniswapFactory from "../artifacts/UniswapFactory.json";
+import * as UniswapRouter from "../artifacts/UniswapRouter.json";
 import * as VoxFab from "../artifacts/VoxFab.json";
 import * as WETH from "../artifacts/WETH.json";
 
@@ -89,8 +89,8 @@ export const artifacts: Artifacts = {
   TestToken,
   TopFab,
   TubFab,
-  UniswapV2Factory,
-  UniswapV2Router,
+  UniswapFactory,
+  UniswapRouter,
   VoxFab,
   WETH,
 } as any;
@@ -132,8 +132,8 @@ export {
   TestToken,
   TopFab,
   TubFab,
-  UniswapV2Factory,
-  UniswapV2Router,
+  UniswapFactory,
+  UniswapRouter,
   VoxFab,
   WETH,
 };

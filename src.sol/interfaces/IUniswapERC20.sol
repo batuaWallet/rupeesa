@@ -2,7 +2,7 @@
 
 pragma solidity ^0.7.0;
 
-interface IUniswapV2ERC20 {
+interface IUniswapERC20 {
     event Approval(address indexed owner, address indexed spender, uint value);
     event Transfer(address indexed from, address indexed to, uint value);
 

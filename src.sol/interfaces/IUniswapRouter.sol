@@ -2,7 +2,7 @@
 
 pragma solidity ^0.7.0;
 
-interface IUniswapV2Router {
+interface IUniswapRouter {
     // function factory() external pure returns (address);
     // function WETH() external pure returns (address);
 
