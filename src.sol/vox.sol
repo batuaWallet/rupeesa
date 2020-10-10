@@ -27,7 +27,7 @@ contract SaiVox is DSThing {
         return block.timestamp;
     }
 
-    function mold(bytes32 param, uint val) public note auth {
+    function mold(bytes32 param, uint val) public payable note auth {
         if (param == "way") _way = val;
     }
 
@@ -41,14 +41,14 @@ contract SaiVox is DSThing {
         return _way;
     }
 
-    function tell(uint256 ray) public note auth {
+    function tell(uint256 ray) public payable note auth {
         fix = ray;
     }
-    function tune(uint256 ray) public note auth {
+    function tune(uint256 ray) public payable note auth {
         how = ray;
     }
 
-    function prod() public note {
+    function prod() public payable note {
         uint256 age = era() - tau;
         if (age == 0) return;  // optimised
         tau = era();

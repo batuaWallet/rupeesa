@@ -67,11 +67,11 @@ contract SaiTop is DSThing {
         tap.vent();    // burn pending sale skr
     }
     // cage by reading the last value from the feed for the price
-    function cage() public note auth {
+    function cage() public payable note auth {
         cage(rdiv(uint(tub.pip().read()), vox.par()));
     }
 
-    function flow() public note {
+    function flow() public payable note {
         require(tub.off());
         bool empty = tub.din() == 0 && tap.fog() == 0;
         bool ended = era() > caged + cooldown;

@@ -20,7 +20,7 @@ contract DSSpell is DSExec, DSNote {
         data = data_;
     }
     // Only marked "done" if CALL succeeds (not exceptional condition).
-    function cast() public note {
+    function cast() public payable note {
         require( !done );
         exec(whom, data, mana);
         done = true;

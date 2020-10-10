@@ -35,6 +35,7 @@ contract DSChiefApprovals is DSThing {
 
     function lock(uint wad)
         public
+        payable
         note
     {
         GOV.pull(msg.sender, wad);
@@ -45,6 +46,7 @@ contract DSChiefApprovals is DSThing {
 
     function free(uint wad)
         public
+        payable
         note
     {
         deposits[msg.sender] = sub(deposits[msg.sender], wad);
@@ -55,6 +57,7 @@ contract DSChiefApprovals is DSThing {
 
     function etch(address[] calldata yays)
         public
+        payable
         note
         returns (bytes32 slate)
     {
@@ -77,6 +80,7 @@ contract DSChiefApprovals is DSThing {
 
     function vote(bytes32 slate)
         public
+        payable
         note
     {
         uint weight = deposits[msg.sender];
@@ -88,6 +92,7 @@ contract DSChiefApprovals is DSThing {
     // like `drop`/`swap` except simply "elect this address if it is higher than current hat"
     function lift(address whom)
         public
+        payable
         note
     {
         require(approvals[whom] > approvals[hat]);
@@ -139,12 +144,12 @@ contract DSChief is DSRoles, DSChiefApprovals {
         owner = address(0);
     }
 
-    function setOwner(address owner_) public override {
+    function setOwner(address owner_) public override pure {
         owner_;
         revert();
     }
 
-    function setAuthority(DSAuthority authority_) public override {
+    function setAuthority(DSAuthority authority_) public override pure {
         authority_;
         revert();
     }
@@ -157,7 +162,7 @@ contract DSChief is DSRoles, DSChiefApprovals {
     {
         return (who == hat);
     }
-    function setRootUser(address who, bool enabled) public override {
+    function setRootUser(address who, bool enabled) public override pure {
         who; enabled;
         revert();
     }

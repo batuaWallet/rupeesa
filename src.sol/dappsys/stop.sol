@@ -16,10 +16,10 @@ contract DSStop is DSNote, DSAuth {
         require(!stopped);
         _;
     }
-    function stop() public auth note {
+    function stop() public auth payable note {
         stopped = true;
     }
-    function start() public auth note {
+    function start() public auth payable note {
         stopped = false;
     }
 

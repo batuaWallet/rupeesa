@@ -46,12 +46,12 @@ contract SaiTap is DSThing {
         gap = WAD;
     }
 
-    function mold(bytes32 param, uint val) public note auth {
+    function mold(bytes32 param, uint val) public payable note auth {
         if (param == "gap") gap = val;
     }
 
     // Cancel debt
-    function heal() public note {
+    function heal() public payable note {
         if (joy() == 0 || woe() == 0) return;  // optimised
         uint wad = min(joy(), woe());
         sai.burn(wad);
@@ -88,34 +88,34 @@ contract SaiTap is DSThing {
         sai.push(msg.sender, bid(wad));
         skr.burn(msg.sender, wad);
     }
-    function bust(uint wad) public note {
+    function bust(uint wad) public payable note {
         require(!off);
         if (wad > fog()) flop(wad);
         else flip(wad);
     }
-    function boom(uint wad) public note {
+    function boom(uint wad) public payable note {
         require(!off);
         flap(wad);
     }
 
     //------------------------------------------------------------------
 
-    function cage(uint fix_) public note auth {
+    function cage(uint fix_) public payable note auth {
         require(!off);
         off = true;
         fix = fix_;
     }
-    function cash(uint wad) public note {
+    function cash(uint wad) public payable note {
         require(off);
         sai.burn(msg.sender, wad);
         require(tub.gem().transfer(msg.sender, rmul(wad, fix)));
     }
-    function mock(uint wad) public note {
+    function mock(uint wad) public payable note {
         require(off);
         sai.mint(msg.sender, wad);
         require(tub.gem().transferFrom(msg.sender, address(this), rmul(wad, fix)));
     }
-    function vent() public note {
+    function vent() public payable note {
         require(off);
         skr.burn(fog());
     }
