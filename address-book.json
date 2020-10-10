@@ -1,28 +1,28 @@
 {
   "1337": {
     "WETH": {
-      "address": "0x4E72770760c011647D4873f60A3CF6cDeA896CD8",
-      "creationCodeHash": "0x8c4776cf92509e264d0ed73b3b17afbd2d1b406efe207a308c2582fabd4da23b",
-      "runtimeCodeHash": "0xec870e98ced8e47fe659db3a8775d598f0e635591403c9956435bc7fc5a17304",
-      "txHash": "0x6ca5780e96ef24a4dc8c52d3d3b68e211c2f1669d47df6fac3ab15a48a40e129"
+      "address": "0x98d9f9e8DEbd4A632682ba207670d2a5ACD3c489",
+      "creationCodeHash": "0xcb2bd75408d335023eb4f9807db4757ef9f4ac0c5ec55be8a86545e4d1068fa1",
+      "runtimeCodeHash": "0x2c12d8f99c4f08203334863d6461b1967bfb69ea59b6ec018d524ad65525b24e",
+      "txHash": "0xf84ee701cbd98ade11320414114881550ff2824d7dc1c7fc1629193084f59a48"
     },
     "DSToken": {
-      "address": "0xbaAA2a3237035A2c7fA2A33c76B44a8C6Fe18e87",
+      "address": "0x8e4C131B37383E431B9cd0635D3cF9f3F628EDae",
       "args": [
         "0x0000000000000000000000000000000000000000000000000000000000474f56"
       ],
-      "creationCodeHash": "0xaf022e8137cf0858458616b3a51ed561e9a9a3e526f55da2c230dfb345f2f527",
-      "runtimeCodeHash": "0x7d430b6de207d854ad2580b259563afb61b9fdbe55a7a8e8b5c773deda8dfffd",
-      "txHash": "0x00d55c19fe98784e8aca9f5cf416d6507c6d1a9f7e6074348c845cd4f73a4b59"
+      "creationCodeHash": "0x3efcf280cc6176cb92f26a89ed567a3c53e2d412ef135c7874051b96362acafe",
+      "runtimeCodeHash": "0x9cfe5f81a8540f20892e48165c536656083ee8f3179b536a60511a837022081e",
+      "txHash": "0x8bf2a56d3621c66a4863c94ff0069e3959fd320cfcc6a6302aac2645c1711b56"
     },
     "UniswapV2Factory": {
-      "address": "0x13274Fe19C0178208bCbee397af8167A7be27f6f",
+      "address": "0x1411CB266FCEd1587b0AA29E9d5a9Ef3Db64A9C5",
       "args": [
         "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"
       ],
-      "creationCodeHash": "0xe9222167e09e41224e538d798206a8ccd174f1489e52eb2ff553e7c84b4af46d",
-      "runtimeCodeHash": "0x06bf3bf8976975d1ec71a9aeb71ddba7b8831ecc3f3763ce0b2e910a6a432a28",
-      "txHash": "0x4d4fb9352b48ddfa76c2355fe706d4ce27459d6705a885c69b0e2965715d8ea5"
+      "creationCodeHash": "0xea516efabd2ed940c3a8e865ccbc5430639d0fee1964b29a38647a029c1686db",
+      "runtimeCodeHash": "0x6af26ab0a81d691999f244ae96833d60774ced186faea30ce906a40687d9f462",
+      "txHash": "0xbc64e7fac03b6fd417c36aeda5e128f4821493603dcfe982c544611484e66e59"
     },
     "Pip": {
       "address": "0xA4392264a2d8c998901D10C154C91725b1BF0158",

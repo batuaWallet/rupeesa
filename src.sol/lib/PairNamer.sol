@@ -2,15 +2,20 @@
 
 pragma solidity ^0.7.0;
 
-import './SafeERC20Namer.sol';
+import "./SafeERC20Namer.sol";
 
 // produces names for pairs of tokens using Uniswap's naming scheme
 library PairNamer {
-    string private constant TOKEN_SYMBOL_PREFIX = 'unicorn ';
-    string private constant TOKEN_SEPARATOR = ':';
+    string private constant TOKEN_SYMBOL_PREFIX = "unicorn ";
+    string private constant TOKEN_SEPARATOR = ":";
 
     // produces a pair descriptor in the format of `${prefix}${name0}:${name1}${suffix}`
-    function pairName(address token0, address token1, string memory prefix, string memory suffix) internal view returns (string memory) {
+    function pairName(
+        address token0,
+        address token1,
+        string memory prefix,
+        string memory suffix
+    ) internal view returns (string memory) {
         return string(
             abi.encodePacked(
                 prefix,
