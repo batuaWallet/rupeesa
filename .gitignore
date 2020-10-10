@@ -1,1 +1,9 @@
 *.docker-compose.yml
+.cache
+.config
+.flags
+.local
+.npm
+artifacts
+cache
+node_modules
