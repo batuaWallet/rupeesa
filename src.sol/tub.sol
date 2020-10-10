@@ -1,27 +1,15 @@
-/// tub.sol -- simplified CDP engine (baby brother of `vat')
-
+// SPDX-License-Identifier: GPL-3.0
 // Copyright (C) 2017  Nikolai Mushegian <nikolai@dapphub.com>
 // Copyright (C) 2017  Daniel Brockman <daniel@dapphub.com>
 // Copyright (C) 2017  Rain Break <rainbreak@riseup.net>
 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// tub.sol -- simplified CDP engine (baby brother of `vat')
 
 pragma solidity ^0.7.0;
 
-import "ds-thing/thing.sol";
-import "ds-token/token.sol";
-import "ds-value/value.sol";
+import "./dappsys/thing.sol";
+import "./dappsys/token.sol";
+import "./dappsys/value.sol";
 
 import "./vox.sol";
 
@@ -143,12 +131,12 @@ contract SaiTub is DSThing, SaiTubEvents {
     //--Risk-parameter-config-------------------------------------------
 
     function mold(bytes32 param, uint val) public note auth {
-        if      (param == 'cap') cap = val;
-        else if (param == 'mat') { require(val >= RAY); mat = val; }
-        else if (param == 'tax') { require(val >= RAY); drip(); tax = val; }
-        else if (param == 'fee') { require(val >= RAY); drip(); fee = val; }
-        else if (param == 'axe') { require(val >= RAY); axe = val; }
-        else if (param == 'gap') { require(val >= WAD); gap = val; }
+        if      (param == "cap") cap = val;
+        else if (param == "mat") { require(val >= RAY); mat = val; }
+        else if (param == "tax") { require(val >= RAY); drip(); tax = val; }
+        else if (param == "fee") { require(val >= RAY); drip(); fee = val; }
+        else if (param == "axe") { require(val >= RAY); axe = val; }
+        else if (param == "gap") { require(val >= WAD); gap = val; }
         else return;
     }
 

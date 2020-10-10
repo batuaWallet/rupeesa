@@ -1,12 +1,14 @@
+// SPDX-License-Identifier: GPL-3.0
+
 pragma solidity ^0.7.0;
 
-import "ds-auth/auth.sol";
-import 'ds-token/token.sol';
-import 'ds-guard/guard.sol';
-import 'ds-roles/roles.sol';
-import 'ds-value/value.sol';
+import "./dappsys/auth.sol";
+import "./dappsys/token.sol";
+import "./dappsys/guard.sol";
+import "./dappsys/roles.sol";
+import "./dappsys/value.sol";
 
-import './mom.sol';
+import "./mom.sol";
 
 contract GemFab {
     function newTok(bytes32 name) public returns (DSToken token) {

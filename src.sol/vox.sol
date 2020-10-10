@@ -1,25 +1,13 @@
-/// vox.sol -- target price feed
-
+// SPDX-License-Identifier: GPL-3.0
 // Copyright (C) 2016, 2017  Nikolai Mushegian <nikolai@dapphub.com>
 // Copyright (C) 2016, 2017  Daniel Brockman <daniel@dapphub.com>
 // Copyright (C) 2017        Rain Break <rainbreak@riseup.net>
 
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// vox.sol -- target price feed
 
 pragma solidity ^0.7.0;
 
-import "ds-thing/thing.sol";
+import "./dappsys/thing.sol";
 
 contract SaiVox is DSThing {
     uint256  _par;
@@ -40,7 +28,7 @@ contract SaiVox is DSThing {
     }
 
     function mold(bytes32 param, uint val) public note auth {
-        if (param == 'way') _way = val;
+        if (param == "way") _way = val;
     }
 
     // Dai Target Price (ref per dai)

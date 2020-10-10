@@ -1,10 +1,6 @@
-/// erc20.sol -- API for the ERC20 token standard
+// SPDX-License-Identifier: GPL-3.0
 
-// See <https://github.com/ethereum/EIPs/issues/20>.
-
-// This file likely does not meet the threshold of originality
-// required for copyright to apply.  As a result, this is free and
-// unencumbered software belonging to the public domain.
+// erc20.sol -- API for the ERC20 token standard
 
 pragma solidity ^0.4.8;
 

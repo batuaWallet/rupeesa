@@ -23,10 +23,10 @@ then
 
   find \
     Makefile \
+    ops \
     package.json \
     src.sol \
     src.ts \
-    ops \
     -type f -not -name "*.swp" -exec sed -i "s|$old|$new|g" {} \;
 
 else echo "Goodbye"
