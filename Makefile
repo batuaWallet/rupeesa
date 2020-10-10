@@ -52,6 +52,9 @@ clean: stop-all
 	rm -rf cache/*
 	rm -rf dist/*
 
+migrate: transpiled-ts
+	node dist/src.ts/cli.js migrate
+
 ########################################
 ## Build Rules
 

@@ -41,7 +41,14 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
     }
   };
 
-  await deployHelper("TestToken", []);
+  // Deploy all standalone contracts with no dependencies & no constructors
+  const registry = {} as any;
+  for (const name of [
+    "TestToken", "WETH", "GemFab", "VoxFab", "TubFab", "TapFab", "TopFab", "MomFab", "DadFab",
+  ]) {
+    console.log(`Also deploying ${name}`);
+    registry[name] = await deployHelper(name, []);
+  }
 
   ////////////////////////////////////////
   // Print summary
