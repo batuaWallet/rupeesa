@@ -1,14 +1,12 @@
 import { constants, Contract, ContractFactory, Wallet, providers, utils, BigNumber } from "ethers";
 
-import { AddressBook } from "./addressBook";
+import { AddressBook, AddressBookEntry } from "./addressBook";
 import { artifacts } from "./artifacts";
 
 const { EtherSymbol } = constants;
-const { formatEther, keccak256 } = utils;
+const { formatEther, keccak256, parseUnits } = utils;
 
 const hash = (input: string): string => keccak256(`0x${input.replace(/^0x/, "")}`);
-
-type ConstructorArgs = { name: string; value: string }[];
 
 // Simple sanity checks to make sure contracts from our address book have been deployed
 export const isContractDeployed = async (
@@ -46,17 +44,17 @@ export const isContractDeployed = async (
 
 export const deployContract = async (
   name: string,
-  args: ConstructorArgs,
+  args: string[],
   wallet: Wallet,
   addressBook: AddressBook,
 ): Promise<Contract> => {
   // NOTE: No special case for testnet token bc non-testnet-tokens are not mintable & throw errors
   const factory = ContractFactory.fromSolidity(artifacts[name]).connect(wallet);
-  const constructorArgs = args.map((a) => a.value);
-  const deployTx = factory.getDeployTransaction(...constructorArgs);
+  const deployTx = factory.getDeployTransaction(...args);
   const tx = await wallet.sendTransaction({
     ...deployTx,
-    gasLimit: BigNumber.from("5000000"),
+    gasLimit: BigNumber.from("50000000"),
+    gasPrice: parseUnits("100", 9),
   });
   console.log(`Sent transaction to deploy ${name}, txHash: ${tx.hash}`);
   const receipt = await tx.wait();
@@ -68,11 +66,11 @@ export const deployContract = async (
   const creationCodeHash = hash(artifacts[name].bytecode);
   addressBook.setEntry(name, {
     address,
-    constructorArgs: args.length === 0 ? undefined : args,
+    args: args.length === 0 ? undefined : args,
     creationCodeHash,
     runtimeCodeHash,
     txHash: tx.hash,
-  });
+  } as AddressBookEntry);
 
   return contract;
 };

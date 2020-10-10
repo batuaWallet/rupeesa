@@ -23,5 +23,8 @@ docker run \
   --publish "8545:8545" \
   --rm \
   --tmpfs "/tmp" \
-  $image "--mnemonic=candy maple cake sugar pudding cream honey rich smooth crumble sweet treat"
+  $image \
+    "--mnemonic=candy maple cake sugar pudding cream honey rich smooth crumble sweet treat" \
+    "--gasLimit=50000000"
+    
 

@@ -4,7 +4,7 @@ import { AddressZero } from "@ethersproject/constants";
 
 export type AddressBookEntry = {
   address: string;
-  constructorArgs?: Array<{ name: string; value: string }>;
+  args?: string[];
   creationCodeHash?: string;
   runtimeCodeHash?: string;
   txHash?: string;
@@ -47,6 +47,7 @@ export const getAddressBook = (path: string, chainId: string): AddressBook => {
         return { address: AddressZero };
       }
     },
+
     setEntry: (contractName: string, entry: AddressBookEntry): void => {
       addressBook[chainId][contractName] = entry;
       try {

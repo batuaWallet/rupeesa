@@ -46,11 +46,16 @@ stop-all:
 	bash ops/stop.sh oracle
 	bash ops/stop.sh ethprovider
 
+reset: stop-all
+	docker volume rm oracle_chaindata oracle_database oracle_oracledata
+
 clean: stop-all
 	rm -rf .flags/*
 	rm -rf artifacts/*
 	rm -rf cache/*
 	rm -rf dist/*
+
+purge: clean reset
 
 migrate: transpiled-ts
 	node dist/src.ts/cli.js migrate

@@ -31,23 +31,39 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
   ////////////////////////////////////////
   // Deploy contracts
 
-  const deployHelper = async (name: string, args: any): Promise<Contract> => {
-    const savedAddress = addressBook.getEntry(name)["address"];
-    if (savedAddress && (await isContractDeployed(name, savedAddress, addressBook, wallet.provider))) {
-      console.log(`${name} is up to date, no action required. Address: ${savedAddress}`);
-      return new Contract(savedAddress, artifacts[name].abi, wallet);
-    } else {
-      return await deployContract(name, args || [], wallet, addressBook);
-    }
-  };
+  const schema = [
+    ["TestToken", []],
+    ["WETH", []],
+    ["GemFab", []],
+    ["VoxFab", []],
+    ["TubFab", []],
+    ["TapFab", []],
+    ["TopFab", []],
+    ["MomFab", []],
+    ["DadFab", []],
+    ["DaiFab", ["GemFab", "VoxFab", "TubFab", "TapFab", "TopFab", "MomFab", "DadFab"]],
+  ] as [string, string[]][];
 
-  // Deploy all standalone contracts with no dependencies & no constructors
   const registry = {} as any;
-  for (const name of [
-    "TestToken", "WETH", "GemFab", "VoxFab", "TubFab", "TapFab", "TopFab", "MomFab", "DadFab",
-  ]) {
-    console.log(`Also deploying ${name}`);
-    registry[name] = await deployHelper(name, []);
+  for (const [name, args] of schema) {
+    console.log(`Deploying ${name} with args [${args.join(", ")}]`);
+    const savedAddress = addressBook.getEntry(name)["address"];
+    if (
+      savedAddress &&
+      await isContractDeployed(name, savedAddress, addressBook, wallet.provider)
+    ) {
+      console.log(`${name} is up to date, no action required. Address: ${savedAddress}`);
+      registry[name] = new Contract(savedAddress, artifacts[name].abi, wallet);
+    } else {
+      registry[name] = await deployContract(
+        name,
+        args.map((arg: string): string => {
+          return Object.keys(registry).includes(arg) ? registry[arg].address : arg;
+        }),
+        wallet,
+        addressBook,
+      );
+    }
   }
 
   ////////////////////////////////////////

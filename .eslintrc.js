@@ -12,8 +12,8 @@ module.exports = {
     sourceType: "module",
   },
   rules: {
-    "@typescript-eslint/no-empty-interface": ["off"],
-    "@typescript-eslint/no-non-null-assertion": ["off"],
+    // "@typescript-eslint/no-empty-interface": ["off"],
+    // "@typescript-eslint/no-non-null-assertion": ["off"],
     "comma-dangle": ["warn", "always-multiline"],
     quotes: ["warn", "double", { allowTemplateLiterals: true, avoidEscape: true }],
     semi: ["error", "always"],
