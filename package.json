@@ -1,0 +1,16 @@
+{
+  "name": "crypto-inr",
+  "version": "1.0.0",
+  "description": "Crypto INR: an ERC20 token pegged to the Indian Rupee, powered by a fork of MakerDAO",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/batuaWallet/crypto-inr.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/batuaWallet/crypto-inr/issues"
+  },
+  "homepage": "https://github.com/batuaWallet/crypto-inr#readme"
+}
