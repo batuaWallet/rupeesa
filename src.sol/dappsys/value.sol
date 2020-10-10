@@ -26,7 +26,7 @@ contract DSValue is DSThing {
         has = true;
     }
 
-    function void() public payable note auth {  // unset the value
+    function void() public payable note auth {
         has = false;
     }
 }

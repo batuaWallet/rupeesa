@@ -127,7 +127,7 @@ contract DaiFab is DSAuth {
         require(address(gov) != address(0));
         require(address(pip) != address(0));
         require(address(pep) != address(0));
-        require(pit != address(0));
+        require(address(pit) != address(0));
         vox = voxFab.newVox();
         tub = tubFab.newTub(sai, sin, skr, gem, gov, pip, pep, vox, pit);
         step += 1;

@@ -24,6 +24,8 @@ import * as GemFab from "../artifacts/GemFab.json";
 import * as GemPit from "../artifacts/GemPit.json";
 import * as IERC20 from "../artifacts/IERC20.json";
 import * as MomFab from "../artifacts/MomFab.json";
+import * as Pep from "../artifacts/Pep.json";
+import * as Pip from "../artifacts/Pip.json";
 import * as SafeMath from "../artifacts/SafeMath.json";
 import * as SaiMom from "../artifacts/SaiMom.json";
 import * as SaiTap from "../artifacts/SaiTap.json";
@@ -73,6 +75,8 @@ export const artifacts: Artifacts = {
   GemPit,
   IERC20,
   MomFab,
+  Pep,
+  Pip,
   SafeMath,
   SaiMom,
   SaiTap,
@@ -112,6 +116,8 @@ export {
   GemPit,
   IERC20,
   MomFab,
+  Pep,
+  Pip,
   SafeMath,
   SaiMom,
   SaiTap,

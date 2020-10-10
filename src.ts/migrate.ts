@@ -34,6 +34,8 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
   const schema = [
     ["DSToken", [hexlify(zeroPad(toUtf8Bytes("COW"),32))]],
     ["WETH", []],
+    ["Pip", []],
+    ["Pep", []],
     ["GemFab", []],
     ["VoxFab", []],
     ["TubFab", []],
@@ -86,8 +88,8 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
     console.log(`Making Vox & Tub..`);
     const gem = registry.WETH.address; // collateral aka weth
     const gov = registry.DSToken.address; // governance token eg MKR
-    const pip = hexlify(zeroPad("0x01", 20)); // TODO: reference price feed
-    const pep = hexlify(zeroPad("0x02", 20)); // TODO: governance price feed
+    const pip = registry.Pip.address; // TODO: reference price feed
+    const pep = registry.Pep.address; // TODO: governance price feed
     const pit = registry.GemPit.address; // governance fee destination
     tx = await fab.makeVoxTub(gem, gov, pip, pep, pit);
     await provider.waitForTransaction(tx.hash);
