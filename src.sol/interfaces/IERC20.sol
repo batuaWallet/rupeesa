@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.7.1;
+pragma solidity ^0.7.0;
 
 // Interface of the ERC20 standard as defined in the EIP
 // + mint/burn methods which are useful during development
