@@ -23,7 +23,7 @@ log_finish=@echo $$((`date "+%s"` - `cat $(startTime)`)) > $(totalTime); rm $(st
 ########################################
 ## Alias Rules
 
-default: contracts
+default: transpiled-ts
 
 ########################################
 ## Command & Control Rules
@@ -34,6 +34,11 @@ restart-oracle: stop-oracle
 	bash ops/start-oracle.sh
 stop-oracle:
 	bash ops/stop.sh oracle
+
+clean:
+	rm -rf .flags/*
+	rm -rf artifacts/*
+	rm -rf dist/*
 
 ########################################
 ## Build Rules
@@ -49,7 +54,12 @@ node-modules: builder package.json
 	$(docker_run) "npm install"
 	$(log_finish) && mv -f $(totalTime) .flags/$@
 
-contracts: node-modules $(shell find contracts $(find_options))
+compiled-sol: node-modules $(shell find src.sol $(find_options))
 	$(log_start)
-	$(docker_run) "npm run build"
+	$(docker_run) "npm run compile"
+	$(log_finish) && mv -f $(totalTime) .flags/$@
+
+transpiled-ts: node-modules compiled-sol $(shell find src.ts $(find_options))
+	$(log_start)
+	$(docker_run) "npm run transpile"
 	$(log_finish) && mv -f $(totalTime) .flags/$@

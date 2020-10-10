@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Crypto INR: an ERC20 token pegged to the Indian Rupee, powered by a fork of MakerDAO",
   "scripts": {
-    "build": "npx buidler compile"
+    "compile": "npx buidler compile",
+    "transpile": "rm -rf dist/* && tsc -p tsconfig.json"
   },
   "repository": {
     "type": "git",
