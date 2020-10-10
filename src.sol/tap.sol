@@ -48,7 +48,7 @@ contract SaiTap is DSThing {
     }
 
     function mold(bytes32 param, uint val) public note auth {
-        if (param == 'gap') gap = val;
+        if (param == "gap") gap = val;
     }
 
     // Cancel debt

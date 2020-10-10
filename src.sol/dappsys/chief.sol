@@ -71,7 +71,7 @@ contract DSChiefApprovals is DSThing {
     function vote(address[] yays) public returns (bytes32)
         // note  both sub-calls note
     {
-        var slate = etch(yays);
+        bytes32 slate = etch(yays);
         vote(slate);
         return slate;
     }
@@ -98,7 +98,7 @@ contract DSChiefApprovals is DSThing {
     function addWeight(uint weight, bytes32 slate)
         internal
     {
-        var yays = slates[slate];
+        address[] yays = slates[slate];
         for( uint i = 0; i < yays.length; i++) {
             approvals[yays[i]] = add(approvals[yays[i]], weight);
         }
@@ -107,7 +107,7 @@ contract DSChiefApprovals is DSThing {
     function subWeight(uint weight, bytes32 slate)
         internal
     {
-        var yays = slates[slate];
+        address[] yays = slates[slate];
         for( uint i = 0; i < yays.length; i++) {
             approvals[yays[i]] = sub(approvals[yays[i]], weight);
         }
@@ -166,7 +166,7 @@ contract DSChief is DSRoles, DSChiefApprovals {
 
 contract DSChiefFab {
     function newChief(DSToken gov, uint MAX_YAYS) public returns (DSChief chief) {
-        DSToken iou = new DSToken('IOU');
+        DSToken iou = new DSToken("IOU");
         chief = new DSChief(gov, iou, MAX_YAYS);
         iou.setOwner(chief);
     }

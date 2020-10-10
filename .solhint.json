@@ -1,0 +1,7 @@
+{
+  "extends": "solhint:default",
+  "rules": {
+    "avoid-suicide": "error",
+    "quotes": ["warn","double"]
+  }
+}
