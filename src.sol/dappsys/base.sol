@@ -5,54 +5,54 @@
 
 pragma solidity ^0.7.0;
 
-import "./erc20.sol";
+import "../interfaces/IERC20.sol";
 import "./math.sol";
 
-contract DSTokenBase is ERC20, DSMath {
+contract DSTokenBase is IERC20, DSMath {
     uint256                                            _supply;
     mapping (address => uint256)                       _balances;
     mapping (address => mapping (address => uint256))  _approvals;
 
-    constructor(uint supply) public {
+    constructor(uint supply) {
         _balances[msg.sender] = supply;
         _supply = supply;
     }
 
-    function totalSupply() public view returns (uint) {
+    function totalSupply() public override view returns (uint) {
         return _supply;
     }
-    function balanceOf(address src) public view returns (uint) {
+
+    function balanceOf(address src) public override view returns (uint) {
         return _balances[src];
     }
-    function allowance(address src, address guy) public view returns (uint) {
+
+    function allowance(address src, address guy) public override view returns (uint) {
         return _approvals[src][guy];
     }
 
-    function transfer(address dst, uint wad) public returns (bool) {
+    function transfer(address dst, uint wad) public override returns (bool) {
         return transferFrom(msg.sender, dst, wad);
     }
 
     function transferFrom(address src, address dst, uint wad)
         public
+        virtual
+        override
         returns (bool)
     {
         if (src != msg.sender) {
             _approvals[src][msg.sender] = sub(_approvals[src][msg.sender], wad);
         }
-
         _balances[src] = sub(_balances[src], wad);
         _balances[dst] = add(_balances[dst], wad);
-
         Transfer(src, dst, wad);
-
         return true;
     }
 
-    function approve(address guy, uint wad) public returns (bool) {
+    function approve(address guy, uint wad) public virtual override returns (bool) {
         _approvals[msg.sender][guy] = wad;
-
         Approval(msg.sender, guy, wad);
-
         return true;
     }
+
 }

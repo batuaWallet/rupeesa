@@ -23,18 +23,18 @@ contract SaiTap is DSThing {
 
     // Surplus
     function joy() public view returns (uint) {
-        return sai.balanceOf(this);
+        return sai.balanceOf(address(this));
     }
     // Bad debt
     function woe() public view returns (uint) {
-        return sin.balanceOf(this);
+        return sin.balanceOf(address(this));
     }
     // Collateral pending liquidation
     function fog() public view returns (uint) {
-        return skr.balanceOf(this);
+        return skr.balanceOf(address(this));
     }
 
-    constructor(SaiTub tub_) public {
+    constructor(SaiTub tub_) {
         tub = tub_;
 
         sai = tub.sai();
@@ -113,7 +113,7 @@ contract SaiTap is DSThing {
     function mock(uint wad) public note {
         require(off);
         sai.mint(msg.sender, wad);
-        require(tub.gem().transferFrom(msg.sender, this, rmul(wad, fix)));
+        require(tub.gem().transferFrom(msg.sender, address(this), rmul(wad, fix)));
     }
     function vent() public note {
         require(off);

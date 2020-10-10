@@ -10,7 +10,8 @@ contract DSExec {
              internal
              returns (bool call_ret)
     {
-        return target.call{value: value}(data);
+        (bool success,) = target.call{value: value}(data);
+        return success;
     }
     function exec( address target, bytes memory data, uint value)
              internal

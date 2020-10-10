@@ -16,7 +16,7 @@ contract WETH9 {
     mapping (address => uint)                       public  balanceOf;
     mapping (address => mapping (address => uint))  public  allowance;
 
-    receive() public payable {
+    receive() external payable {
         deposit();
     }
     function deposit() public payable {
@@ -31,7 +31,7 @@ contract WETH9 {
     }
 
     function totalSupply() public view returns (uint) {
-        return this.balance;
+        return address(this).balance;
     }
 
     function approve(address guy, uint wad) public returns (bool) {

@@ -6,23 +6,16 @@ pragma solidity ^0.7.0;
 // + mint/burn methods which are useful during development
 
 interface IERC20 {
-    event Approval(address indexed owner, address indexed spender, uint256 value);
+    event Approval(address indexed src, address indexed guy, uint wad);
+    event Transfer(address indexed src, address indexed dst, uint wad);
 
-    event Transfer(address indexed from, address indexed to, uint256 value);
+    function totalSupply() external view returns (uint);
+    function balanceOf(address guy) external view returns (uint);
+    function allowance(address src, address guy) external view returns (uint);
 
-    function allowance(address owner, address spender) external view returns (uint256);
-
-    function approve(address spender, uint256 amount) external returns (bool);
-
-    function balanceOf(address account) external view returns (uint256);
-
-    function totalSupply() external view returns (uint256);
-
-    function transfer(address recipient, uint256 amount) external returns (bool);
-
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
-
-    function mint(address recipient, uint256 amount) external returns (bool);
-
-    function burn(address recipient, uint256 amount) external returns (bool);
+    function approve(address guy, uint wad) external returns (bool);
+    function transfer(address dst, uint wad) external returns (bool);
+    function transferFrom(
+        address src, address dst, uint wad
+    ) external returns (bool);
 }

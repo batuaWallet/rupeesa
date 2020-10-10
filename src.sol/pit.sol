@@ -9,6 +9,6 @@ import "./dappsys/token.sol";
 
 contract GemPit {
     function burn(DSToken gem) public {
-        gem.burn(gem.balanceOf(this));
+        gem.burn(gem.balanceOf(address(this)));
     }
 }

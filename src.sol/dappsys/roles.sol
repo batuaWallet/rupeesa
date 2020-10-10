@@ -32,6 +32,7 @@ contract DSRoles is DSAuth, DSAuthority
 
     function isUserRoot(address who)
         public
+        virtual
         view
         returns (bool)
     {
@@ -58,6 +59,7 @@ contract DSRoles is DSAuth, DSAuthority
 
     function canCall(address caller, address code, bytes4 sig)
         public
+        override
         view
         returns (bool)
     {
@@ -76,6 +78,7 @@ contract DSRoles is DSAuth, DSAuthority
 
     function setRootUser(address who, bool enabled)
         public
+        virtual
         auth
     {
         _root_users[who] = enabled;

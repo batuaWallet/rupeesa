@@ -4,13 +4,15 @@
 
 pragma solidity ^0.7.0;
 
-contract DSAuthority {
+abstract contract DSAuthority {
     function canCall(
-        address src, address dst, bytes4 sig
-    ) public view returns (bool);
+        address src,
+        address dst,
+        bytes4 sig
+    ) public virtual view returns (bool);
 }
 
-contract DSAuthEvents {
+abstract contract DSAuthEvents {
     event LogSetAuthority (address indexed authority);
     event LogSetOwner     (address indexed owner);
 }
@@ -19,13 +21,14 @@ contract DSAuth is DSAuthEvents {
     DSAuthority  public  authority;
     address      public  owner;
 
-    constructor() public {
+    constructor() {
         owner = msg.sender;
         LogSetOwner(msg.sender);
     }
 
     function setOwner(address owner_)
         public
+        virtual
         auth
     {
         owner = owner_;
@@ -34,10 +37,11 @@ contract DSAuth is DSAuthEvents {
 
     function setAuthority(DSAuthority authority_)
         public
+        virtual
         auth
     {
         authority = authority_;
-        LogSetAuthority(authority);
+        LogSetAuthority(address(authority));
     }
 
     modifier auth {
@@ -53,7 +57,7 @@ contract DSAuth is DSAuthEvents {
         } else if (authority == DSAuthority(0)) {
             return false;
         } else {
-            return authority.canCall(src, this, sig);
+            return authority.canCall(src, address(this), sig);
         }
     }
 }

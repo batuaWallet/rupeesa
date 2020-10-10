@@ -27,8 +27,7 @@ contract DSChiefApprovals is DSThing {
 
     // IOU constructed outside this contract reduces deployment costs significantly
     // lock/free/vote are quite sensitive to token invariants. Caution is advised.
-    constructor(DSToken GOV_, DSToken IOU_, uint MAX_YAYS_) public
-    {
+    constructor(DSToken GOV_, DSToken IOU_, uint MAX_YAYS_) {
         GOV = GOV_;
         IOU = IOU_;
         MAX_YAYS = MAX_YAYS_;
@@ -62,7 +61,7 @@ contract DSChiefApprovals is DSThing {
         require( yays.length <= MAX_YAYS );
         requireByteOrderedSet(yays);
 
-        bytes32 hash = keccak256(yays);
+        bytes32 hash = keccak256(abi.encodePacked(yays));
         slates[hash] = yays;
         Etch(hash);
         return hash;
@@ -123,7 +122,7 @@ contract DSChiefApprovals is DSThing {
         }
         for( uint i = 0; i < yays.length - 1; i++ ) {
             // strict inequality ensures both ordering and uniqueness
-            require(uint(bytes32(yays[i])) < uint256(bytes32(yays[i+1])));
+            require(uint(bytes32(bytes20(yays[i]))) < uint256(bytes32(bytes20(yays[i+1]))));
         }
     }
 }
@@ -134,31 +133,31 @@ contract DSChiefApprovals is DSThing {
 contract DSChief is DSRoles, DSChiefApprovals {
 
     constructor(DSToken GOV, DSToken IOU, uint MAX_YAYS)
-             DSChiefApprovals (GOV, IOU, MAX_YAYS)
-        public
+        DSChiefApprovals (GOV, IOU, MAX_YAYS)
     {
         authority = this;
-        owner = 0;
+        owner = address(0);
     }
 
-    function setOwner(address owner_) public {
+    function setOwner(address owner_) public override {
         owner_;
         revert();
     }
 
-    function setAuthority(DSAuthority authority_) public {
+    function setAuthority(DSAuthority authority_) public override {
         authority_;
         revert();
     }
 
     function isUserRoot(address who)
         public
+        override
         view
         returns (bool)
     {
         return (who == hat);
     }
-    function setRootUser(address who, bool enabled) public {
+    function setRootUser(address who, bool enabled) public override {
         who; enabled;
         revert();
     }
@@ -168,6 +167,6 @@ contract DSChiefFab {
     function newChief(DSToken gov, uint MAX_YAYS) public returns (DSChief chief) {
         DSToken iou = new DSToken("IOU");
         chief = new DSChief(gov, iou, MAX_YAYS);
-        iou.setOwner(chief);
+        iou.setOwner(address(chief));
     }
 }

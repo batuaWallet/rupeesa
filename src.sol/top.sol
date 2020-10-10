@@ -18,14 +18,14 @@ contract SaiTop is DSThing {
     DSToken  public  sai;
     DSToken  public  sin;
     DSToken  public  skr;
-    ERC20    public  gem;
+    IERC20    public  gem;
 
     uint256  public  fix;  // sai cage price (gem per sai)
     uint256  public  fit;  // skr cage price (ref per skr)
     uint256  public  caged;
     uint256  public  cooldown = 6 hours;
 
-    constructor(SaiTub tub_, SaiTap tap_) public {
+    constructor(SaiTub tub_, SaiTap tap_) {
         tub = tub_;
         tap = tap_;
 

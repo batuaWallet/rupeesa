@@ -22,7 +22,7 @@ contract SaiTub is DSThing, SaiTubEvents {
     DSToken  public  sin;  // Debt (negative sai)
 
     DSToken  public  skr;  // Abstracted collateral
-    ERC20    public  gem;  // Underlying collateral
+    IERC20   public  gem;  // Underlying collateral
 
     DSToken  public  gov;  // Governance token
 
@@ -79,11 +79,11 @@ contract SaiTub is DSThing, SaiTubEvents {
     }
     // Backing collateral
     function air() public view returns (uint) {
-        return skr.balanceOf(this);
+        return skr.balanceOf(address(this));
     }
     // Raw collateral
     function pie() public view returns (uint) {
-        return gem.balanceOf(this);
+        return gem.balanceOf(address(this));
     }
 
     //------------------------------------------------------------------
@@ -92,13 +92,13 @@ contract SaiTub is DSThing, SaiTubEvents {
         DSToken  sai_,
         DSToken  sin_,
         DSToken  skr_,
-        ERC20    gem_,
+        IERC20   gem_,
         DSToken  gov_,
         DSValue  pip_,
         DSValue  pep_,
         SaiVox   vox_,
         address  pit_
-    ) public {
+    ) {
         gem = gem_;
         skr = skr_;
 
@@ -154,8 +154,8 @@ contract SaiTub is DSThing, SaiTubEvents {
 
     //--Tap-setter------------------------------------------------------
     function turn(address tap_) public note {
-        require(tap  == 0);
-        require(tap_ != 0);
+        require(tap  == address(0));
+        require(tap_ != address(0));
         tap = tap_;
     }
 
@@ -176,7 +176,7 @@ contract SaiTub is DSThing, SaiTubEvents {
     function join(uint wad) public note {
         require(!off);
         require(ask(wad) > 0);
-        require(gem.transferFrom(msg.sender, this, ask(wad)));
+        require(gem.transferFrom(msg.sender, address(this), ask(wad)));
         skr.mint(msg.sender, wad);
     }
     function exit(uint wad) public note {
@@ -245,7 +245,7 @@ contract SaiTub is DSThing, SaiTubEvents {
     }
     function give(bytes32 cup, address guy) public note {
         require(msg.sender == cups[cup].lad);
-        require(guy != 0);
+        require(guy != address(0));
         cups[cup].lad = guy;
     }
 

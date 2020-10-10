@@ -18,7 +18,7 @@ contract SaiMom is DSThing {
     SaiTap  public  tap;
     SaiVox  public  vox;
 
-    constructor(SaiTub tub_, SaiTap tap_, SaiVox vox_) public {
+    constructor(SaiTub tub_, SaiTap tap_, SaiVox vox_) {
         tub = tub_;
         tap = tap_;
         vox = vox_;

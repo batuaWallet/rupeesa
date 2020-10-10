@@ -13,7 +13,7 @@ contract DSToken is DSTokenBase(0), DSStop {
     bytes32  public  symbol;
     uint256  public  decimals = 18; // standard token precision. override to customize
 
-    constructor(bytes32 symbol_) public {
+    constructor(bytes32 symbol_) {
         symbol = symbol_;
     }
 
@@ -24,12 +24,13 @@ contract DSToken is DSTokenBase(0), DSStop {
         return super.approve(guy, uint(-1));
     }
 
-    function approve(address guy, uint wad) public stoppable returns (bool) {
+    function approve(address guy, uint wad) public override stoppable returns (bool) {
         return super.approve(guy, wad);
     }
 
     function transferFrom(address src, address dst, uint wad)
         public
+        override
         stoppable
         returns (bool)
     {

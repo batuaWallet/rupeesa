@@ -14,7 +14,7 @@ contract DSSpell is DSExec, DSNote {
     bytes   public data;
     bool    public done;
 
-    constructor(address whom_, uint256 mana_, bytes memory data_) public {
+    constructor(address whom_, uint256 mana_, bytes memory data_) {
         whom = whom_;
         mana = mana_;
         data = data_;
