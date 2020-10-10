@@ -1,59 +1,49 @@
-import { getEthProvider } from "@connext/vector-utils";
 import { EtherSymbol, Zero } from "@ethersproject/constants";
 import { Contract, providers, utils, Wallet } from "ethers";
-import { Argv } from "yargs";
 
-import { artifacts } from "../artifacts";
-import { cliOpts, ConstructorArgs } from "../constants";
-import { getAddressBook, isContractDeployed, deployContract } from "../utils";
-import { registerTransfer } from "./registerTransfer";
+import { getAddressBook } from "./addressBook";
+import { artifacts } from "./artifacts";
+import { isContractDeployed, deployContract } from "./deployContract";
 
 const { formatEther } = utils;
 
-export const migrate = async (wallet: Wallet, addressBookPath: string): Promise<void> => {
+export const migrate = async (ethProviderUrl: string, addressBookPath: string): Promise<void> => {
+
+  const mnemonic = process.env.ETH_MNEMONIC || "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat";
+
+  const provider = new providers.JsonRpcProvider(ethProviderUrl);
+  const wallet = Wallet.fromMnemonic(mnemonic).connect(provider);
 
   ////////////////////////////////////////
   // Environment Setup
 
-  const chainId = process?.env?.REAL_CHAIN_ID || (await wallet.provider.getNetwork()).chainId;
+  const chainId = (await wallet.provider.getNetwork()).chainId.toString();
   const balance = await wallet.getBalance();
   const nonce = await wallet.getTransactionCount();
-  const providerUrl = (wallet.provider as providers.JsonRpcProvider).connection.url;
 
-  console.log(`\nPreparing to migrate contracts to provider ${providerUrl} w chainId: ${chainId}`);
+  console.log(`\nPreparing to migrate contracts to ${ethProviderUrl} w chainId: ${chainId}`);
   console.log(`Deployer address=${wallet.address} nonce=${nonce} balance=${formatEther(balance)}`);
 
   if (balance.eq(Zero)) {
     throw new Error(`Account ${wallet.address} has zero balance on chain ${chainId}, aborting contract migration`);
   }
 
-  const addressBook = getAddressBook(addressBookPath, chainId.toString());
+  const addressBook = getAddressBook(addressBookPath, chainId);
 
   ////////////////////////////////////////
   // Deploy contracts
 
-  const deployHelper = async (name: string, args: ConstructorArgs): Promise<Contract> => {
+  const deployHelper = async (name: string, args: any): Promise<Contract> => {
     const savedAddress = addressBook.getEntry(name)["address"];
-    if (savedAddress && (await isContractDeployed(name, savedAddress, addressBook, wallet.provider, silent))) {
+    if (savedAddress && (await isContractDeployed(name, savedAddress, addressBook, wallet.provider))) {
       console.log(`${name} is up to date, no action required. Address: ${savedAddress}`);
       return new Contract(savedAddress, artifacts[name].abi, wallet);
     } else {
-      return await deployContract(name, args || [], wallet, addressBook, silent);
+      return await deployContract(name, args || [], wallet, addressBook);
     }
   };
 
-  const mastercopy = await deployHelper("ChannelMastercopy", []);
-  await deployHelper("ChannelFactory", [{ name: "mastercopy", value: mastercopy.address }]);
-  await deployHelper("TransferRegistry", []);
-
-  // Transfers
-  await deployHelper("HashlockTransfer", []);
-  await deployHelper("Withdraw", []);
-
-  // Register default transfers
-  console.log("\nRegistering Withdraw and HashlockTransfer");
-  await registerTransfer("Withdraw", wallet, addressBookPath, silent);
-  await registerTransfer("HashlockTransfer", wallet, addressBookPath, silent);
+  await deployHelper("TestToken", []);
 
   ////////////////////////////////////////
   // Print summary

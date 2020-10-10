@@ -18,7 +18,7 @@ contract TestToken is IERC20 {
 
     uint256 private _totalSupply;
     string private _name = "TestToken";
-    string private _symbol = "TEST";
+    string private _symbol = "TST";
     uint8 private _decimals = 18;
 
     constructor () {}

@@ -1,14 +1,14 @@
 import { constants, Contract, ContractFactory, Wallet, providers, utils, BigNumber } from "ethers";
 
-import { artifacts } from "../artifacts";
-import { ConstructorArgs } from "../constants";
-
 import { AddressBook } from "./addressBook";
+import { artifacts } from "./artifacts";
 
 const { EtherSymbol } = constants;
 const { formatEther, keccak256 } = utils;
 
 const hash = (input: string): string => keccak256(`0x${input.replace(/^0x/, "")}`);
+
+type ConstructorArgs = { name: string; value: string }[];
 
 // Simple sanity checks to make sure contracts from our address book have been deployed
 export const isContractDeployed = async (
