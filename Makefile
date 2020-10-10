@@ -49,6 +49,7 @@ stop-all:
 clean: stop-all
 	rm -rf .flags/*
 	rm -rf artifacts/*
+	rm -rf cache/*
 	rm -rf dist/*
 
 ########################################
