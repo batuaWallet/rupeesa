@@ -1,33 +1,15 @@
 #!/usr/bin/env bash
 set -eu
 
+# chainlink docs: https://docs.chain.link/docs/running-a-chainlink-node
 stack="oracle"
 
-root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null 2>&1 && pwd )"
 project="`cat $root/package.json | grep '"name":' | head -n 1 | cut -d '"' -f 4 | tr '-' '_'`"
 
 # make sure a network for this project has been created
 docker swarm init 2> /dev/null || true
 docker network create --attachable --driver overlay $project 2> /dev/null || true
-
-# documentation:
-# https://docs.chain.link/docs/running-a-chainlink-node
-
-data_dir="$root/.chainlink"
-mkdir -p $data_dir
-
-echo 'export DATABASE_URL="postgresql://inr_oracle:inr_oracle@database:5432/inr_oracle"
-export ROOT="/chainlink"
-export LOG_LEVEL="debug"
-export ETH_CHAIN_ID="3"
-export MIN_OUTGOING_CONFIRMATIONS="2"
-export LINK_CONTRACT_ADDRESS="0x20fE562d797A42Dcb3399062AE9546cd06f63280"
-export CHAINLINK_TLS_PORT="0"
-export SECURE_COOKIES="false"
-export GAS_UPDATER_ENABLED="true"
-export ETH_URL="http://ethprovider:8545"
-export ALLOW_ORIGINS="*"
-' > $data_dir/.env
 
 eth_image="trufflesuite/ganache-cli:v6.9.1"
 db_image="postgres:12-alpine"
@@ -57,7 +39,7 @@ networks:
 
 volumes:
   chaindata:
-  linkdata:
+  oracledata:
   database:
 
 services:
@@ -88,18 +70,15 @@ services:
     volumes:
       - 'database:/var/lib/postgresql/data'
 
-EOF
-
-cat <<EOF
   chainlink:
     image: 'smartcontract/chainlink'
     command: ["local", "n"]
     environment:
       DATABASE_URL: 'postgresql://$pg_user:$pg_password@database:5432/$pg_db'
-      ROOT: '/chainlink'
+      ROOT: '/root'
       LOG_LEVEL: 'debug'
-      ETH_CHAIN_ID: '3'
-      MIN_OUTGOING_CONFIRMATIONS: '2'
+      ETH_CHAIN_ID: '1337'
+      MIN_OUTGOING_CONFIRMATIONS: '1'
       LINK_CONTRACT_ADDRESS: '0x20fE562d797A42Dcb3399062AE9546cd06f63280'
       CHAINLINK_TLS_PORT: '0'
       SECURE_COOKIES: 'false'
@@ -112,7 +91,7 @@ cat <<EOF
       - '6688:6688'
     tmpfs: /tmp
     volumes:
-      - 'linkdata:/chainlink
+      - 'oracledata:/root'
 
 EOF
 

@@ -8,9 +8,9 @@ project=$(shell cat $(root)/package.json | grep '"name":' | head -n 1 | cut -d '
 default:
 
 start-oracle:
-	bash start-chainlink.sh
+	bash ops/start-oracle.sh
 restart-oracle: stop-oracle
-	bash start-chainlink.sh
+	bash ops/start-oracle.sh
 stop-oracle:
 	bash ops/stop.sh oracle
 
