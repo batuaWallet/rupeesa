@@ -63,12 +63,17 @@ contract SaiTub is DSThing, SaiTubEvents {
     function lad(bytes32 cup) public view returns (address) {
         return cups[cup].lad;
     }
+
     function ink(bytes32 cup) public view returns (uint) {
         return cups[cup].ink;
     }
+
+    // outstanding debt
     function tab(bytes32 cup) public returns (uint) {
         return rmul(cups[cup].art, chi());
     }
+
+    // gov debt aka accumulated fees
     function rap(bytes32 cup) public returns (uint) {
         return sub(rmul(cups[cup].ire, rhi()), tab(cup));
     }
@@ -77,10 +82,12 @@ contract SaiTub is DSThing, SaiTubEvents {
     function din() public returns (uint) {
         return rmul(rum, chi());
     }
+
     // Backing collateral
     function air() public view returns (uint) {
         return skr.balanceOf(address(this));
     }
+
     // Raw collateral
     function pie() public view returns (uint) {
         return gem.balanceOf(address(this));
@@ -277,6 +284,8 @@ contract SaiTub is DSThing, SaiTubEvents {
         require(safe(cup));
         require(sai.totalSupply() <= cap);
     }
+
+    // Repay wad (amount) of debt to cup (cdp id)
     function wipe(bytes32 cup, uint wad) public payable note {
         require(!off);
 

@@ -5,7 +5,7 @@ import { getAddressBook } from "./addressBook";
 import { artifacts } from "./artifacts";
 import { isContractDeployed, deployContract } from "./deployContract";
 
-const { formatEther } = utils;
+const { formatEther, hexlify, toUtf8Bytes, zeroPad } = utils;
 
 export const migrate = async (ethProviderUrl: string, mnemonic: string, addressBookPath: string): Promise<void> => {
 
@@ -32,7 +32,7 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
   // Deploy contracts
 
   const schema = [
-    ["TestToken", []],
+    ["DSToken", [hexlify(zeroPad(toUtf8Bytes("COW"),32))]],
     ["WETH", []],
     ["GemFab", []],
     ["VoxFab", []],
@@ -41,12 +41,12 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
     ["TopFab", []],
     ["MomFab", []],
     ["DadFab", []],
+    ["GemPit", []],
     ["DaiFab", ["GemFab", "VoxFab", "TubFab", "TapFab", "TopFab", "MomFab", "DadFab"]],
   ] as [string, string[]][];
 
   const registry = {} as any;
   for (const [name, args] of schema) {
-    console.log(`Deploying ${name} with args [${args.join(", ")}]`);
     const savedAddress = addressBook.getEntry(name)["address"];
     if (
       savedAddress &&
@@ -66,11 +66,48 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
     }
   }
 
-  ////////////////////////////////////////
-  // Print summary
+  const fab = registry.DaiFab;
+  let step;
+  let tx;
 
-  console.log("\nAll done!");
-  const spent = formatEther(balance.sub(await wallet.getBalance()));
-  const nTx = (await wallet.getTransactionCount()) - nonce;
-  console.log(`Sent ${nTx} transaction${nTx === 1 ? "" : "s"} & spent ${EtherSymbol} ${spent}`);
+  step = await fab.step();
+  console.log(`Fab ${fab.address} is on step ${step}`);
+
+  if (step.toString() === "0") {
+    console.log(`Making tokens..`);
+    tx = await fab.makeTokens();
+    await provider.waitForTransaction(tx.hash);
+    console.log(`sai=${await fab.sai()} | sin=${await fab.sin()} | skr=${await fab.skr()}`);
+    step = await fab.step();
+    console.log(`Fab ${fab.address} is on step ${step}`);
+  }
+
+  if (step.toString() === "1") {
+    console.log(`Making Vox & Tub..`);
+    const gem = registry.WETH.address; // collateral aka weth
+    const gov = registry.DSToken.address; // governance token eg MKR
+    const pip = hexlify(zeroPad("0x01", 20)); // TODO: reference price feed
+    const pep = hexlify(zeroPad("0x02", 20)); // TODO: governance price feed
+    const pit = registry.GemPit.address; // governance fee destination
+    tx = await fab.makeVoxTub(gem, gov, pip, pep, pit);
+    await provider.waitForTransaction(tx.hash);
+    step = await fab.step();
+    console.log(`Fab ${fab.address} is on step ${step}`);
+  }
+
+  if (step.toString() === "2") {
+    console.log(`Making Tap & Top..`);
+    tx = await fab.makeTapTop();
+    await provider.waitForTransaction(tx.hash);
+    step = await fab.step();
+    console.log(`Fab ${fab.address} is on step ${step}`);
+  }
+
+  if (step.toString() === "3") {
+    console.log("\nAll done!");
+    const spent = formatEther(balance.sub(await wallet.getBalance()));
+    const nTx = (await wallet.getTransactionCount()) - nonce;
+    console.log(`Sent ${nTx} transaction${nTx === 1 ? "" : "s"} & spent ${EtherSymbol} ${spent}`);
+  }
+
 };

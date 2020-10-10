@@ -48,6 +48,7 @@ export const deployContract = async (
   wallet: Wallet,
   addressBook: AddressBook,
 ): Promise<Contract> => {
+  console.log(`Deploying ${name} with args [${args.join(", ")}]`);
   // NOTE: No special case for testnet token bc non-testnet-tokens are not mintable & throw errors
   const factory = ContractFactory.fromSolidity(artifacts[name]).connect(wallet);
   const deployTx = factory.getDeployTransaction(...args);

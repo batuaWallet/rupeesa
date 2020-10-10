@@ -49,9 +49,11 @@ contract DSToken is DSTokenBase(0), DSStop {
     function push(address dst, uint wad) public {
         transferFrom(msg.sender, dst, wad);
     }
+
     function pull(address src, uint wad) public {
         transferFrom(src, msg.sender, wad);
     }
+
     function move(address src, address dst, uint wad) public {
         transferFrom(src, dst, wad);
     }
@@ -59,19 +61,21 @@ contract DSToken is DSTokenBase(0), DSStop {
     function mint(uint wad) public {
         mint(msg.sender, wad);
     }
+
     function burn(uint wad) public {
         burn(msg.sender, wad);
     }
+
     function mint(address guy, uint wad) public auth stoppable {
         _balances[guy] = add(_balances[guy], wad);
         _supply = add(_supply, wad);
         Mint(guy, wad);
     }
+
     function burn(address guy, uint wad) public auth stoppable {
         if (guy != msg.sender && _approvals[guy][msg.sender] != uint(-1)) {
             _approvals[guy][msg.sender] = sub(_approvals[guy][msg.sender], wad);
         }
-
         _balances[guy] = sub(_balances[guy], wad);
         _supply = sub(_supply, wad);
         Burn(guy, wad);
