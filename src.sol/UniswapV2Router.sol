@@ -2,26 +2,26 @@
 
 pragma solidity ^0.7.0;
 
-import '../interfaces/IERC20.sol';
-import '../interfaces/IUniswapV2Factory.sol';
-import '../interfaces/IUniswapV2Router.sol';
-import '../interfaces/IWETH.sol';
-import '../lib/SafeMath.sol';
-import '../lib/TransferHelper.sol';
-import '../lib/UniswapV2Library.sol';
+import './interfaces/IERC20.sol';
+import './interfaces/IUniswapV2Factory.sol';
+import './interfaces/IUniswapV2Router.sol';
+import './interfaces/IWETH.sol';
+import './lib/SafeMath.sol';
+import './lib/TransferHelper.sol';
+import './lib/UniswapV2Library.sol';
 
-contract UniswapV2Router02 is IUniswapV2Router {
+contract UniswapV2Router is IUniswapV2Router {
     using SafeMath for uint;
 
-    address public immutable override factory;
-    address public immutable override WETH;
+    address public immutable factory;
+    address public immutable WETH;
 
     modifier ensure(uint deadline) {
         require(deadline >= block.timestamp, 'UniswapV2Router: EXPIRED');
         _;
     }
 
-    constructor(address _factory, address _WETH) public {
+    constructor(address _factory, address _WETH) {
         factory = _factory;
         WETH = _WETH;
     }

@@ -1,7 +1,9 @@
-pragma solidity >=0.5.0;
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+pragma solidity ^0.7.0;
 
 import '../lib/FixedPoint.sol';
-import './IUniswapV2Pair.sol';
+import '../interfaces/IUniswapV2Pair.sol';
 
 // library with helper methods for oracles that are concerned with computing average prices
 library UniswapV2OracleLibrary {
