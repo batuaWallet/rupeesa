@@ -6,22 +6,22 @@
 pragma solidity ^0.7.0;
 
 contract DSExec {
-    function tryExec( address target, bytes calldata, uint value)
+    function tryExec( address target, bytes memory data, uint value)
              internal
              returns (bool call_ret)
     {
-        return target.call.value(value)(calldata);
+        return target.call{value: value}(data);
     }
-    function exec( address target, bytes calldata, uint value)
+    function exec( address target, bytes memory data, uint value)
              internal
     {
-        if(!tryExec(target, calldata, value)) {
+        if(!tryExec(target, data, value)) {
             revert();
         }
     }
 
     // Convenience aliases
-    function exec( address t, bytes c )
+    function exec( address t, bytes memory c )
         internal
     {
         exec(t, c, 0);
@@ -31,7 +31,7 @@ contract DSExec {
     {
         bytes memory c; exec(t, c, v);
     }
-    function tryExec( address t, bytes c )
+    function tryExec( address t, bytes memory c )
         internal
         returns (bool)
     {

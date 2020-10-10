@@ -27,7 +27,7 @@ contract DSChiefApprovals is DSThing {
 
     // IOU constructed outside this contract reduces deployment costs significantly
     // lock/free/vote are quite sensitive to token invariants. Caution is advised.
-    function DSChiefApprovals(DSToken GOV_, DSToken IOU_, uint MAX_YAYS_) public
+    constructor(DSToken GOV_, DSToken IOU_, uint MAX_YAYS_) public
     {
         GOV = GOV_;
         IOU = IOU_;
@@ -54,7 +54,7 @@ contract DSChiefApprovals is DSThing {
         GOV.push(msg.sender, wad);
     }
 
-    function etch(address[] yays)
+    function etch(address[] calldata yays)
         public
         note
         returns (bytes32 slate)
@@ -68,7 +68,7 @@ contract DSChiefApprovals is DSThing {
         return hash;
     }
 
-    function vote(address[] yays) public returns (bytes32)
+    function vote(address[] calldata yays) public returns (bytes32)
         // note  both sub-calls note
     {
         bytes32 slate = etch(yays);
@@ -98,7 +98,7 @@ contract DSChiefApprovals is DSThing {
     function addWeight(uint weight, bytes32 slate)
         internal
     {
-        address[] yays = slates[slate];
+        address[] memory yays = slates[slate];
         for( uint i = 0; i < yays.length; i++) {
             approvals[yays[i]] = add(approvals[yays[i]], weight);
         }
@@ -107,14 +107,14 @@ contract DSChiefApprovals is DSThing {
     function subWeight(uint weight, bytes32 slate)
         internal
     {
-        address[] yays = slates[slate];
+        address[] memory yays = slates[slate];
         for( uint i = 0; i < yays.length; i++) {
             approvals[yays[i]] = sub(approvals[yays[i]], weight);
         }
     }
 
     // Throws unless the array of addresses is a ordered set.
-    function requireByteOrderedSet(address[] yays)
+    function requireByteOrderedSet(address[] calldata yays)
         internal
         pure
     {
@@ -133,7 +133,7 @@ contract DSChiefApprovals is DSThing {
 // unique owner of role 0 (typically 'sys' or 'internal')
 contract DSChief is DSRoles, DSChiefApprovals {
 
-    function DSChief(DSToken GOV, DSToken IOU, uint MAX_YAYS)
+    constructor(DSToken GOV, DSToken IOU, uint MAX_YAYS)
              DSChiefApprovals (GOV, IOU, MAX_YAYS)
         public
     {
@@ -153,7 +153,7 @@ contract DSChief is DSRoles, DSChiefApprovals {
 
     function isUserRoot(address who)
         public
-        constant
+        view
         returns (bool)
     {
         return (who == hat);

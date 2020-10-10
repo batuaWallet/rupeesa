@@ -16,7 +16,7 @@ contract WETH9 {
     mapping (address => uint)                       public  balanceOf;
     mapping (address => mapping (address => uint))  public  allowance;
 
-    function() public payable {
+    receive() public payable {
         deposit();
     }
     function deposit() public payable {

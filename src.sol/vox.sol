@@ -17,7 +17,7 @@ contract SaiVox is DSThing {
     uint256  public  how;
     uint256  public  tau;
 
-    function SaiVox(uint par_) public {
+    constructor(uint par_) public {
         _par = fix = par_;
         _way = RAY;
         tau  = era();
@@ -49,14 +49,14 @@ contract SaiVox is DSThing {
     }
 
     function prod() public note {
-        var age = era() - tau;
+        uint256 age = era() - tau;
         if (age == 0) return;  // optimised
         tau = era();
 
         if (_way != RAY) _par = rmul(_par, rpow(_way, age));  // optimised
 
         if (how == 0) return;  // optimised
-        var wag = int128(how * age);
+        int128 wag = int128(how * age);
         _way = inj(prj(_way) + (fix < _par ? wag : -wag));
     }
 

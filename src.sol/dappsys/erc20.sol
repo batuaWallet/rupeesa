@@ -2,7 +2,7 @@
 
 // erc20.sol -- API for the ERC20 token standard
 
-pragma solidity ^0.4.8;
+pragma solidity ^0.7.0;
 
 contract ERC20Events {
     event Approval(address indexed src, address indexed guy, uint wad);

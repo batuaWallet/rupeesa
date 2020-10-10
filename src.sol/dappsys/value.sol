@@ -14,7 +14,7 @@ contract DSValue is DSThing {
         return (val,has);
     }
     function read() public view returns (bytes32) {
-        var (wut, haz) = peek();
+        (bytes32 wut, bool haz) = peek();
         assert(haz);
         return wut;
     }

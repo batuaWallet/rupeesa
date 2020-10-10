@@ -92,7 +92,7 @@ contract DaiFab is DSAuth {
 
     uint8 public step = 0;
 
-    function DaiFab(
+    constructor(
         GemFab gemFab_,
         VoxFab voxFab_,
         TubFab tubFab_,
@@ -141,7 +141,7 @@ contract DaiFab is DSAuth {
         step += 1;
     }
 
-    function S(string s) internal pure returns (bytes4) {
+    function S(string memory s) internal pure returns (bytes4) {
         return bytes4(keccak256(s));
     }
 

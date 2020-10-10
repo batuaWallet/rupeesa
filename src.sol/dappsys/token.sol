@@ -13,7 +13,7 @@ contract DSToken is DSTokenBase(0), DSStop {
     bytes32  public  symbol;
     uint256  public  decimals = 18; // standard token precision. override to customize
 
-    function DSToken(bytes32 symbol_) public {
+    constructor(bytes32 symbol_) public {
         symbol = symbol_;
     }
 

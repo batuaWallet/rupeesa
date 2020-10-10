@@ -14,7 +14,7 @@ contract DSSpell is DSExec, DSNote {
     bytes   public data;
     bool    public done;
 
-    function DSSpell(address whom_, uint256 mana_, bytes data_) public {
+    constructor(address whom_, uint256 mana_, bytes memory data_) public {
         whom = whom_;
         mana = mana_;
         data = data_;
@@ -28,7 +28,7 @@ contract DSSpell is DSExec, DSNote {
 }
 
 contract DSSpellBook {
-    function make(address whom, uint256 mana, bytes data) public returns (DSSpell) {
+    function make(address whom, uint256 mana, bytes memory data) public returns (DSSpell) {
         return new DSSpell(whom, mana, data);
     }
 }
