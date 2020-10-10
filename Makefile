@@ -47,7 +47,7 @@ stop-all:
 	bash ops/stop.sh ethprovider
 
 reset: stop-all
-	docker volume rm oracle_chaindata oracle_database oracle_oracledata
+	docker volume rm oracle_chaindata oracle_database oracle_oracledata || true
 
 clean: stop-all
 	rm -rf .flags/*
