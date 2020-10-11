@@ -1,6 +1,9 @@
 import fs from "fs";
 
 import { AddressZero } from "@ethersproject/constants";
+import { Contract } from "ethers";
+
+import { artifacts } from "./artifacts";
 
 export type AddressBookEntry = {
   address: string;
@@ -17,6 +20,7 @@ export type AddressBookJson = {
 };
 
 export interface AddressBook {
+  getContract: (contractName: string) => Contract;
   getEntry: (contractName: string) => AddressBookEntry;
   setEntry: (contractName: string, entry: AddressBookEntry) => void;
 }
@@ -39,22 +43,34 @@ export const getAddressBook = (path: string, chainId: string): AddressBook => {
   addressBook = addressBook || {};
   addressBook[chainId] = addressBook[chainId] || {};
 
-  return {
-    getEntry: (contractName: string): AddressBookEntry => {
-      try {
-        return addressBook[chainId][contractName] || { address: AddressZero };
-      } catch (e) {
-        return { address: AddressZero };
-      }
-    },
-
-    setEntry: (contractName: string, entry: AddressBookEntry): void => {
-      addressBook[chainId][contractName] = entry;
-      try {
-        fs.writeFileSync(path, JSON.stringify(addressBook, null, 2));
-      } catch (e) {
-        console.log(`Error saving artifacts: ${e.message}`);
-      }
-    },
+  const getEntry = (contractName: string): AddressBookEntry => {
+    try {
+      return addressBook[chainId][contractName] || { address: AddressZero };
+    } catch (e) {
+      return { address: AddressZero };
+    }
   };
+
+  const setEntry = (contractName: string, entry: AddressBookEntry): void => {
+    addressBook[chainId][contractName] = entry;
+    try {
+      fs.writeFileSync(path, JSON.stringify(addressBook, null, 2));
+    } catch (e) {
+      throw Error(`setEntry(${contractName}, ${JSON.stringify(entry)}): ${e.message}`);
+    }
+  };
+
+  const getContract = (contractName: string): Contract => {
+    const entry = getEntry(contractName);
+    if (entry.address == AddressZero) {
+      throw Error(`getContract(${contractName}): NO_ADDRESS_BOOK_ENTRY`);
+    }
+    const artifact = artifacts[contractName];
+    if (!artifact) {
+      throw Error(`getContract(${contractName}): NO_AVAILABLE_ARTIFACTS`);
+    }
+    return new Contract(entry.address, artifact.abi);
+  };
+
+  return { getContract, getEntry, setEntry };
 };

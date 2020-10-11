@@ -1,15 +1,16 @@
-import { constants, Contract, ContractFactory, Wallet, providers, utils, BigNumber } from "ethers";
+import { AddressZero, EtherSymbol } from "@ethersproject/constants";
+import { Contract, ContractFactory, Wallet, providers, utils, BigNumber } from "ethers";
 
-import { AddressBook, AddressBookEntry } from "./addressBook";
-import { artifacts } from "./artifacts";
+import { AddressBook, AddressBookEntry } from "../addressBook";
+import { artifacts } from "../artifacts";
+import { MigrationSchema } from "../types";
 
-const { EtherSymbol } = constants;
 const { formatEther, keccak256, parseUnits } = utils;
 
 const hash = (input: string): string => keccak256(`0x${input.replace(/^0x/, "")}`);
 
 // Simple sanity checks to make sure contracts from our address book have been deployed
-export const isContractDeployed = async (
+const isContractDeployed = async (
   name: string,
   address: string | undefined,
   addressBook: AddressBook,
@@ -42,7 +43,7 @@ export const isContractDeployed = async (
   return true;
 };
 
-export const deployContract = async (
+const deployContract = async (
   name: string,
   args: string[],
   wallet: Wallet,
@@ -74,4 +75,32 @@ export const deployContract = async (
   } as AddressBookEntry);
 
   return contract;
+};
+
+export const deployContracts = async (
+  wallet: Wallet,
+  addressBook: AddressBook,
+  schema: MigrationSchema,
+): Promise<void> => {
+
+  for (const [name, args] of schema) {
+    const savedAddress = addressBook.getEntry(name)["address"];
+    if (
+      savedAddress && savedAddress !== AddressZero &&
+      await isContractDeployed(name, savedAddress, addressBook, wallet.provider)
+    ) {
+      console.log(`${name} is up to date, no action required. Address: ${savedAddress}`);
+    } else {
+      await deployContract(
+        name,
+        args.map((arg: string): string => {
+          const entry = addressBook.getEntry(arg);
+          return entry.address !== AddressZero ? entry.address : arg;
+        }),
+        wallet,
+        addressBook,
+      );
+    }
+  }
+
 };
