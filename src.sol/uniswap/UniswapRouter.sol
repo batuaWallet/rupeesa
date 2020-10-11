@@ -27,7 +27,7 @@ contract UniswapRouter is IUniswapRouter {
     }
 
     receive() external payable {
-        assert(msg.sender == WETH); // only accept ETH via fallback from the WETH contract
+        require(msg.sender == WETH, "UniswapRouter: ONLY_WETH"); // only accept ETH via fallback from the WETH contract
     }
 
     // **** ADD LIQUIDITY ****
@@ -54,7 +54,6 @@ contract UniswapRouter is IUniswapRouter {
             } else {
                 uint amountAOptimal = UniswapLibrary.quote(amountBDesired, reserveB, reserveA);
                 require(amountAOptimal <= amountADesired, "UniswapRouter: LESS_THAN_DESIRED");
-                assert(amountAOptimal <= amountADesired);
                 require(amountAOptimal >= amountAMin, "UniswapRouter: INSUFFICIENT_A_AMOUNT");
                 (amountA, amountB) = (amountAOptimal, amountBDesired);
             }
@@ -114,11 +113,10 @@ contract UniswapRouter is IUniswapRouter {
             amountTokenMin,
             amountETHMin
         );
-        require(false, "ping");
         address pair = UniswapLibrary.pairFor(factory, token, WETH);
         TransferHelper.safeTransferFrom(token, msg.sender, pair, amountToken);
         IWETH(WETH).deposit{value: amountETH}();
-        assert(IWETH(WETH).transfer(pair, amountETH));
+        require(IWETH(WETH).transfer(pair, amountETH), "UniswapRouter: WETH_TRANSFER_FAILED");
         liquidity = IUniswapPair(pair).mint(to);
         // refund dust eth, if any
         if (msg.value > amountETH) TransferHelper.safeTransferETH(msg.sender, msg.value - amountETH);
@@ -286,7 +284,10 @@ contract UniswapRouter is IUniswapRouter {
         amounts = UniswapLibrary.getAmountsOut(factory, msg.value, path);
         require(amounts[amounts.length - 1] >= amountOutMin, "UniswapRouter: INSUFFICIENT_OUTPUT_AMOUNT");
         IWETH(WETH).deposit{value: amounts[0]}();
-        assert(IWETH(WETH).transfer(UniswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]));
+        require(
+          IWETH(WETH).transfer(UniswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]),
+          "UniswapRouter: WETH_TRANSFER_FAILED"
+        );
         _swap(amounts, path, to);
     }
     function swapTokensForExactETH(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
@@ -335,7 +336,10 @@ contract UniswapRouter is IUniswapRouter {
         amounts = UniswapLibrary.getAmountsIn(factory, amountOut, path);
         require(amounts[0] <= msg.value, "UniswapRouter: EXCESSIVE_INPUT_AMOUNT");
         IWETH(WETH).deposit{value: amounts[0]}();
-        assert(IWETH(WETH).transfer(UniswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]));
+        require(
+          IWETH(WETH).transfer(UniswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]),
+          "UniswapRouter: WETH_TRANSFER_FAILED"
+        );
         _swap(amounts, path, to);
         // refund dust eth, if any
         if (msg.value > amounts[0]) TransferHelper.safeTransferETH(msg.sender, msg.value - amounts[0]);
@@ -393,7 +397,10 @@ contract UniswapRouter is IUniswapRouter {
         require(path[0] == WETH, "UniswapRouter: INVALID_PATH");
         uint amountIn = msg.value;
         IWETH(WETH).deposit{value: amountIn}();
-        assert(IWETH(WETH).transfer(UniswapLibrary.pairFor(factory, path[0], path[1]), amountIn));
+        require(
+          IWETH(WETH).transfer(UniswapLibrary.pairFor(factory, path[0], path[1]), amountIn),
+          "WETH_TRANSFER_FAILED"
+        );
         uint balanceBefore = IERC20(path[path.length - 1]).balanceOf(to);
         _swapSupportingFeeOnTransferTokens(path, to);
         require(

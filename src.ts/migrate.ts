@@ -116,7 +116,7 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
     tx = await uniswapFactory.createPair(gem.address, gov.address);
     await provider.waitForTransaction(tx.hash);
     pairAddress = await uniswapFactory.getPair(gem.address, gov.address);
-    addressBook.setEntry("UniswapGemGov", {
+    addressBook.setEntry("UniswapPair-GemGov", {
       address: pairAddress,
       args: [gem.address, gov.address],
       txHash: tx.hash,
@@ -127,14 +127,20 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
 
   let reserves = await pair.getReserves();
   if (reserves[0].eq(Zero)) {
-    console.log(`Adding liquidity`);
+    const ethAmt = parseEther("100");
+    const govAmt = parseEther("1000");
+    console.log(`Approving tokens | ${Object.keys(gov)} | ${Object.keys(gov.functions)}`);
+    tx = await gov["approve(address,uint256)"](uniswapRouter.address, govAmt);
+    await provider.waitForTransaction(tx.hash);
+    console.log(`Adding liquidity | ${Object.keys(gov)} | ${Object.keys(gov.functions)}`);
     tx = await uniswapRouter.addLiquidityETH(
       gov.address,
-      parseEther("1000"),
-      Zero,
-      parseEther("100"),
+      ethAmt,
+      ethAmt,
+      govAmt,
       wallet.address,
       Date.now() + 1000 * 60,
+      { value: ethAmt },
     );
     await provider.waitForTransaction(tx.hash);
     reserves = await pair.getReserves();

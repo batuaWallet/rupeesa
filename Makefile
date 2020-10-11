@@ -60,6 +60,14 @@ purge: clean reset
 migrate: transpiled-ts
 	node dist/src.ts/cli.js migrate
 
+## Tests
+
+test: transpiled-ts
+	bash ops/test.sh test
+
+watch:
+	bash ops/test.sh watch
+
 ########################################
 ## Build Rules
 
