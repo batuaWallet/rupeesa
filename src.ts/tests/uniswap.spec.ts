@@ -1,9 +1,28 @@
-import { expect } from "./utils";
+import { utils } from "ethers";
 
-describe("Something", () => {
+import { createUniswapOracle, deployContracts } from "../actions";
+import { AddressBook } from "../addressBook";
 
-  it("should be ok", async () => {
-    expect(true).to.be.ok;
+import { alice } from "./constants";
+import { expect, getTestAddressBook } from "./utils";
+
+const { hexlify, zeroPad, toUtf8Bytes } = utils;
+
+describe("Uniswap", () => {
+  let addressBook: AddressBook;
+
+  beforeEach(async () => {
+    addressBook = await getTestAddressBook();
+    await deployContracts(alice, addressBook, [
+      ["WETH", []],
+      ["DSToken", [hexlify(zeroPad(toUtf8Bytes("UNI"),32))]],
+      ["UniswapFactory", [alice.address]],
+      ["UniswapRouter", ["UniswapFactory", "WETH"]],
+    ]);
+  });
+
+  it("should be created without error", async () => {
+    await expect(createUniswapOracle(alice, addressBook)).to.be.fulfilled;
   });
 
 });

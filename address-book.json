@@ -25,14 +25,14 @@
       "txHash": "0x7f8e08b4d713611fbd3d61a92c3a3cbeab46df37b5e54cad9a8393368ea89a54"
     },
     "UniswapRouter": {
-      "address": "0xf25186B5081Ff5cE73482AD761DB0eB0d25abfBF",
+      "address": "0xbaAA2a3237035A2c7fA2A33c76B44a8C6Fe18e87",
       "args": [
         "0x345cA3e014Aaf5dcA488057592ee47305D9B3e10",
         "0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0"
       ],
-      "creationCodeHash": "0x21445f71b02a6651aaa6ce1edf4027dc677c8908eaee8a7cecd6503230fa69ca",
-      "runtimeCodeHash": "0xd0be0bf2d2c6e67d267393febbb3e406dc0e56d73f1b244b672224154344bc04",
-      "txHash": "0x42bf7632c9a55ede5a99ae191a6108d07ea5000ec8461748c52403fd636e410f"
+      "creationCodeHash": "0x4f35c396cfe2688e087097e7c5d46b724f86452a9c8d61eb937ea3658dc83911",
+      "runtimeCodeHash": "0xdc875769e5e943dbd41f70924c8eb2ae4c6caf4ecd6a5fcc17a442e217208fc5",
+      "txHash": "0xf92c6b55fcf28f3fc5d9e677f5e7e08bbd951b9e788c1df22ab20c2d05c57ba0"
     },
     "Pip": {
       "address": "0x8f0483125FCb9aaAEFA9209D8E9d7b9C8B9Fb90F",

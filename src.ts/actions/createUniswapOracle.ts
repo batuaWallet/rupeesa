@@ -35,10 +35,10 @@ export const createUniswapOracle = async (wallet: Wallet, addressBook: AddressBo
   if (reserves[0].eq(Zero)) {
     const ethAmt = parseEther("100");
     const govAmt = parseEther("1000");
-    console.log(`Approving tokens | ${Object.keys(gov)} | ${Object.keys(gov.functions)}`);
+    console.log(`Approving tokens`);
     tx = await gov["approve(address,uint256)"](uniswapRouter.address, govAmt);
     await wallet.provider.waitForTransaction(tx.hash);
-    console.log(`Adding liquidity | ${Object.keys(gov)} | ${Object.keys(gov.functions)}`);
+    console.log(`Adding liquidity`);
     tx = await uniswapRouter.addLiquidityETH(
       gov.address,
       ethAmt,
