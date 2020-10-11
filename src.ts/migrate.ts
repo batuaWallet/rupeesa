@@ -35,7 +35,7 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
     ["WETH", []],
     ["DSToken", [hexlify(zeroPad(toUtf8Bytes("GOV"),32))]],
     ["UniswapFactory", [wallet.address]],
-    ["UniswapRouter", [wallet.address]],
+    ["UniswapRouter", ["UniswapFactory", "WETH"]],
     ["Pip", []],
     ["Pep", []],
     ["GemFab", []],
@@ -122,14 +122,24 @@ export const migrate = async (ethProviderUrl: string, mnemonic: string, addressB
       txHash: tx.hash,
     } as AddressBookEntry);
   }
-  console.log(`Uniswap pair is at ${pairAddress} for ${gem.address}:${gov.address}`);
   const pair = new Contract(pairAddress, artifacts["UniswapPair"].abi, wallet);
+  console.log(`Uniswap pair is at ${pairAddress} for ${gem.address}:${gov.address}`);
 
-  const gemAmt = formatEther("100");
-  const govAmt = formatEther("1000");
-
-  await gem.approve(pair.address, gemAmt);
-  await gov.approve(pair.address, govAmt);
+  let reserves = await pair.getReserves();
+  if (reserves[0].eq(Zero)) {
+    console.log(`Adding liquidity`);
+    tx = await uniswapRouter.addLiquidityETH(
+      gov.address,
+      parseEther("1000"),
+      Zero,
+      parseEther("100"),
+      wallet.address,
+      Date.now() + 1000 * 60,
+    );
+    await provider.waitForTransaction(tx.hash);
+    reserves = await pair.getReserves();
+  }
+  console.log(`Uniswap pair ${pairAddress} has reserves: ${reserves}`);
 
   ////////////////////////////////////////
   // Execute the Fab build process

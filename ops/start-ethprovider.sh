@@ -26,4 +26,5 @@ docker run \
   $image \
     "--mnemonic=candy maple cake sugar pudding cream honey rich smooth crumble sweet treat" \
     "--gasLimit=50000000" \
-    "--defaultBalanceEther=1000000000"
+    "--defaultBalanceEther=1000000000" \
+    "--allowUnlimitedContractSize"

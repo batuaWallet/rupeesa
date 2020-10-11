@@ -53,12 +53,14 @@ contract UniswapRouter is IUniswapRouter {
                 (amountA, amountB) = (amountADesired, amountBOptimal);
             } else {
                 uint amountAOptimal = UniswapLibrary.quote(amountBDesired, reserveB, reserveA);
+                require(amountAOptimal <= amountADesired, "UniswapRouter: LESS_THAN_DESIRED");
                 assert(amountAOptimal <= amountADesired);
                 require(amountAOptimal >= amountAMin, "UniswapRouter: INSUFFICIENT_A_AMOUNT");
                 (amountA, amountB) = (amountAOptimal, amountBDesired);
             }
         }
     }
+
     function addLiquidity(
         address tokenA,
         address tokenB,
@@ -68,13 +70,27 @@ contract UniswapRouter is IUniswapRouter {
         uint amountBMin,
         address to,
         uint deadline
-    ) external virtual override ensure(deadline) returns (uint amountA, uint amountB, uint liquidity) {
-        (amountA, amountB) = _addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin);
+    )
+        external
+        virtual
+        override
+        ensure(deadline)
+        returns (uint amountA, uint amountB, uint liquidity)
+    {
+        (amountA, amountB) = _addLiquidity(
+            tokenA,
+            tokenB,
+            amountADesired,
+            amountBDesired,
+            amountAMin,
+            amountBMin
+        );
         address pair = UniswapLibrary.pairFor(factory, tokenA, tokenB);
         TransferHelper.safeTransferFrom(tokenA, msg.sender, pair, amountA);
         TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountB);
         liquidity = IUniswapPair(pair).mint(to);
     }
+
     function addLiquidityETH(
         address token,
         uint amountTokenDesired,
@@ -82,7 +98,14 @@ contract UniswapRouter is IUniswapRouter {
         uint amountETHMin,
         address to,
         uint deadline
-    ) external virtual override payable ensure(deadline) returns (uint amountToken, uint amountETH, uint liquidity) {
+    )
+        external
+        virtual
+        override
+        payable
+        ensure(deadline)
+        returns (uint amountToken, uint amountETH, uint liquidity)
+    {
         (amountToken, amountETH) = _addLiquidity(
             token,
             WETH,
@@ -91,6 +114,7 @@ contract UniswapRouter is IUniswapRouter {
             amountTokenMin,
             amountETHMin
         );
+        require(false, "ping");
         address pair = UniswapLibrary.pairFor(factory, token, WETH);
         TransferHelper.safeTransferFrom(token, msg.sender, pair, amountToken);
         IWETH(WETH).deposit{value: amountETH}();

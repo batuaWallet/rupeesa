@@ -37,6 +37,7 @@ import * as TestToken from "../artifacts/TestToken.json";
 import * as TopFab from "../artifacts/TopFab.json";
 import * as TubFab from "../artifacts/TubFab.json";
 import * as UniswapFactory from "../artifacts/UniswapFactory.json";
+import * as UniswapPair from "../artifacts/UniswapPair.json";
 import * as UniswapRouter from "../artifacts/UniswapRouter.json";
 import * as VoxFab from "../artifacts/VoxFab.json";
 import * as WETH from "../artifacts/WETH.json";
@@ -90,6 +91,7 @@ export const artifacts: Artifacts = {
   TopFab,
   TubFab,
   UniswapFactory,
+  UniswapPair,
   UniswapRouter,
   VoxFab,
   WETH,
@@ -133,6 +135,7 @@ export {
   TopFab,
   TubFab,
   UniswapFactory,
+  UniswapPair,
   UniswapRouter,
   VoxFab,
   WETH,
