@@ -1,6 +1,7 @@
-import { waffle } from "@nomiclabs/buidler";
+// import { waffle } from "@nomiclabs/buidler";
+import { MockProvider } from "ethereum-waffle";
 
-export const provider = waffle.provider;
+export const provider = new MockProvider();
 export const wallets = provider.getWallets();
 export const alice = wallets[0];
 export const bob = wallets[1];
