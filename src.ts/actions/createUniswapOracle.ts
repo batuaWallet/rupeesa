@@ -1,4 +1,4 @@
-import { AddressZero, Two } from "@ethersproject/constants";
+import { AddressZero, Zero } from "@ethersproject/constants";
 import { Contract, utils, Wallet } from "ethers";
 
 import { AddressBook, AddressBookEntry } from "../addressBook";
@@ -31,15 +31,14 @@ export const createUniswapOracle = async (wallet: Wallet, addressBook: AddressBo
   }
   const pair = new Contract(pairAddress, artifacts["UniswapPair"].abi, wallet);
   console.log(`Uniswap pair is at ${pairAddress} for ${weth.address}:${gov.address}`);
-  console.log(`Pair at ${pairAddress} has ${((await wallet.provider.getCode(pairAddress)).length-2)/2} bytes of code`);
 
-  let reserves;
-  // let reserves = await pair.getReserves();
-  // console.log(`Got reserves:`, reserves);
-  if (true /*(reserves[0].eq(Zero)*/) {
+  let reserves = await pair.getReserves();
+  if (reserves[0].eq(Zero)) {
+    console.log(`Adding reserves to pair`);
     const ethAmt = parseEther("100");
     const govAmt = parseEther("1000");
     console.log(`Approving tokens`);
+
     tx = await gov["approve(address,uint256)"](uniswapRouter.address, govAmt.mul(govAmt));
     await wallet.provider.waitForTransaction(tx.hash);
 

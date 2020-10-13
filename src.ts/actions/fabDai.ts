@@ -9,7 +9,7 @@ export const fabDai = async (wallet: Wallet, addressBook: AddressBook): Promise<
   const gov = addressBook.getContract("Gov").connect(wallet); // governance token eg MKR
   const pip = addressBook.getContract("Pip").connect(wallet); // TODO: reference price feed
   const pep = addressBook.getContract("Pep").connect(wallet); // TODO: governance price feed
-  const pit = addressBook.getContract("Pit").connect(wallet); // governance fee destination
+  const pit = addressBook.getContract("GemPit").connect(wallet); // governance fee destination
   const fab = addressBook.getContract("DaiFab").connect(wallet); // builder
 
   let tx;
@@ -50,5 +50,8 @@ export const fabDai = async (wallet: Wallet, addressBook: AddressBook): Promise<
     step = await fab.step();
     console.log(`Fab ${fab.address} is on step ${step}`);
   }
+
+  console.log(`Single collateral Dai has been deployed to ${await fab.sai()}`);
+  // TODO: add new contracts to address book
 
 };

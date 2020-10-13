@@ -33,7 +33,7 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
   if (chainId === "1337") {
     schema = [
       ["WETH", []],
-      ["GOV", [hexlify(zeroPad(toUtf8Bytes("GOV"),32))]],
+      ["Gov", [hexlify(zeroPad(toUtf8Bytes("GOV"),32))]],
       ["UniswapFactory", [wallet.address]],
       ["UniswapRouter", ["UniswapFactory", "WETH"]],
       ["Pip", []],

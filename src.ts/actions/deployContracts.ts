@@ -50,7 +50,6 @@ const deployContract = async (
   addressBook: AddressBook,
 ): Promise<Contract> => {
   console.log(`Deploying ${name} with args [${args.join(", ")}]`);
-  console.log(`Bytecode is ${(artifacts[name].bytecode.length-2)/2} bytes long`);
   const factory = ContractFactory.fromSolidity(artifacts[name]).connect(wallet);
   const deployTx = factory.getDeployTransaction(...args);
   const tx = await wallet.sendTransaction({ ...deployTx, gasPrice: parseUnits("100", 9) });
