@@ -10,6 +10,7 @@ import * as packageJson from "./package.json";
 // and use them to fund accounts in the test as needed
 const MAX_INT = BigNumber.from(2).pow(256).sub(1);
 
+usePlugin("@nomiclabs/buidler-ethers");
 usePlugin("@nomiclabs/buidler-waffle");
 
 const config: BuidlerConfig = {
@@ -26,6 +27,7 @@ const config: BuidlerConfig = {
     buidlerevm: {
       chainId: 1337,
       loggingEnabled: true,
+      blockGasLimit: 50000000,
       accounts: [
         {
           // 0x627306090abaB3A6e1400e9345bC60c78a8BEf57 // SUGAR DADDY

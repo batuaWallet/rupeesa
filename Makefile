@@ -82,7 +82,7 @@ node-modules: builder package.json
 	$(docker_run) "npm install"
 	$(log_finish) && mv -f $(totalTime) .flags/$@
 
-compiled-sol: node-modules $(shell find src.sol $(find_options))
+compiled-sol: node-modules buidler.config.ts $(shell find src.sol $(find_options))
 	$(log_start)
 	$(docker_run) "npm run compile"
 	$(log_finish) && mv -f $(totalTime) .flags/$@

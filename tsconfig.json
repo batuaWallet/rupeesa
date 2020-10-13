@@ -26,10 +26,12 @@
     "typeRoots": ["./node_modules/@types"]
   },
   "exclude": ["dist", "node_modules"],
+  "files": [
+    "node_modules/@nomiclabs/buidler-ethers/src/type-extensions.d.ts",
+    "node_modules/@nomiclabs/buidler-waffle/src/type-extensions.d.ts"
+  ],
   "include": [
-    "./node_modules/@nomiclabs/buidler-ethers/src/type-extensions.d.ts",
-    "./node_modules/@nomiclabs/buidler-waffle/src/type-extensions.d.ts",
-    "./buidler.config.ts",
+    "buidler.config.ts",
     "src.ts/**/*.ts"
   ]
 }
