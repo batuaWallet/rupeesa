@@ -1,13 +1,24 @@
-import waffle from "@nomiclabs/buidler-waffle";
-waffle();
+import { waffle } from "@nomiclabs/buidler";
 
-console.log(`${JSON.stringify(provider, null, 2)}`);
-
-export const provider = process.env.provider!;
+export const provider = waffle.provider;
 export const wallets = provider.getWallets();
 export const alice = wallets[0];
 export const bob = wallets[1];
 export const rando = wallets[2];
+export const addressBookPath = "/tmp/address-book.json";
+
+/*
+
+import { waffle from "@nomiclabs/buidler-waffle";
+import { Wallet } from "ethers";
+
+console.log(`${JSON.stringify(waffle, null, 2)}`);
+
+export const provider = waffle.provider;
+// export const wallets = provider.getWallets();
+export const alice = Wallet.createRandom(); // wallets[0];
+export const bob = Wallet.createRandom(); // wallets[1];
+export const rando = Wallet.createRandom(); // wallets[2];
 export const addressBookPath = "/tmp/address-book.json";
 
 /*

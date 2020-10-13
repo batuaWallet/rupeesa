@@ -1,16 +1,34 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "noImplicitAny": true,
-    "outDir": "dist",
-    "resolveJsonModule": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
-    "allowJs": true
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2017", "dom", "esnext.asynciterable", "ES2019"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "noLib": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "outDir": "dist",
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
+    "typeRoots": ["./node_modules/@types"]
   },
   "exclude": ["dist", "node_modules"],
   "include": [
-    "../../node_modules/@nomiclabs/buidler-ethers/src/type-extensions.d.ts",
-    "../../node_modules/@nomiclabs/buidler-waffle/src/type-extensions.d.ts",
+    "./node_modules/@nomiclabs/buidler-ethers/src/type-extensions.d.ts",
+    "./node_modules/@nomiclabs/buidler-waffle/src/type-extensions.d.ts",
     "./buidler.config.ts",
     "src.ts/**/*.ts"
   ]
