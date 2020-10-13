@@ -50,14 +50,15 @@ reset: stop-all
 	docker volume rm oracle_chaindata oracle_database oracle_oracledata || true
 
 clean: stop-all
-	rm -rf .flags/*
-	rm -rf artifacts/*
-	rm -rf cache/*
-	rm -rf dist/*
+	rm -rf .*.docker-compose.yml
+	rm -rf .flags
+	rm -rf artifacts
+	rm -rf cache
+	rm -rf dist
 
 purge: clean reset
-	rm -f package-lock.json
-	rm -f node_modules
+	rm -rf node_modules
+	rm -rf package-lock.json
 
 migrate: transpiled-ts
 	node dist/src.ts/cli.js migrate
