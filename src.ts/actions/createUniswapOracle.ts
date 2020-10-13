@@ -1,16 +1,16 @@
-import { AddressZero, Zero } from "@ethersproject/constants";
+import { AddressZero, Two } from "@ethersproject/constants";
 import { Contract, utils, Wallet } from "ethers";
 
 import { AddressBook, AddressBookEntry } from "../addressBook";
 import { artifacts } from "../artifacts";
 
-const { parseEther } = utils;
+const { keccak256, parseEther } = utils;
 
 export const createUniswapOracle = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   console.log("\nChecking Uniswap Pools..");
 
   const weth = addressBook.getContract("WETH").connect(wallet);
-  const gov =  addressBook.getContract("DSToken").connect(wallet);
+  const gov =  addressBook.getContract("Gov").connect(wallet);
   const uniswapFactory = addressBook.getContract("UniswapFactory").connect(wallet);
   const uniswapRouter = addressBook.getContract("UniswapRouter").connect(wallet);
 
@@ -40,8 +40,11 @@ export const createUniswapOracle = async (wallet: Wallet, addressBook: AddressBo
     const ethAmt = parseEther("100");
     const govAmt = parseEther("1000");
     console.log(`Approving tokens`);
-    tx = await gov["approve(address,uint256)"](uniswapRouter.address, govAmt);
+    tx = await gov["approve(address,uint256)"](uniswapRouter.address, govAmt.mul(govAmt));
     await wallet.provider.waitForTransaction(tx.hash);
+
+    console.log(`pair code hash: ${keccak256(await uniswapFactory.pairCreationCode())}`);
+
     console.log(`Adding liquidity`);
     tx = await uniswapRouter.addLiquidityETH(
       gov.address,

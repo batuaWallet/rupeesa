@@ -9,7 +9,7 @@ export const mintTokens = async (wallet: Wallet, addressBook: AddressBook): Prom
   console.log("\nChecking Tokens..");
 
   const gem = addressBook.getContract("WETH").connect(wallet);
-  const gov = addressBook.getContract("DSToken").connect(wallet); // governance token eg MKR
+  const gov = addressBook.getContract("Gov").connect(wallet); // governance token eg MKR
 
   let balance;
   let tx;

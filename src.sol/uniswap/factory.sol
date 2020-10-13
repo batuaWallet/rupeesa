@@ -10,6 +10,8 @@ contract UniswapFactory is IUniswapFactory {
     address public override feeTo;
     address public override feeToSetter;
 
+    bytes public constant pairCreationCode = type(UniswapPair).creationCode;
+
     mapping(address => mapping(address => address)) public override getPair;
     address[] public override allPairs;
 
@@ -28,14 +30,13 @@ contract UniswapFactory is IUniswapFactory {
         require(getPair[token0][token1] == address(0), "Uniswap: PAIR_EXISTS"); // single check is sufficient
         bytes memory bytecode = type(UniswapPair).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(token0, token1));
-        assembly {
-            pair := create2(0, add(bytecode, 32), mload(bytecode), salt)
-        }
-        IUniswapPair(pair).initialize(token0, token1);
-        getPair[token0][token1] = pair;
-        getPair[token1][token0] = pair; // populate mapping in the reverse direction
-        allPairs.push(pair);
-        emit PairCreated(token0, token1, pair, allPairs.length);
+        UniswapPair pair = new UniswapPair{salt: salt}();
+        pair.initialize(token0, token1);
+        getPair[token0][token1] = address(pair);
+        getPair[token1][token0] = address(pair); // populate mapping in the reverse direction
+        allPairs.push(address(pair));
+        emit PairCreated(token0, token1, address(pair), allPairs.length);
+        return address(pair);
     }
 
     function setFeeTo(address _feeTo) external override {

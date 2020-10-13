@@ -17,11 +17,10 @@ import * as DSSpell from "../artifacts/DSSpell.json";
 import * as DSSpellBook from "../artifacts/DSSpellBook.json";
 import * as DSStop from "../artifacts/DSStop.json";
 import * as DSThing from "../artifacts/DSThing.json";
-import * as DSToken from "../artifacts/DSToken.json";
-import * as DSTokenBase from "../artifacts/DSTokenBase.json";
 import * as DSValue from "../artifacts/DSValue.json";
 import * as GemFab from "../artifacts/GemFab.json";
 import * as GemPit from "../artifacts/GemPit.json";
+import * as Gov from "../artifacts/Gov.json";
 import * as IERC20 from "../artifacts/IERC20.json";
 import * as MomFab from "../artifacts/MomFab.json";
 import * as Pep from "../artifacts/Pep.json";
@@ -71,11 +70,10 @@ export const artifacts: Artifacts = {
   DSSpellBook,
   DSStop,
   DSThing,
-  DSToken,
-  DSTokenBase,
   DSValue,
   GemFab,
   GemPit,
+  Gov,
   IERC20,
   MomFab,
   Pep,
@@ -115,11 +113,10 @@ export {
   DSSpellBook,
   DSStop,
   DSThing,
-  DSToken,
-  DSTokenBase,
   DSValue,
   GemFab,
   GemPit,
+  Gov,
   IERC20,
   MomFab,
   Pep,

@@ -6,7 +6,7 @@ export const fabDai = async (wallet: Wallet, addressBook: AddressBook): Promise<
 
   const weth = addressBook.getContract("WETH").connect(wallet);
   const gem = weth; // collateral
-  const gov = addressBook.getContract("DSToken").connect(wallet); // governance token eg MKR
+  const gov = addressBook.getContract("Gov").connect(wallet); // governance token eg MKR
   const pip = addressBook.getContract("Pip").connect(wallet); // TODO: reference price feed
   const pep = addressBook.getContract("Pep").connect(wallet); // TODO: governance price feed
   const pit = addressBook.getContract("Pit").connect(wallet); // governance fee destination

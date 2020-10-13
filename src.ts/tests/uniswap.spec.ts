@@ -15,7 +15,7 @@ describe("Uniswap", () => {
     addressBook = await getTestAddressBook();
     await deployContracts(alice, addressBook, [
       ["WETH", []],
-      ["DSToken", [hexlify(zeroPad(toUtf8Bytes("UNI"),32))]],
+      ["Gov", [hexlify(zeroPad(toUtf8Bytes("UNI"),32))]],
       ["UniswapFactory", [alice.address]],
       ["UniswapRouter", ["UniswapFactory", "WETH"]],
     ]);
