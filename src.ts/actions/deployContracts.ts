@@ -1,5 +1,5 @@
 import { AddressZero, EtherSymbol } from "@ethersproject/constants";
-import { Contract, ContractFactory, Wallet, providers, utils, BigNumber } from "ethers";
+import { Contract, ContractFactory, Wallet, providers, utils } from "ethers";
 
 import { AddressBook, AddressBookEntry } from "../addressBook";
 import { artifacts } from "../artifacts";
@@ -50,14 +50,10 @@ const deployContract = async (
   addressBook: AddressBook,
 ): Promise<Contract> => {
   console.log(`Deploying ${name} with args [${args.join(", ")}]`);
-  // NOTE: No special case for testnet token bc non-testnet-tokens are not mintable & throw errors
+  console.log(`Bytecode is ${(artifacts[name].bytecode.length-2)/2} bytes long`);
   const factory = ContractFactory.fromSolidity(artifacts[name]).connect(wallet);
   const deployTx = factory.getDeployTransaction(...args);
-  const tx = await wallet.sendTransaction({
-    ...deployTx,
-    gasLimit: BigNumber.from("50000000"),
-    gasPrice: parseUnits("100", 9),
-  });
+  const tx = await wallet.sendTransaction({ ...deployTx, gasPrice: parseUnits("100", 9) });
   console.log(`Sent transaction to deploy ${name}, txHash: ${tx.hash}`);
   const receipt = await tx.wait();
   const address = Contract.getContractAddress(tx);
