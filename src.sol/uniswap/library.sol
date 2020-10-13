@@ -2,8 +2,8 @@
 
 pragma solidity ^0.7.0;
 
-import "./SafeMath.sol";
 import "../interfaces/IUniswapPair.sol";
+import "../lib/SafeMath.sol";
 
 library UniswapLibrary {
     using SafeMath for uint;
@@ -33,10 +33,9 @@ library UniswapLibrary {
         address tokenB
     ) internal view returns (uint reserveA, uint reserveB) {
         (address token0,) = sortTokens(tokenA, tokenB);
-        address pair = pairFor(factory, tokenA, tokenB);
-        require(false, "ping");
-        (uint112 reserve0, uint112 reserve1,) = IUniswapPair(pair).getReserves();
-        require(false, "pong");
+        (uint reserve0, uint reserve1,) = IUniswapPair(
+          pairFor(factory, tokenA, tokenB)
+        ).getReserves();
         (reserveA, reserveB) = tokenA == token0 ? (reserve0, reserve1) : (reserve1, reserve0);
     }
 

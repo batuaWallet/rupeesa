@@ -17,6 +17,7 @@ export const createUniswapOracle = async (wallet: Wallet, addressBook: AddressBo
   let tx;
 
   let pairAddress = await uniswapFactory.getPair(weth.address, gov.address);
+
   if (!pairAddress || pairAddress === AddressZero) {
     console.log(`Deploying new uniswap pair`);
     tx = await uniswapFactory.createPair(weth.address, gov.address);
@@ -30,9 +31,12 @@ export const createUniswapOracle = async (wallet: Wallet, addressBook: AddressBo
   }
   const pair = new Contract(pairAddress, artifacts["UniswapPair"].abi, wallet);
   console.log(`Uniswap pair is at ${pairAddress} for ${weth.address}:${gov.address}`);
+  console.log(`Pair at ${pairAddress} has ${((await wallet.provider.getCode(pairAddress)).length-2)/2} bytes of code`);
 
-  let reserves = await pair.getReserves();
-  if (reserves[0].eq(Zero)) {
+  let reserves;
+  // let reserves = await pair.getReserves();
+  // console.log(`Got reserves:`, reserves);
+  if (true /*(reserves[0].eq(Zero)*/) {
     const ethAmt = parseEther("100");
     const govAmt = parseEther("1000");
     console.log(`Approving tokens`);
@@ -41,9 +45,9 @@ export const createUniswapOracle = async (wallet: Wallet, addressBook: AddressBo
     console.log(`Adding liquidity`);
     tx = await uniswapRouter.addLiquidityETH(
       gov.address,
-      ethAmt,
-      ethAmt,
       govAmt,
+      govAmt,
+      ethAmt,
       wallet.address,
       Date.now() + 1000 * 60,
       { value: ethAmt },

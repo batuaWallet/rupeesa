@@ -8,7 +8,8 @@ import "../interfaces/IUniswapRouter.sol";
 import "../interfaces/IWETH.sol";
 import "../lib/SafeMath.sol";
 import "../lib/TransferHelper.sol";
-import "../lib/UniswapLibrary.sol";
+
+import "./library.sol";
 
 contract UniswapRouter is IUniswapRouter {
     using SafeMath for uint;
@@ -43,6 +44,11 @@ contract UniswapRouter is IUniswapRouter {
         if (IUniswapFactory(factory).getPair(tokenA, tokenB) == address(0)) {
             IUniswapFactory(factory).createPair(tokenA, tokenB);
         }
+        require(
+          IUniswapFactory(factory).getPair(tokenA, tokenB) ==
+          UniswapLibrary.pairFor(factory, tokenA, tokenB),
+          "Saved pair address doesn't match the lib calculation"
+        );
         (uint reserveA, uint reserveB) = UniswapLibrary.getReserves(factory, tokenA, tokenB);
         if (reserveA == 0 && reserveB == 0) {
             (amountA, amountB) = (amountADesired, amountBDesired);

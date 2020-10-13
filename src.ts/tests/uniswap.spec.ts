@@ -19,6 +19,7 @@ describe("Uniswap", () => {
       ["UniswapFactory", [alice.address]],
       ["UniswapRouter", ["UniswapFactory", "WETH"]],
     ]);
+    console.log("UniswapRouter entry: ", addressBook.getEntry("UniswapRouter"));
   });
 
   it("should be created without error", async () => {
