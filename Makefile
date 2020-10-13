@@ -56,6 +56,8 @@ clean: stop-all
 	rm -rf dist/*
 
 purge: clean reset
+	rm -f package-lock.json
+	rm -f node_modules
 
 migrate: transpiled-ts
 	node dist/src.ts/cli.js migrate
