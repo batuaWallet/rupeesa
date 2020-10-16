@@ -5,32 +5,36 @@
 
 pragma solidity ^0.7.0;
 
+import "../interfaces/IDSToken.sol";
+
 import "./base.sol";
 import "./stop.sol";
 
-contract DSToken is DSTokenBase(0), DSStop {
+contract DSToken is IDSToken, DSTokenBase(0), DSStop {
 
-    bytes32  public  symbol;
-    uint256  public  decimals = 18; // standard token precision. override to customize
+    bytes32  public  override  symbol;
+    uint256  public  override  decimals = 18; // standard token precision. override to customize
 
     constructor(bytes32 symbol_) {
         symbol = symbol_;
     }
 
-    event Mint(address indexed guy, uint wad);
-    event Burn(address indexed guy, uint wad);
-
-    function approve(address guy) public stoppable returns (bool) {
+    function approve(address guy) public override stoppable returns (bool) {
         return super.approve(guy, uint(-1));
     }
 
-    function approve(address guy, uint wad) public override stoppable returns (bool) {
+    function approve(address guy, uint wad)
+        public
+        override(IDSToken, DSTokenBase)
+        stoppable
+        returns (bool)
+    {
         return super.approve(guy, wad);
     }
 
     function transferFrom(address src, address dst, uint wad)
         public
-        override
+        override(IDSToken, DSTokenBase)
         stoppable
         returns (bool)
     {
@@ -46,33 +50,33 @@ contract DSToken is DSTokenBase(0), DSStop {
         return true;
     }
 
-    function push(address dst, uint wad) public {
+    function push(address dst, uint wad) public override {
         transferFrom(msg.sender, dst, wad);
     }
 
-    function pull(address src, uint wad) public {
+    function pull(address src, uint wad) public override {
         transferFrom(src, msg.sender, wad);
     }
 
-    function move(address src, address dst, uint wad) public {
+    function move(address src, address dst, uint wad) public override {
         transferFrom(src, dst, wad);
     }
 
-    function mint(uint wad) public {
+    function mint(uint wad) public override {
         mint(msg.sender, wad);
     }
 
-    function burn(uint wad) public {
+    function burn(uint wad) public override {
         burn(msg.sender, wad);
     }
 
-    function mint(address guy, uint wad) public auth stoppable {
+    function mint(address guy, uint wad) public override auth stoppable {
         _balances[guy] = add(_balances[guy], wad);
         _supply = add(_supply, wad);
         emit Mint(guy, wad);
     }
 
-    function burn(address guy, uint wad) public auth stoppable {
+    function burn(address guy, uint wad) public override auth stoppable {
         if (guy != msg.sender && _approvals[guy][msg.sender] != uint(-1)) {
             _approvals[guy][msg.sender] = sub(_approvals[guy][msg.sender], wad);
         }

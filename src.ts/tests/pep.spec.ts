@@ -30,6 +30,9 @@ describe("Pep", () => {
     const uniPair = addressBook.getContract("UniswapPair-GemGov");
     const reserves = await uniPair.getReserves();
     console.log(`Reserves for ${gem.address}/${gov.address}: ${reserves}`);
+
+    // await deployContracts(alice, addressBook, ["Pep"]);
+
   });
 
 });

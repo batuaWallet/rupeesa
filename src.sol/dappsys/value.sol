@@ -23,12 +23,12 @@ contract DSValue is IDSValue, DSThing {
         return wut;
     }
 
-    function poke(bytes32 wut) public override payable {
+    function poke(bytes32 wut) public override payable note auth {
         val = wut;
         has = true;
     }
 
-    function void() public override payable {
+    function void() public override payable note auth {
         has = false;
     }
 }
