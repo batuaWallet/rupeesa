@@ -20,6 +20,7 @@ import * as DSToken from "../artifacts/DSToken.json";
 import * as GemFab from "../artifacts/GemFab.json";
 import * as GemPit from "../artifacts/GemPit.json";
 import * as Gov from "../artifacts/Gov.json";
+import * as Governance from "../artifacts/Governance.json";
 import * as IERC20 from "../artifacts/IERC20.json";
 import * as MomFab from "../artifacts/MomFab.json";
 import * as Pep from "../artifacts/Pep.json";
@@ -77,6 +78,7 @@ export const artifacts: Artifacts = {
   GemFab,
   GemPit,
   Gov,
+  Governance,
   IERC20,
   MomFab,
   Pep,
@@ -103,7 +105,6 @@ export const artifacts: Artifacts = {
 } as any;
 
 export {
-  DadFab,
   DSAuth,
   DSAuthority,
   DSChief,
@@ -120,9 +121,11 @@ export {
   DSStop,
   DSThing,
   DSToken,
+  DadFab,
   GemFab,
   GemPit,
   Gov,
+  Governance,
   IERC20,
   MomFab,
   Pep,

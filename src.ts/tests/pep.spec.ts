@@ -18,6 +18,7 @@ describe.skip("Pep", () => {
       ["Gov", [hexlify(zeroPad(toUtf8Bytes("UNI"),32))]],
       ["UniswapFactory", [alice.address]],
       ["UniswapRouter", ["UniswapFactory", "Weth"]],
+      ["Pep", []],
     ]);
     console.log("UniswapRouter entry: ", addressBook.getEntry("UniswapRouter"));
     await expect(mintTokens(alice, addressBook)).to.be.fulfilled;
@@ -30,9 +31,10 @@ describe.skip("Pep", () => {
     const uniPair = addressBook.getContract("UniswapPair-GemGov");
     const reserves = await uniPair.getReserves();
     console.log(`Reserves for ${gem.address}/${gov.address}: ${reserves}`);
-
-    // await deployContracts(alice, addressBook, ["Pep"]);
-
   });
+
+
+  // it("should be peek-able", async () => {});
+  // it("should be poke-able", async () => {});
 
 });

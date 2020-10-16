@@ -6,11 +6,11 @@ import { AddressBook, getAddressBook } from "../addressBook";
 import { MigrationSchema } from "../types";
 
 import { deployContracts } from "./deployContracts";
-import { mintTokens } from "./mintTokens";
-import { createUniswapOracle } from "./createUniswapOracle";
+import { getPip } from "./getPip";
+import { getPep, setPep } from "./getPep";
 import { fabSai } from "./fabSai";
 
-const { formatEther, hexlify, toUtf8Bytes, zeroPad } = utils;
+const { formatEther } = utils;
 
 export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
 
@@ -28,38 +28,23 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
   ////////////////////////////////////////
   // Deploy contracts
 
-  let schema = [] as MigrationSchema;
-
+  // Deploy "global" things that already exist on mainnet
   if (chainId === "1337") {
-    schema = [
+    await deployContracts(wallet, addressBook, [
       ["Weth", []],
-      ["Gov", [hexlify(zeroPad(toUtf8Bytes("GOV"),32))]],
       ["UniswapFactory", [wallet.address]],
       ["UniswapRouter", ["UniswapFactory", "Weth"]],
-      ["Pip", []],
-      ["Pep", []],
-      ["GemFab", []],
-      ["VoxFab", []],
-      ["TubFab", []],
-      ["TapFab", []],
-      ["TopFab", []],
-      ["MomFab", []],
-      ["DadFab", []],
-      ["GemPit", []],
-      ["SaiFab", ["GemFab", "VoxFab", "TubFab", "TapFab", "TopFab", "MomFab", "DadFab"]],
-    ];
+    ]);
+
+    await getPip(wallet, addressBook);
+    await getGov(wallet, addressBook);
+    await getPep(wallet, addressBook);
+    await fabSai(wallet, addressBook);
+    await setPep(wallet, addressBook);
+
   } else {
     throw new Error(`Migrations for chain ${chainId} are not supported.`);
   }
-
-  await deployContracts(wallet, addressBook, schema);
-  await mintTokens(wallet, addressBook);
-  await fabSai(wallet, addressBook);
-
-  // TODO: generate some Sai
-
-  await createUniswapOracle({ Sai: "1", Gov: "2" }, wallet, addressBook);
-  await createUniswapOracle({ Sai: "1", Weth: "2" }, wallet, addressBook);
 
   ////////////////////////////////////////
   // Print summary
