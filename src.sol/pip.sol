@@ -15,7 +15,7 @@ contract Pip is IPip, DSThing  {
 
     function read() public override view returns (bytes32) {
         (bytes32 wut, bool haz) = peek();
-        assert(haz);
+        require(haz, "Pip: HAZ_NOT");
         return wut;
     }
 

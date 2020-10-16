@@ -26,7 +26,7 @@ contract UniswapOracle {
     FixedPoint.uq112x112 public price0Average;
     FixedPoint.uq112x112 public price1Average;
 
-    constructor(address factory, address tokenA, address tokenB) public {
+    constructor(address factory, address tokenA, address tokenB) {
         IUniswapPair _pair = IUniswapPair(UniswapLibrary.pairFor(factory, tokenA, tokenB));
         pair = _pair;
         token0 = _pair.token0();

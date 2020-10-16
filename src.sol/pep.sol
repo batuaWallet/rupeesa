@@ -15,12 +15,12 @@ import "./uniswap/oracleLib.sol";
 contract Pep is IPep, DSThing {
     using FixedPoint for *;
 
-    bool govIsIndexZero;
-    bool ready;
+    bool internal govIsIndexZero;
+    bool internal ready;
 
     uint public constant PERIOD = 24 hours;
 
-    IUniswapPair pair;
+    IUniswapPair public pair;
     address public gov;
 
     uint    public priceCumulativeLast;
@@ -29,6 +29,7 @@ contract Pep is IPep, DSThing {
 
     function init(IUniswapPair _pair, bool _govIsIndexZero) public auth {
         require(!ready, "Pep: ALREADY_INITIALIZED");
+        ready = true;
 
         pair = _pair;
         govIsIndexZero = _govIsIndexZero;
@@ -49,21 +50,19 @@ contract Pep is IPep, DSThing {
             reserve0 != 0 && reserve1 != 0,
             "ExampleOracleSimple: NO_RESERVES"
         );
-        ready = true;
     }
 
     function peek() public override view returns (bytes32, bool) {
         if (ready) {
-          uint amountOut = priceAverage.mul(1).decode144();
-          return (bytes32(amountOut), ready);
+          return (bytes32(uint(priceAverage.decode())), ready);
         } else {
-          return (bytes32(0), ready);
+          return (bytes32(uint(1)), ready);
         }
     }
 
     function read() external override view returns (bytes32) {
         (bytes32 wut, bool haz) = peek();
-        assert(haz);
+        require(haz, "Pep: HAZ_NOT");
         return wut;
     }
 

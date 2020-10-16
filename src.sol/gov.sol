@@ -7,4 +7,3 @@ import "./dappsys/token.sol";
 contract Gov is DSToken {
     constructor(bytes32 symbol) DSToken(symbol) {}
 }
-

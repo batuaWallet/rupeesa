@@ -161,7 +161,7 @@ contract SaiFab is DSAuth {
     function configParams() public auth {
         require(step == 3);
 
-        tub.mold("cap", 0);
+        tub.mold("cap", 100000  ether);
         tub.mold("mat", ray(1.5  ether));
         tub.mold("axe", ray(1.13 ether));
         tub.mold("fee", 1000000000158153903837946257);  // 0.5% / year
@@ -176,7 +176,7 @@ contract SaiFab is DSAuth {
     function verifyParams() public auth {
         require(step == 4);
 
-        require(tub.cap() == 0);
+        require(tub.cap() == 100000000000000000000000);
         require(tub.mat() == 1500000000000000000000000000);
         require(tub.axe() == 1130000000000000000000000000);
         require(tub.fee() == 1000000000158153903837946257);
@@ -200,14 +200,19 @@ contract SaiFab is DSAuth {
 
         vox.setAuthority(dad);
         vox.setOwner(address(0));
+
         tub.setAuthority(dad);
         tub.setOwner(address(0));
+
         tap.setAuthority(dad);
         tap.setOwner(address(0));
+
         sai.setAuthority(dad);
         sai.setOwner(address(0));
+
         sin.setAuthority(dad);
         sin.setOwner(address(0));
+
         skr.setAuthority(dad);
         skr.setOwner(address(0));
 
@@ -219,11 +224,13 @@ contract SaiFab is DSAuth {
         dad.permit(address(top), address(tub), S("cage(uint256,uint256)"));
         dad.permit(address(top), address(tub), S("flow()"));
         dad.permit(address(top), address(tap), S("cage(uint256)"));
+
         dad.permit(address(tub), address(skr), S("mint(address,uint256)"));
         dad.permit(address(tub), address(skr), S("burn(address,uint256)"));
         dad.permit(address(tub), address(sai), S("mint(address,uint256)"));
         dad.permit(address(tub), address(sai), S("burn(address,uint256)"));
         dad.permit(address(tub), address(sin), S("mint(address,uint256)"));
+
         dad.permit(address(tap), address(sai), S("mint(address,uint256)"));
         dad.permit(address(tap), address(sai), S("burn(address,uint256)"));
         dad.permit(address(tap), address(sai), S("burn(uint256)"));
@@ -231,6 +238,7 @@ contract SaiFab is DSAuth {
         dad.permit(address(tap), address(skr), S("mint(uint256)"));
         dad.permit(address(tap), address(skr), S("burn(uint256)"));
         dad.permit(address(tap), address(skr), S("burn(address,uint256)"));
+
         dad.permit(address(mom), address(vox), S("mold(bytes32,uint256)"));
         dad.permit(address(mom), address(vox), S("tune(uint256)"));
         dad.permit(address(mom), address(tub), S("mold(bytes32,uint256)"));

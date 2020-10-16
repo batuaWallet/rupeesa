@@ -29,8 +29,8 @@ contract SaiTub is DSThing, SaiTubEvents {
     DSToken  public  gov;  // Governance token
 
     SaiVox   public  vox;  // Target price feed
-    IPip  public  pip;  // Reference price feed
-    IPep  public  pep;  // Governance price feed
+    IPip  public  pip;  // Reference price feed (ref per gem)
+    IPep  public  pep;  // Governance price feed (gov per sai?)
 
     address  public  tap;  // Liquidator
     address  public  pit;  // Governance Vault
@@ -140,7 +140,7 @@ contract SaiTub is DSThing, SaiTubEvents {
     //--Risk-parameter-config-------------------------------------------
 
     function mold(bytes32 param, uint val) public payable note auth {
-        if      (param == "cap") cap = val;
+        if      (param == "cap") { cap = val; }
         else if (param == "mat") { require(val >= RAY); mat = val; }
         else if (param == "tax") { require(val >= RAY); drip(); tax = val; }
         else if (param == "fee") { require(val >= RAY); drip(); fee = val; }
@@ -183,9 +183,9 @@ contract SaiTub is DSThing, SaiTubEvents {
         return rmul(wad, wmul(per(), sub(2 * WAD, gap)));
     }
     function join(uint wad) public payable note {
-        require(!off);
-        require(ask(wad) > 0);
-        require(gem.transferFrom(msg.sender, address(this), ask(wad)));
+        require(!off, "Tub: OFF");
+        require(ask(wad) > 0, "Tub: ASK_ZERO");
+        require(gem.transferFrom(msg.sender, address(this), ask(wad)), "Tub: GEM_TRANSFER_FAILED");
         skr.mint(msg.sender, wad);
     }
     function exit(uint wad) public payable note {
@@ -247,10 +247,12 @@ contract SaiTub is DSThing, SaiTubEvents {
 
     function open() public payable note returns (bytes32 cup) {
         require(!off);
+        require(msg.sender != address(0), "Tub: MSG_SENDER_ZERO");
         cupi = add(cupi, 1);
         cup = bytes32(cupi);
         cups[cup].lad = msg.sender;
         LogNewCup(msg.sender, cup);
+        require(cups[cup].lad != address(0), "Tub: TUB_LAD_ZERO");
     }
     function give(bytes32 cup, address guy) public payable note {
         require(msg.sender == cups[cup].lad);
@@ -259,10 +261,10 @@ contract SaiTub is DSThing, SaiTubEvents {
     }
 
     function lock(bytes32 cup, uint wad) public payable note {
-        require(!off);
+        require(!off, "Tub: OFF");
         cups[cup].ink = add(cups[cup].ink, wad);
         skr.pull(msg.sender, wad);
-        require(cups[cup].ink == 0 || cups[cup].ink > 0.005 ether);
+        require(cups[cup].ink == 0 || cups[cup].ink > 0.005 ether, "Tub: INK_AINT_RIGHT");
     }
     function free(bytes32 cup, uint wad) public payable note {
         require(msg.sender == cups[cup].lad);
@@ -273,9 +275,9 @@ contract SaiTub is DSThing, SaiTubEvents {
     }
 
     function draw(bytes32 cup, uint wad) public payable note {
-        require(!off);
-        require(msg.sender == cups[cup].lad);
-        require(rdiv(wad, chi()) > 0);
+        require(!off, "Tub: OFF");
+        require(msg.sender == cups[cup].lad, "Tub: NOT_LAD");
+        require(rdiv(wad, chi()) > 0, "Tub: ZERO_WAD_CHI");
 
         cups[cup].art = add(cups[cup].art, rdiv(wad, chi()));
         rum = add(rum, rdiv(wad, chi()));
@@ -283,8 +285,8 @@ contract SaiTub is DSThing, SaiTubEvents {
         cups[cup].ire = add(cups[cup].ire, rdiv(wad, rhi()));
         sai.mint(cups[cup].lad, wad);
 
-        require(safe(cup));
-        require(sai.totalSupply() <= cap);
+        require(safe(cup), "Tub: CDP_UNSAFE");
+        require(sai.totalSupply() <= cap, "Tub: CAP_EXCEEDED");
     }
 
     // Repay wad (amount) of debt to cup (cdp id)
