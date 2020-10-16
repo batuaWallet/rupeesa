@@ -8,6 +8,8 @@
 pragma solidity ^0.7.0;
 
 import "../dappsys/thing.sol";
+import "../interfaces/IPip.sol";
+import "../interfaces/IPep.sol";
 
 import "./tub.sol";
 import "./top.sol";
@@ -60,11 +62,11 @@ contract SaiMom is DSThing {
         tub.mold("gap", wad);
     }
     // ETH/USD Feed
-    function setPip(DSValue pip_) public payable note auth {
+    function setPip(IPip pip_) public payable note auth {
         tub.setPip(pip_);
     }
     // MKR/USD Feed
-    function setPep(DSValue pep_) public payable note auth {
+    function setPep(IPep pep_) public payable note auth {
         tub.setPep(pep_);
     }
     // TRFM

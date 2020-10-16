@@ -7,6 +7,8 @@ import "../dappsys/token.sol";
 import "../dappsys/guard.sol";
 import "../dappsys/roles.sol";
 import "../dappsys/value.sol";
+import "../interfaces/IPip.sol";
+import "../interfaces/IPep.sol";
 
 import "./mom.sol";
 
@@ -31,8 +33,8 @@ contract TubFab {
         DSToken skr,
         IERC20 gem,
         DSToken gov,
-        DSValue pip,
-        DSValue pep,
+        IPip pip,
+        IPep pep,
         SaiVox vox,
         address pit
     ) public returns (SaiTub tub) {
@@ -121,7 +123,7 @@ contract DaiFab is DSAuth {
         step += 1;
     }
 
-    function makeVoxTub(IERC20 gem, DSToken gov, DSValue pip, DSValue pep, address pit) public auth {
+    function makeVoxTub(IERC20 gem, DSToken gov, IPip pip, IPep pep, address pit) public auth {
         require(step == 1);
         require(address(gem) != address(0));
         require(address(gov) != address(0));

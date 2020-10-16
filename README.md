@@ -45,3 +45,24 @@ make migrate
 ## Deploying contracts to mainnet
 
 Coming soon
+
+## Notes:
+
+### Pit
+Where gov tokens go when they're burned (eventually: or taken from when they're minted?)
+
+### Pep
+The gov/sai price feed.
+Used once in Tub.wipe() (aka repay CDP debt) to determine how many gov token to move to/from the Pit based on the accumulated fees/rewards.
+
+```
+  (bytes32 val, bool ok) = pep.peek();
+  if (ok && val != 0) gov.move(msg.sender, pit, wdiv(owe, uint(val)));
+```
+
+### Pip
+The eth/sai price feed, this one sets the PEG
+
+
+### Pyorp
+The eth/sai price feed, this one sets the ACTUAL price

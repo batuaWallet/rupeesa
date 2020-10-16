@@ -17,7 +17,6 @@ import * as DSSpell from "../artifacts/DSSpell.json";
 import * as DSSpellBook from "../artifacts/DSSpellBook.json";
 import * as DSStop from "../artifacts/DSStop.json";
 import * as DSThing from "../artifacts/DSThing.json";
-import * as DSValue from "../artifacts/DSValue.json";
 import * as GemFab from "../artifacts/GemFab.json";
 import * as GemPit from "../artifacts/GemPit.json";
 import * as Gov from "../artifacts/Gov.json";
@@ -70,7 +69,6 @@ export const artifacts: Artifacts = {
   DSSpellBook,
   DSStop,
   DSThing,
-  DSValue,
   GemFab,
   GemPit,
   Gov,
@@ -113,7 +111,6 @@ export {
   DSSpellBook,
   DSStop,
   DSThing,
-  DSValue,
   GemFab,
   GemPit,
   Gov,

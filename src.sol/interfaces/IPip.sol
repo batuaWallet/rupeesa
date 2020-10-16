@@ -2,7 +2,7 @@
 
 pragma solidity ^0.7.0;
 
-interface IDSValue {
+interface IPip {
 
     function peek() external view returns (bytes32, bool);
     function read() external view returns (bytes32);

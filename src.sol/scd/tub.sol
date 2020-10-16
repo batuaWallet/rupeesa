@@ -10,6 +10,8 @@ pragma solidity ^0.7.0;
 import "../dappsys/thing.sol";
 import "../dappsys/token.sol";
 import "../dappsys/value.sol";
+import "../interfaces/IPip.sol";
+import "../interfaces/IPep.sol";
 
 import "./vox.sol";
 
@@ -27,8 +29,8 @@ contract SaiTub is DSThing, SaiTubEvents {
     DSToken  public  gov;  // Governance token
 
     SaiVox   public  vox;  // Target price feed
-    DSValue  public  pip;  // Reference price feed
-    DSValue  public  pep;  // Governance price feed
+    IPip  public  pip;  // Reference price feed
+    IPep  public  pep;  // Governance price feed
 
     address  public  tap;  // Liquidator
     address  public  pit;  // Governance Vault
@@ -101,8 +103,8 @@ contract SaiTub is DSThing, SaiTubEvents {
         DSToken  skr_,
         IERC20   gem_,
         DSToken  gov_,
-        DSValue  pip_,
-        DSValue  pep_,
+        IPip  pip_,
+        IPep  pep_,
         SaiVox   vox_,
         address  pit_
     ) {
@@ -149,10 +151,10 @@ contract SaiTub is DSThing, SaiTubEvents {
 
     //--Price-feed-setters----------------------------------------------
 
-    function setPip(DSValue pip_) public payable note auth {
+    function setPip(IPip pip_) public payable note auth {
         pip = pip_;
     }
-    function setPep(DSValue pep_) public payable note auth {
+    function setPep(IPep pep_) public payable note auth {
         pep = pep_;
     }
     function setVox(SaiVox vox_) public payable note auth {
