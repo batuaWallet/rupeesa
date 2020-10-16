@@ -2,11 +2,11 @@
 
 pragma solidity ^0.7.0;
 
-import "./dappsys/auth.sol";
-import "./dappsys/token.sol";
-import "./dappsys/guard.sol";
-import "./dappsys/roles.sol";
-import "./dappsys/value.sol";
+import "../dappsys/auth.sol";
+import "../dappsys/token.sol";
+import "../dappsys/guard.sol";
+import "../dappsys/roles.sol";
+import "../dappsys/value.sol";
 
 import "./mom.sol";
 

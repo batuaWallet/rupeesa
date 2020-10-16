@@ -23,12 +23,11 @@ contract UniswapFactory is IUniswapFactory {
         return allPairs.length;
     }
 
-    function createPair(address tokenA, address tokenB) external override returns (address pair) {
+    function createPair(address tokenA, address tokenB) external override returns (address newPair) {
         require(tokenA != tokenB, "Uniswap: IDENTICAL_ADDRESSES");
         (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
         require(token0 != address(0), "Uniswap: ZERO_ADDRESS");
         require(getPair[token0][token1] == address(0), "Uniswap: PAIR_EXISTS"); // single check is sufficient
-        bytes memory bytecode = type(UniswapPair).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(token0, token1));
         UniswapPair pair = new UniswapPair{salt: salt}();
         pair.initialize(token0, token1);

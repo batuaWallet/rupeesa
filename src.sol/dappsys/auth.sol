@@ -23,7 +23,7 @@ contract DSAuth is DSAuthEvents {
 
     constructor() {
         owner = msg.sender;
-        LogSetOwner(msg.sender);
+        emit LogSetOwner(msg.sender);
     }
 
     function setOwner(address owner_)
@@ -32,7 +32,7 @@ contract DSAuth is DSAuthEvents {
         auth
     {
         owner = owner_;
-        LogSetOwner(owner);
+        emit LogSetOwner(owner);
     }
 
     function setAuthority(DSAuthority authority_)
@@ -41,7 +41,7 @@ contract DSAuth is DSAuthEvents {
         auth
     {
         authority = authority_;
-        LogSetAuthority(address(authority));
+        emit LogSetAuthority(address(authority));
     }
 
     modifier auth {

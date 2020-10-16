@@ -7,9 +7,9 @@
 
 pragma solidity ^0.7.0;
 
-import "./dappsys/thing.sol";
-import "./dappsys/token.sol";
-import "./dappsys/value.sol";
+import "../dappsys/thing.sol";
+import "../dappsys/token.sol";
+import "../dappsys/value.sol";
 
 import "./vox.sol";
 

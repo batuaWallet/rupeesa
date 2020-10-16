@@ -7,7 +7,7 @@
 
 pragma solidity ^0.7.0;
 
-import "./dappsys/thing.sol";
+import "../dappsys/thing.sol";
 
 import "./tub.sol";
 import "./top.sol";

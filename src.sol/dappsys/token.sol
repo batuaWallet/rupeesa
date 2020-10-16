@@ -69,7 +69,7 @@ contract DSToken is DSTokenBase(0), DSStop {
     function mint(address guy, uint wad) public auth stoppable {
         _balances[guy] = add(_balances[guy], wad);
         _supply = add(_supply, wad);
-        Mint(guy, wad);
+        emit Mint(guy, wad);
     }
 
     function burn(address guy, uint wad) public auth stoppable {
@@ -78,7 +78,7 @@ contract DSToken is DSTokenBase(0), DSStop {
         }
         _balances[guy] = sub(_balances[guy], wad);
         _supply = sub(_supply, wad);
-        Burn(guy, wad);
+        emit Burn(guy, wad);
     }
 
     // Optional token name
