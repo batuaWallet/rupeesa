@@ -19,12 +19,9 @@ contract Pip is IPip, DSThing  {
         return wut;
     }
 
-    function poke(bytes32 wut) public override payable note auth {
+    function poke(bytes32 wut) public override auth {
         val = wut;
         has = true;
     }
 
-    function void() public override payable note auth {
-        has = false;
-    }
 }
