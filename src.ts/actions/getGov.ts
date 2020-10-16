@@ -5,12 +5,13 @@ import { AddressBook } from "../addressBook";
 
 import { deployContracts } from "./deployContracts";
 
-const { formatEther, parseEther } = utils;
+const { formatEther, hexZeroPad, toUtf8Bytes, parseEther } = utils;
 
 export const getGov = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
+  console.log(`\nGetting Gov`);
 
   await deployContracts(wallet, addressBook, [
-    ["Gov", []],
+    ["Gov", [hexZeroPad(toUtf8Bytes("GOV"), 32)]],
     ["Governance", []],
   ]);
 

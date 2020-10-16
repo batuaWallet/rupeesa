@@ -3,7 +3,6 @@ import { Contract, ContractFactory, Wallet, providers, utils } from "ethers";
 
 import { AddressBook, AddressBookEntry } from "../addressBook";
 import { artifacts } from "../artifacts";
-import { MigrationSchema } from "../types";
 
 const { formatEther, keccak256, parseUnits } = utils;
 
@@ -75,7 +74,7 @@ const deployContract = async (
 export const deployContracts = async (
   wallet: Wallet,
   addressBook: AddressBook,
-  schema: MigrationSchema,
+  schema: [string, string[]][],
 ): Promise<void> => {
 
   for (const [name, args] of schema) {

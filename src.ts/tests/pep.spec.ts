@@ -1,36 +1,23 @@
-import { utils } from "ethers";
+import { Contract } from "ethers";
 
-import { createUniswapOracle, deployContracts, mintTokens } from "../actions";
+import { getPep } from "../actions";
 import { AddressBook } from "../addressBook";
 
 import { alice } from "./constants";
-import { expect, getTestAddressBook } from "./utils";
-
-const { hexlify, zeroPad, toUtf8Bytes } = utils;
+import { getTestAddressBook } from "./utils";
 
 describe.skip("Pep", () => {
   let addressBook: AddressBook;
+  let pep: Contract;
 
   beforeEach(async () => {
     addressBook = await getTestAddressBook();
-    await deployContracts(alice, addressBook, [
-      ["Weth", []],
-      ["Gov", [hexlify(zeroPad(toUtf8Bytes("UNI"),32))]],
-      ["UniswapFactory", [alice.address]],
-      ["UniswapRouter", ["UniswapFactory", "Weth"]],
-      ["Pep", []],
-    ]);
-    console.log("UniswapRouter entry: ", addressBook.getEntry("UniswapRouter"));
-    await expect(mintTokens(alice, addressBook)).to.be.fulfilled;
-    await expect(createUniswapOracle({ Weth: "1", Gov: "1" }, alice, addressBook)).to.be.fulfilled;
+    await getPep(alice, addressBook);
+    pep = addressBook.getContract("Pep");
   });
 
   it("should be created without error", async () => {
-    const gem = addressBook.getContract("Weth");
-    const gov = addressBook.getContract("Gov");
-    const uniPair = addressBook.getContract("UniswapPair-GemGov");
-    const reserves = await uniPair.getReserves();
-    console.log(`Reserves for ${gem.address}/${gov.address}: ${reserves}`);
+    console.log(`Pep deployed to ${pep.address} (ready=${await pep.ready()})`);
   });
 
 

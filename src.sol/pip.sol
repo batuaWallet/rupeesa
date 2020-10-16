@@ -6,11 +6,11 @@ import "./dappsys/thing.sol";
 import "./interfaces/IPip.sol";
 
 contract Pip is IPip, DSThing  {
-    bool    has;
+    bool    public ready;
     bytes32 val;
 
     function peek() public override view returns (bytes32, bool) {
-        return (val,has);
+        return (val,ready);
     }
 
     function read() public override view returns (bytes32) {
@@ -21,7 +21,7 @@ contract Pip is IPip, DSThing  {
 
     function poke(bytes32 wut) public override auth {
         val = wut;
-        has = true;
+        ready = true;
     }
 
 }

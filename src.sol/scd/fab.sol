@@ -161,7 +161,7 @@ contract SaiFab is DSAuth {
     function configParams() public auth {
         require(step == 3);
 
-        tub.mold("cap", 100000  ether);
+        tub.mold("cap", 1000000  ether);
         tub.mold("mat", ray(1.5  ether));
         tub.mold("axe", ray(1.13 ether));
         tub.mold("fee", 1000000000158153903837946257);  // 0.5% / year
@@ -176,7 +176,7 @@ contract SaiFab is DSAuth {
     function verifyParams() public auth {
         require(step == 4);
 
-        require(tub.cap() == 100000000000000000000000);
+        require(tub.cap() == 1000000000000000000000000);
         require(tub.mat() == 1500000000000000000000000000);
         require(tub.axe() == 1130000000000000000000000000);
         require(tub.fee() == 1000000000158153903837946257);

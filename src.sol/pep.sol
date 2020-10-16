@@ -16,7 +16,7 @@ contract Pep is IPep, DSThing {
     using FixedPoint for *;
 
     bool internal govIsIndexZero;
-    bool internal ready;
+    bool public ready;
 
     uint public constant PERIOD = 24 hours;
 
@@ -67,6 +67,8 @@ contract Pep is IPep, DSThing {
     }
 
     function poke() external override {
+        require(ready, "Pep: NOT_READY");
+
         (uint price0Cumulative, uint price1Cumulative, uint32 blockTimestamp) =
             UniswapOracleLibrary.currentCumulativePrices(address(pair));
         uint32 timeElapsed = blockTimestamp - blockTimestampLast; // overflow is desired

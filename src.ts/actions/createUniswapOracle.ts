@@ -3,7 +3,7 @@ import { utils, Wallet } from "ethers";
 
 import { AddressBook, AddressBookEntry } from "../addressBook";
 
-const { parseEther } = utils;
+const { formatEther, parseEther } = utils;
 
 export const createUniswapOracle = async (
   initialReserves: { [name: string]: string },
@@ -21,37 +21,13 @@ export const createUniswapOracle = async (
   const uniswapFactory = addressBook.getContract("UniswapFactory").connect(wallet);
   const uniswapRouter = addressBook.getContract("UniswapRouter").connect(wallet);
 
-  let tx;
-
-  let pairAddress = await uniswapFactory.getPair(tokenA.address, tokenB.address);
-
-  if (!pairAddress || pairAddress === AddressZero) {
-    console.log(`Deploying new uniswap pair`);
-    tx = await uniswapFactory.createPair(tokenA.address, tokenB.address);
-    await wallet.provider.waitForTransaction(tx.hash);
-    pairAddress = await uniswapFactory.getPair(tokenA.address, tokenB.address);
-    addressBook.setEntry("UniswapPair-GemGov", {
-      address: pairAddress,
-      args: [tokenA.address, tokenB.address],
-      txHash: tx.hash,
-    } as AddressBookEntry);
-  }
-  const pair = addressBook.getContract("UniswapPair-GemGov").connect(wallet);
-  console.log(`Uniswap pair is at ${pairAddress} for ${tokenA.address}:${tokenB.address}`);
-
-  let reserves = await pair.getReserves();
-  if (reserves[0].eq(Zero)) {
-    console.log(`Adding reserves to pair`);
-    console.log(`Approving tokens`);
-
-    tx = await tokenA["approve(address,uint256)"](uniswapRouter.address, amountA.mul(amountA));
-    await wallet.provider.waitForTransaction(tx.hash);
-
-    tx = await tokenB["approve(address,uint256)"](uniswapRouter.address, amountB.mul(amountB));
-    await wallet.provider.waitForTransaction(tx.hash);
-
-    console.log(`Adding liquidity`);
-    tx = await uniswapRouter.addLiquidity(
+  const initPair = async (): Promise<string> => {
+    console.log(`Approving ${uniswapRouter.address} to spend ${formatEther(amountA)} ${tokenNames[0]} tokens`);
+    await(await tokenA["approve(address,uint256)"](uniswapRouter.address, amountA)).wait();
+    console.log(`Approving ${uniswapRouter.address} to spend ${formatEther(amountB)} ${tokenNames[1]} tokens`);
+    await(await tokenB["approve(address,uint256)"](uniswapRouter.address, amountB)).wait();
+    console.log(`Adding liquidity to pair ${pair.address}`);
+    const tx = await uniswapRouter.addLiquidity(
       tokenA.address,
       tokenB.address,
       amountA,
@@ -61,9 +37,28 @@ export const createUniswapOracle = async (
       wallet.address,
       Date.now() + 1000 * 60,
     );
-    await wallet.provider.waitForTransaction(tx.hash);
+    tx.wait();
+    return tx.hash;
+
+  };
+
+  let pairAddress = await uniswapFactory.getPair(tokenA.address, tokenB.address);
+  if (!pairAddress || pairAddress === AddressZero) {
+    const txHash = await initPair();
+    pairAddress = await uniswapFactory.getPair(tokenA.address, tokenB.address);
+    addressBook.setEntry("UniswapPair-GemGov", {
+      address: pairAddress,
+      txHash,
+    } as AddressBookEntry);
+  }
+  console.log(`Uniswap pair is at ${pairAddress} for ${tokenA.address}:${tokenB.address}`);
+
+  const pair = addressBook.getContract("UniswapPair-GemGov").connect(wallet);
+  let reserves = await pair.getReserves();
+  if (reserves[0].eq(Zero)) {
+    await initPair();
     reserves = await pair.getReserves();
   }
-  console.log(`Uniswap pair ${pairAddress} has reserves: ${reserves}`);
 
+  console.log(`Uniswap pair ${pairAddress} has reserves: ${reserves}`);
 };

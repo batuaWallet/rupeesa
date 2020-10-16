@@ -8,6 +8,7 @@ import { deployContracts } from "./deployContracts";
 const { formatEther, hexZeroPad, parseEther } = utils;
 
 export const fabSai = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
+  console.log(`\nGetting Sai`);
 
   await deployContracts(wallet, addressBook, [
     ["GemFab", []],
@@ -120,7 +121,7 @@ export const fabSai = async (wallet: Wallet, addressBook: AddressBook): Promise<
     */
 
     console.log(`Sai supply is zero, minting some`);
-    const depositAmount = parseEther("20");
+    const depositAmount = parseEther("10");
     await (await weth.deposit({ value: depositAmount })).wait();
     await (await weth.approve(tub.address, depositAmount)).wait();
     await (await tub.join(depositAmount)).wait();
@@ -144,9 +145,11 @@ export const fabSai = async (wallet: Wallet, addressBook: AddressBook): Promise<
 
     const pip = addressBook.getContract("Pip");
 
-    const inrPerEth = BigNumber.from(await pip.read());
+    const inrPerEth = formatEther(BigNumber.from(await pip.read())).split(".")[0];
+    console.log(`inrPerEth=${inrPerEth}`);
     const drawAmt = BigNumber.from(inrPerEth).mul(depositAmount).div(Two);
 
+    console.log(`Drawing ${formatEther(drawAmt)} Sai from cup ${cup}`);
     await (await tub.draw(cup, drawAmt)).wait();
     console.log(`Drew a bunch of Sai`);
 

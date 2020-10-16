@@ -3,10 +3,10 @@ import { providers, utils, Wallet } from "ethers";
 import { Argv } from "yargs";
 
 import { AddressBook, getAddressBook } from "../addressBook";
-import { MigrationSchema } from "../types";
 
 import { deployContracts } from "./deployContracts";
 import { getPip } from "./getPip";
+import { getGov } from "./getGov";
 import { getPep, setPep } from "./getPep";
 import { fabSai } from "./fabSai";
 
@@ -28,8 +28,9 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
   ////////////////////////////////////////
   // Deploy contracts
 
-  // Deploy "global" things that already exist on mainnet
   if (chainId === "1337") {
+
+    // Deploy "global" things that already exist on mainnet
     await deployContracts(wallet, addressBook, [
       ["Weth", []],
       ["UniswapFactory", [wallet.address]],
@@ -37,8 +38,8 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
     ]);
 
     await getPip(wallet, addressBook);
-    await getGov(wallet, addressBook);
     await getPep(wallet, addressBook);
+    await getGov(wallet, addressBook);
     await fabSai(wallet, addressBook);
     await setPep(wallet, addressBook);
 
