@@ -31,7 +31,7 @@ contract SaiVox is DSThing {
         if (param == "way") _way = val;
     }
 
-    // Dai Target Price (ref per dai)
+    // Sai Target Price (ref per dai)
     function par() public returns (uint) {
         prod();
         return _par;

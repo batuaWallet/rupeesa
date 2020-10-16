@@ -8,7 +8,7 @@ import { MigrationSchema } from "../types";
 import { deployContracts } from "./deployContracts";
 import { mintTokens } from "./mintTokens";
 import { createUniswapOracle } from "./createUniswapOracle";
-import { fabDai } from "./fabDai";
+import { fabSai } from "./fabSai";
 
 const { formatEther, hexlify, toUtf8Bytes, zeroPad } = utils;
 
@@ -32,10 +32,10 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
 
   if (chainId === "1337") {
     schema = [
-      ["WETH", []],
+      ["Weth", []],
       ["Gov", [hexlify(zeroPad(toUtf8Bytes("GOV"),32))]],
       ["UniswapFactory", [wallet.address]],
-      ["UniswapRouter", ["UniswapFactory", "WETH"]],
+      ["UniswapRouter", ["UniswapFactory", "Weth"]],
       ["Pip", []],
       ["Pep", []],
       ["GemFab", []],
@@ -46,7 +46,7 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
       ["MomFab", []],
       ["DadFab", []],
       ["GemPit", []],
-      ["DaiFab", ["GemFab", "VoxFab", "TubFab", "TapFab", "TopFab", "MomFab", "DadFab"]],
+      ["SaiFab", ["GemFab", "VoxFab", "TubFab", "TapFab", "TopFab", "MomFab", "DadFab"]],
     ];
   } else {
     throw new Error(`Migrations for chain ${chainId} are not supported.`);
@@ -54,8 +54,12 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
 
   await deployContracts(wallet, addressBook, schema);
   await mintTokens(wallet, addressBook);
-  await createUniswapOracle(wallet, addressBook);
-  await fabDai(wallet, addressBook);
+  await fabSai(wallet, addressBook);
+
+  // TODO: generate some Sai
+
+  await createUniswapOracle({ Sai: "1", Gov: "2" }, wallet, addressBook);
+  await createUniswapOracle({ Sai: "1", Weth: "2" }, wallet, addressBook);
 
   ////////////////////////////////////////
   // Print summary

@@ -71,7 +71,7 @@ contract DadFab {
     }
 }
 
-contract DaiFab is DSAuth {
+contract SaiFab is DSAuth {
     GemFab public gemFab;
     VoxFab public voxFab;
     TapFab public tapFab;
@@ -117,7 +117,7 @@ contract DaiFab is DSAuth {
         sai = gemFab.newTok("DAI");
         sin = gemFab.newTok("SIN");
         skr = gemFab.newTok("PETH");
-        sai.setName("Dai Stablecoin v1.0");
+        sai.setName("Sai Stablecoin v1.0");
         sin.setName("SIN");
         skr.setName("Pooled Ether");
         step += 1;

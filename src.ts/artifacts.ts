@@ -1,7 +1,6 @@
 import { utils } from "ethers";
 
 import * as DadFab from "../artifacts/DadFab.json";
-import * as DaiFab from "../artifacts/DaiFab.json";
 import * as DSAuth from "../artifacts/DSAuth.json";
 import * as DSAuthority from "../artifacts/DSAuthority.json";
 import * as DSChief from "../artifacts/DSChief.json";
@@ -17,6 +16,7 @@ import * as DSSpell from "../artifacts/DSSpell.json";
 import * as DSSpellBook from "../artifacts/DSSpellBook.json";
 import * as DSStop from "../artifacts/DSStop.json";
 import * as DSThing from "../artifacts/DSThing.json";
+import * as DSToken from "../artifacts/DSToken.json";
 import * as GemFab from "../artifacts/GemFab.json";
 import * as GemPit from "../artifacts/GemPit.json";
 import * as Gov from "../artifacts/Gov.json";
@@ -25,6 +25,7 @@ import * as MomFab from "../artifacts/MomFab.json";
 import * as Pep from "../artifacts/Pep.json";
 import * as Pip from "../artifacts/Pip.json";
 import * as SafeMath from "../artifacts/SafeMath.json";
+import * as SaiFab from "../artifacts/SaiFab.json";
 import * as SaiMom from "../artifacts/SaiMom.json";
 import * as SaiTap from "../artifacts/SaiTap.json";
 import * as SaiTop from "../artifacts/SaiTop.json";
@@ -38,7 +39,7 @@ import * as UniswapFactory from "../artifacts/UniswapFactory.json";
 import * as UniswapPair from "../artifacts/UniswapPair.json";
 import * as UniswapRouter from "../artifacts/UniswapRouter.json";
 import * as VoxFab from "../artifacts/VoxFab.json";
-import * as WETH from "../artifacts/WETH.json";
+import * as Weth from "../artifacts/WETH.json";
 
 type Abi = Array<string | utils.FunctionFragment | utils.EventFragment | utils.ParamType>;
 
@@ -51,9 +52,12 @@ type Artifact = {
 
 type Artifacts = { [contractName: string]: Artifact };
 
+const Sai = DSToken;
+const Sin = DSToken;
+const Skr = DSToken;
+
 export const artifacts: Artifacts = {
   DadFab,
-  DaiFab,
   DSAuth,
   DSAuthority,
   DSChief,
@@ -69,6 +73,7 @@ export const artifacts: Artifacts = {
   DSSpellBook,
   DSStop,
   DSThing,
+  DSToken,
   GemFab,
   GemPit,
   Gov,
@@ -77,11 +82,15 @@ export const artifacts: Artifacts = {
   Pep,
   Pip,
   SafeMath,
+  Sai,
+  SaiFab,
   SaiMom,
   SaiTap,
   SaiTop,
   SaiTub,
   SaiVox,
+  Sin,
+  Skr,
   TapFab,
   TestToken,
   TopFab,
@@ -90,12 +99,11 @@ export const artifacts: Artifacts = {
   UniswapPair,
   UniswapRouter,
   VoxFab,
-  WETH,
+  Weth,
 } as any;
 
 export {
   DadFab,
-  DaiFab,
   DSAuth,
   DSAuthority,
   DSChief,
@@ -111,6 +119,7 @@ export {
   DSSpellBook,
   DSStop,
   DSThing,
+  DSToken,
   GemFab,
   GemPit,
   Gov,
@@ -119,11 +128,15 @@ export {
   Pep,
   Pip,
   SafeMath,
+  Sai,
+  SaiFab,
   SaiMom,
   SaiTap,
   SaiTop,
   SaiTub,
   SaiVox,
+  Sin,
+  Skr,
   TapFab,
   TestToken,
   TopFab,
@@ -132,6 +145,6 @@ export {
   UniswapPair,
   UniswapRouter,
   VoxFab,
-  WETH,
+  Weth,
 };
 

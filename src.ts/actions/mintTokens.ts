@@ -8,7 +8,7 @@ const { formatEther, parseEther } = utils;
 export const mintTokens = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   console.log("\nChecking Tokens..");
 
-  const gem = addressBook.getContract("WETH").connect(wallet);
+  const gem = addressBook.getContract("Weth").connect(wallet);
   const gov = addressBook.getContract("Gov").connect(wallet); // governance token eg MKR
 
   let balance;
@@ -16,12 +16,12 @@ export const mintTokens = async (wallet: Wallet, addressBook: AddressBook): Prom
 
   balance = await gem.balanceOf(wallet.address);
   if (balance.eq(Zero)) {
-    console.log(`Depositing ETH to get WETH aka GEM`);
+    console.log(`Depositing ETH to get Weth aka GEM`);
     tx = await gem.deposit({ value: parseEther("1000") });
     await wallet.provider.waitForTransaction(tx.hash);
     balance = await gem.balanceOf(wallet.address);
   }
-  console.log(`WETH (Gem) balance: ${formatEther(balance)}`);
+  console.log(`Weth (Gem) balance: ${formatEther(balance)}`);
 
   balance = await gov.balanceOf(wallet.address);
   if (balance.eq(Zero)) {
