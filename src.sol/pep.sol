@@ -71,12 +71,8 @@ contract Pep is IPep, DSThing {
 
         (uint price0Cumulative, uint price1Cumulative, uint32 blockTimestamp) =
             UniswapOracleLibrary.currentCumulativePrices(address(pair));
-        uint32 timeElapsed = blockTimestamp - blockTimestampLast; // overflow is desired
 
-        // ensure that at least one full period has passed since the last update
-        if (timeElapsed < PERIOD) {
-          return;
-        }
+        uint32 timeElapsed = blockTimestamp - blockTimestampLast; // overflow is desired
 
         uint priceCumulative = govIsIndexZero ? price0Cumulative : price1Cumulative;
 
@@ -86,6 +82,11 @@ contract Pep is IPep, DSThing {
         priceAverage = FixedPoint.uq112x112(uint224(
           (priceCumulative - priceCumulativeLast) / timeElapsed
         ));
+
+        // ensure that at least one full period has passed since the last update
+        if (timeElapsed < PERIOD) {
+          return;
+        }
 
         priceCumulativeLast = priceCumulative;
         blockTimestampLast = blockTimestamp;
