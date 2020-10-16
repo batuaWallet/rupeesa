@@ -5,7 +5,7 @@ import { utils } from "ethers";
 
 import { AddressBook, getAddressBook } from "../addressBook";
 
-import { addressBookPath, provider } from "./constants";
+import { addressBookPath, alice, provider } from "./constants";
 
 const { randomBytes, hexlify } = utils;
 
@@ -14,8 +14,9 @@ use(waffleChai);
 
 // Returns a different address book every time
 export const getTestAddressBook = async (): Promise<AddressBook> => getAddressBook(
-  addressBookPath.replace(".json", `.${hexlify(randomBytes(16)).substring(2)}.json`),
+  addressBookPath.replace(".json", `.${hexlify(randomBytes(8)).substring(2)}.json`),
   (await provider.getNetwork()).chainId.toString(),
+  alice,
 );
 
 export { expect } from "chai";

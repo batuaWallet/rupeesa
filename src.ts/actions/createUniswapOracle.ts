@@ -29,10 +29,12 @@ export const createUniswapOracle = async (wallet: Wallet, addressBook: AddressBo
       txHash: tx.hash,
     } as AddressBookEntry);
   }
-  const pair = new Contract(pairAddress, artifacts["UniswapPair"].abi, wallet);
+  const pair = addressBook.getContract("UniswapPair-GemGov").connect(wallet);
   console.log(`Uniswap pair is at ${pairAddress} for ${weth.address}:${gov.address}`);
 
+  console.log(`Pair methods: ${Object.keys(pair).join(`,  `)}`);
   let reserves = await pair.getReserves();
+  console.log(`==================== 10`);
   if (reserves[0].eq(Zero)) {
     console.log(`Adding reserves to pair`);
     const ethAmt = parseEther("100");

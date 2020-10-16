@@ -79,7 +79,7 @@ export const deployContracts = async (
 ): Promise<void> => {
 
   for (const [name, args] of schema) {
-    const savedAddress = addressBook.getEntry(name)["address"];
+    const savedAddress = addressBook.getEntry(name).address;
     if (
       savedAddress && savedAddress !== AddressZero &&
       await isContractDeployed(name, savedAddress, addressBook, wallet.provider)

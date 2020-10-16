@@ -1,7 +1,7 @@
 import fs from "fs";
 
 import { AddressZero } from "@ethersproject/constants";
-import { Contract } from "ethers";
+import { Contract, providers, Wallet } from "ethers";
 
 import { artifacts } from "./artifacts";
 
@@ -15,17 +15,21 @@ export type AddressBookEntry = {
 
 export type AddressBookJson = {
   [chainId: string]: {
-    [contractName: string]: AddressBookEntry;
+    [name: string]: AddressBookEntry;
   };
 };
 
 export interface AddressBook {
-  getContract: (contractName: string) => Contract;
-  getEntry: (contractName: string) => AddressBookEntry;
-  setEntry: (contractName: string, entry: AddressBookEntry) => void;
+  getContract: (name: string) => Contract;
+  getEntry: (name: string) => AddressBookEntry;
+  setEntry: (name: string, entry: AddressBookEntry) => void;
 }
 
-export const getAddressBook = (path: string, chainId: string): AddressBook => {
+export const getAddressBook = (
+  path: string,
+  chainId: string,
+  provider?: providers.JsonRpcProvider | Wallet,
+): AddressBook => {
   if (!path) throw new Error(`A path to the address book file is required.`);
   if (!chainId) throw new Error(`A chainId is required.`);
   let addressBook: AddressBookJson = { [chainId]: {} };
@@ -43,33 +47,33 @@ export const getAddressBook = (path: string, chainId: string): AddressBook => {
   addressBook = addressBook || {};
   addressBook[chainId] = addressBook[chainId] || {};
 
-  const getEntry = (contractName: string): AddressBookEntry => {
+  const getEntry = (name: string): AddressBookEntry => {
     try {
-      return addressBook[chainId][contractName] || { address: AddressZero };
+      return addressBook[chainId][name] || { address: AddressZero };
     } catch (e) {
       return { address: AddressZero };
     }
   };
 
-  const setEntry = (contractName: string, entry: AddressBookEntry): void => {
-    addressBook[chainId][contractName] = entry;
+  const setEntry = (name: string, entry: AddressBookEntry): void => {
+    addressBook[chainId][name] = entry;
     try {
       fs.writeFileSync(path, JSON.stringify(addressBook, null, 2));
     } catch (e) {
-      throw Error(`setEntry(${contractName}, ${JSON.stringify(entry)}): ${e.message}`);
+      throw Error(`setEntry(${name}, ${JSON.stringify(entry)}): ${e.message}`);
     }
   };
 
-  const getContract = (contractName: string): Contract => {
-    const entry = getEntry(contractName);
+  const getContract = (name: string): Contract => {
+    const entry = getEntry(name);
     if (entry.address == AddressZero) {
-      throw Error(`getContract(${contractName}): NO_ADDRESS_BOOK_ENTRY`);
+      throw Error(`getContract(${name}): NO_ADDRESS_BOOK_ENTRY`);
     }
-    const artifact = artifacts[contractName];
-    if (!artifact) {
-      throw Error(`getContract(${contractName}): NO_AVAILABLE_ARTIFACTS`);
+    const artifact = artifacts[name.split("-")[0]];
+    if (!artifact || !artifact.abi) {
+      throw Error(`getContract(${name}): NO_AVAILABLE_ARTIFACTS`);
     }
-    return new Contract(entry.address, artifact.abi);
+    return new Contract(entry.address, artifact.abi, provider);
   };
 
   return { getContract, getEntry, setEntry };
