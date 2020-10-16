@@ -1,6 +1,6 @@
 import { utils } from "ethers";
 
-import { createUniswapOracle, deployContracts } from "../actions";
+import { createUniswapOracle, deployContracts, mintTokens } from "../actions";
 import { AddressBook } from "../addressBook";
 
 import { alice } from "./constants";
@@ -23,6 +23,7 @@ describe("Uniswap", () => {
   });
 
   it("should be created without error", async () => {
+    await expect(mintTokens(alice, addressBook)).to.be.fulfilled;
     await expect(createUniswapOracle(alice, addressBook)).to.be.fulfilled;
   });
 
