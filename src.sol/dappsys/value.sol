@@ -5,28 +5,30 @@
 
 pragma solidity ^0.7.0;
 
+import "../interfaces/IDSValue.sol";
+
 import "./thing.sol";
 
-contract DSValue is DSThing {
+contract DSValue is IDSValue, DSThing {
     bool    has;
     bytes32 val;
 
-    function peek() public view returns (bytes32, bool) {
+    function peek() public override view returns (bytes32, bool) {
         return (val,has);
     }
 
-    function read() public view returns (bytes32) {
+    function read() public override view returns (bytes32) {
         (bytes32 wut, bool haz) = peek();
         assert(haz);
         return wut;
     }
 
-    function poke(bytes32 wut) public payable note auth {
+    function poke(bytes32 wut) public override payable {
         val = wut;
         has = true;
     }
 
-    function void() public payable note auth {
+    function void() public override payable {
         has = false;
     }
 }

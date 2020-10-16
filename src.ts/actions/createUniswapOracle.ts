@@ -1,8 +1,7 @@
 import { AddressZero, Zero } from "@ethersproject/constants";
-import { Contract, utils, Wallet } from "ethers";
+import { utils, Wallet } from "ethers";
 
 import { AddressBook, AddressBookEntry } from "../addressBook";
-import { artifacts } from "../artifacts";
 
 const { keccak256, parseEther } = utils;
 
@@ -32,9 +31,7 @@ export const createUniswapOracle = async (wallet: Wallet, addressBook: AddressBo
   const pair = addressBook.getContract("UniswapPair-GemGov").connect(wallet);
   console.log(`Uniswap pair is at ${pairAddress} for ${weth.address}:${gov.address}`);
 
-  console.log(`Pair methods: ${Object.keys(pair).join(`,  `)}`);
   let reserves = await pair.getReserves();
-  console.log(`==================== 10`);
   if (reserves[0].eq(Zero)) {
     console.log(`Adding reserves to pair`);
     const ethAmt = parseEther("100");
@@ -43,8 +40,6 @@ export const createUniswapOracle = async (wallet: Wallet, addressBook: AddressBo
 
     tx = await gov["approve(address,uint256)"](uniswapRouter.address, govAmt.mul(govAmt));
     await wallet.provider.waitForTransaction(tx.hash);
-
-    console.log(`pair code hash: ${keccak256(await uniswapFactory.pairCreationCode())}`);
 
     console.log(`Adding liquidity`);
     tx = await uniswapRouter.addLiquidityETH(

@@ -12,11 +12,11 @@ const { randomBytes, hexlify } = utils;
 use(promised);
 use(waffleChai);
 
+export { expect } from "chai";
+
 // Returns a different address book every time
 export const getTestAddressBook = async (): Promise<AddressBook> => getAddressBook(
   addressBookPath.replace(".json", `.${hexlify(randomBytes(8)).substring(2)}.json`),
   (await provider.getNetwork()).chainId.toString(),
   alice,
 );
-
-export { expect } from "chai";
