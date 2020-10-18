@@ -24,6 +24,7 @@ import * as Governance from "../artifacts/Governance.json";
 import * as IERC20 from "../artifacts/IERC20.json";
 import * as LinkToken from "../artifacts/LinkToken.json";
 import * as MomFab from "../artifacts/MomFab.json";
+import * as Operator from "../artifacts/Operator.json";
 import * as Pep from "../artifacts/Pep.json";
 import * as Pip from "../artifacts/Pip.json";
 import * as SafeMath from "../artifacts/SafeMath.json";
@@ -82,6 +83,7 @@ export const artifacts: Artifacts = {
   IERC20,
   LinkToken,
   MomFab,
+  Operator,
   Pep,
   Pip,
   SafeMath,
@@ -129,6 +131,7 @@ export {
   IERC20,
   LinkToken,
   MomFab,
+  Operator,
   Pep,
   Pip,
   SafeMath,

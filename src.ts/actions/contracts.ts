@@ -27,9 +27,7 @@ export const deployContracts = async (
       return false;
     }
     const savedCreationCodeHash = addressBook.getEntry(name).creationCodeHash;
-    if (!artifacts || !artifacts[name]) {
-      throw new Error(`No contract artifacts are available for ${name}`);
-    }
+    console.log(`Artifacts: ${JSON.stringify(artifacts[name])}`);
     const creationCodeHash = hash(artifacts[name].bytecode || "0x00");
     if (!savedCreationCodeHash || savedCreationCodeHash !== creationCodeHash) {
       console.log(`creationCodeHash in our address book doen't match ${name} artifacts`);
@@ -78,6 +76,9 @@ export const deployContracts = async (
   };
 
   for (const [name, args] of schema) {
+    if (!artifacts || !artifacts[name]) {
+      throw new Error(`No contract artifacts are available for ${name}`);
+    }
     const savedAddress = addressBook.getEntry(name).address;
     if (
       savedAddress && savedAddress !== AddressZero &&

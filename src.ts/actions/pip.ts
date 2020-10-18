@@ -1,8 +1,10 @@
-import { BigNumber, Wallet } from "ethers";
+import { BigNumber, utils, Wallet } from "ethers";
 
 import { AddressBook } from "../addressBook";
 
 import { deployContracts } from "./contracts";
+
+const { parseEther } = utils;
 
 export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   console.log(`\nDeploying Pip`);
@@ -15,13 +17,18 @@ export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promi
     ["Pip", ["LinkToken", initialPrice]],
   ]);
 
+  const link = addressBook.getContract("LinkToken").connect(wallet);
   const pip = addressBook.getContract("Pip").connect(wallet);
+  const operator = addressBook.getContract("Operator").connect(wallet);
 
-  // TODO: get the real oracle price
-  const oracle = Wallet.createRandom();
+  console.log(`Approving link tokens`);
+  await (await link["approve(address,uint256)"](pip.address, parseEther("100"))).wait();
 
-  console.log(`Setting oracle to ${oracle.address}`);
-  await (await pip.setOracle(oracle.address, "job number uno")).wait();
+  console.log(`Sending pip some link tokens`);
+  await (await link["transfer(address,uint256)"](pip.address, parseEther("10"))).wait();
+
+  console.log(`Setting oracle operator to ${operator.address}`);
+  await (await pip.setOracle(operator.address, "1")).wait();
 
   console.log(`Poking pip..`);
   console.log(`pip methods: ${Object.keys(pip.functions)}`);
