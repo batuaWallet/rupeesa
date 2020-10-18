@@ -13,7 +13,7 @@ docker network create --attachable --driver overlay $project 2> /dev/null || tru
 
 eth_image="trufflesuite/ganache-cli:v6.9.1"
 db_image="postgres:12-alpine"
-link_image="smartcontract/chainlink:latest"
+link_image="crypto_inr_chainlink:latest"
 
 for image in $eth_image $db_image $link_image
 do
@@ -53,8 +53,8 @@ services:
     ports:
       - '8545:8545'
     tmpfs: '/tmp'
-    volumes:
-      - 'chaindata:/data'
+#    volumes:
+#      - 'chaindata:/data'
 
   database:
     image: '$db_image'
@@ -67,14 +67,15 @@ services:
     ports:
       - '5432:5432'
     tmpfs: '/tmp'
-    volumes:
-      - 'database:/var/lib/postgresql/data'
+#    volumes:
+#      - '$root/ops/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf'
+#      - 'database:/var/lib/postgresql/data'
 
   chainlink:
-    image: 'smartcontract/chainlink'
+    image: '$link_image'
     command: ["local", "n"]
     environment:
-      DATABASE_URL: 'postgresql://$pg_user:$pg_password@database:5432/$pg_db'
+      DATABASE_URL: 'postgresql://$pg_user:$pg_password@database:5432/$pg_db?sslmode=disable'
       ROOT: '/root'
       LOG_LEVEL: 'debug'
       ETH_CHAIN_ID: '1337'
@@ -82,16 +83,16 @@ services:
       LINK_CONTRACT_ADDRESS: '0x20fE562d797A42Dcb3399062AE9546cd06f63280'
       CHAINLINK_TLS_PORT: '0'
       SECURE_COOKIES: 'false'
-      GAS_UPDATER_ENABLED: 'true'
-      ETH_URL: 'http://ethprovider:8545'
+      GAS_UPDATER_ENABLED: 'false'
+      ETH_URL: 'ws://ethprovider:8545'
       ALLOW_ORIGINS: '*'
     networks:
       - '$project'
     ports:
       - '6688:6688'
     tmpfs: /tmp
-    volumes:
-      - 'oracledata:/root'
+#    volumes:
+#      - 'oracledata:/root'
 
 EOF
 

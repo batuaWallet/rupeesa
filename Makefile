@@ -28,7 +28,7 @@ default: transpiled-ts
 ########################################
 ## Command & Control Rules
 
-start-oracle:
+start-oracle: chainlink-img
 	bash ops/start-oracle.sh
 restart-oracle: stop-oracle
 	bash ops/start-oracle.sh
@@ -93,4 +93,10 @@ compiled-sol: node-modules buidler.config.ts $(shell find src.sol $(find_options
 transpiled-ts: node-modules compiled-sol $(shell find src.ts $(find_options))
 	$(log_start)
 	$(docker_run) "npm run transpile"
+	$(log_finish) && mv -f $(totalTime) .flags/$@
+
+chainlink-img: $(shell find ops/chainlink $(find_options))
+	$(log_start)
+	docker build --file ops/chainlink/Dockerfile --tag $(project)_chainlink ops/chainlink
+	docker tag ${project}_chainlink ${project}_chainlink:$(commit)
 	$(log_finish) && mv -f $(totalTime) .flags/$@
