@@ -24,6 +24,10 @@ do
   fi
 done
 
+chain_data="$root/.chaindata"
+rm -rf "$chain_data"
+mkdir -p "$chain_data"
+
 pg_db="$project"
 pg_user="$project"
 pg_password="$project"
@@ -38,8 +42,7 @@ networks:
     external: true
 
 volumes:
-  chaindata:
-  oracledata:
+  chainlink:
   database:
 
 services:
@@ -54,7 +57,7 @@ services:
       - '8545:8545'
     tmpfs: '/tmp'
     volumes:
-      - 'chaindata:/data'
+      - '$chain_data:/data'
 
   database:
     image: '$db_image'
@@ -94,8 +97,8 @@ services:
       - '6688:6688'
     tmpfs: /tmp
     volumes:
-      - 'oracledata:/root'
+      - 'chainlink:/root'
 
 EOF
 
-docker stack deploy -c "$docker_compose $stack"
+docker stack deploy -c "$docker_compose" "$stack"

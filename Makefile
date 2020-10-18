@@ -23,12 +23,17 @@ log_finish=@echo $$((`date "+%s"` - `cat $(startTime)`)) > $(totalTime); rm $(st
 ########################################
 ## Alias Rules
 
-default: transpiled-ts chainlink-img
+default: transpiled-ts oracle
+oracle: chainlink ethprovider
 
 ########################################
 ## Command & Control Rules
 
-start-oracle: chainlink-img
+start: start-oracle
+restart: restart-oracle
+stop: stop-oracle
+
+start-oracle: oracle
 	bash ops/start-oracle.sh
 restart-oracle: stop-oracle
 	bash ops/start-oracle.sh
@@ -95,8 +100,14 @@ transpiled-ts: node-modules compiled-sol $(shell find src.ts $(find_options))
 	$(docker_run) "npm run transpile"
 	$(log_finish) && mv -f $(totalTime) .flags/$@
 
-chainlink-img: $(shell find ops/chainlink $(find_options))
+chainlink: $(shell find ops/chainlink $(find_options))
 	$(log_start)
 	docker build --file ops/chainlink/Dockerfile --tag $(project)_chainlink ops/chainlink
 	docker tag ${project}_chainlink ${project}_chainlink:$(commit)
+	$(log_finish) && mv -f $(totalTime) .flags/$@
+
+ethprovider: $(shell find ops/ethprovider $(find_options))
+	$(log_start)
+	docker build --file ops/ethprovider/Dockerfile --tag $(project)_ethprovider ops/ethprovider
+	docker tag ${project}_ethprovider ${project}_ethprovider:$(commit)
 	$(log_finish) && mv -f $(totalTime) .flags/$@

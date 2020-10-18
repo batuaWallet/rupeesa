@@ -16,29 +16,29 @@
       "txHash": "0x15cc39af0bd6a52ef1db54a19954d81f2bd9805607d5ea04874d4ffe374be1b8"
     },
     "UniswapFactory": {
-      "address": "0x345cA3e014Aaf5dcA488057592ee47305D9B3e10",
+      "address": "0xF12b5dd4EAD5F743C6BaA640B0216200e89B60Da",
       "args": [
         "0x627306090abaB3A6e1400e9345bC60c78a8BEf57"
       ],
-      "creationCodeHash": "0x8ecd51b378a4fa22021351cbcdf2f1a47645ed0542570209cb4d7580ab26b958",
-      "runtimeCodeHash": "0x5a5af376b25376cfee7712eb6f1348e03a8101e60d5104309c823558e76ef291",
-      "txHash": "0xd9bf563bebdef376e7f3521664a0347246623525cfb8c80f6eb4dad04b1a2059"
+      "creationCodeHash": "0x8fd9fe367a9665fa4acfb302dc18a0f69b7ea1a85da809a87244c2a6950d71e8",
+      "runtimeCodeHash": "0xe2b4a90f85eccbf4c6cf0db22d00cc9f23c1eda311d4161fe000c6d1eb50927b",
+      "txHash": "0xf27d319cb3c81b54ecad381307c7886ab0d47118fddba81a312abf931d090257"
     },
     "UniswapRouter": {
-      "address": "0xf25186B5081Ff5cE73482AD761DB0eB0d25abfBF",
+      "address": "0x345cA3e014Aaf5dcA488057592ee47305D9B3e10",
       "args": [
-        "0x345cA3e014Aaf5dcA488057592ee47305D9B3e10",
+        "0xF12b5dd4EAD5F743C6BaA640B0216200e89B60Da",
         "0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0"
       ],
       "creationCodeHash": "0xeda6b0c7b170362a861d7bfa466847d2b6249f3485be60d8149ae1927d519043",
-      "runtimeCodeHash": "0x41710956f06f4931bcdb8276397ba30dcfba4dec65909d1b769987e700ef2bd9",
-      "txHash": "0x05534a69d9d0c299815528dafe26d980398ec78388396544e97416fda991da5f"
+      "runtimeCodeHash": "0x142c85c169d2acd361fd7fbb95d1ca5de6dfe0a5a8a2186e5dd2f18abf3f2f3a",
+      "txHash": "0x2a708e0e1c5ab95033787e768814aa7536313c2612e204a2cc048ae27c03bb2b"
     },
     "Pip": {
-      "address": "0x8f0483125FCb9aaAEFA9209D8E9d7b9C8B9Fb90F",
-      "creationCodeHash": "0xa7c4ef1689441ba82933970d7161ebe4d33f664dd2e3715276373eba59abd962",
-      "runtimeCodeHash": "0xe6246d22db76026277832f5d5ef2abf0466df949c268fe4adbf0c01ccab36837",
-      "txHash": "0xcd6ab73b743ef642d4245aba5148fbdec459ef6bcedccc77869348812893796e"
+      "address": "0xf25186B5081Ff5cE73482AD761DB0eB0d25abfBF",
+      "creationCodeHash": "0x80950a389347431afbc15d6b12aaa7b2f9af8a4d4ae184b9e324978af9e02d39",
+      "runtimeCodeHash": "0x0a1c23f2c1c98c48071b7e18065acb073f73e3a22cecaba91483f294a693bae9",
+      "txHash": "0x3a97b8b8e9ffbc54cad1a4fa7bc4e7267d4c815bebcf4954209d69aa92a8018b"
     },
     "Pep": {
       "address": "0x9FBDa871d559710256a2502A2517b794B482Db40",
@@ -137,6 +137,12 @@
     "SKR": {
       "address": "0x3f363A6145F0Cb7AD64dF8F2d5CFEc638186931a",
       "txHash": "0x5ab7f21c8616ecc29a0eea04303e45376ff30117257e897e0234c1e3a0f9eb92"
+    },
+    "Weth": {
+      "address": "0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0",
+      "creationCodeHash": "0x4160e1bf8a0d1afb0cd3b9e333533f1a64c5689666fdf7eced462d5b96f9b3c8",
+      "runtimeCodeHash": "0x50d2b54f7c7c6ed1eeb049138d07c0011c3fbb92397ed886f481dd8f435251c4",
+      "txHash": "0x4ebccc6d097c1e20dcb01708f93dfa8710cd8692486cf1eef6913a654a1e3e33"
     }
   }
 }

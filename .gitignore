@@ -1,3 +1,4 @@
+.chaindata
 *.docker-compose.yml
 .cache
 .config
