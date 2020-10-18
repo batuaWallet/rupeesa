@@ -3,7 +3,7 @@ import { BigNumber, utils, Wallet } from "ethers";
 
 import { AddressBook, AddressBookEntry } from "../addressBook";
 
-const { formatEther } = utils;
+const { formatEther, keccak256 } = utils;
 
 export const createUniswapPair = async (
   initialReserves: { [name: string]: BigNumber },
@@ -22,6 +22,8 @@ export const createUniswapPair = async (
 
   const uniswapFactory = addressBook.getContract("UniswapFactory").connect(wallet).connect(wallet);
   const uniswapRouter = addressBook.getContract("UniswapRouter").connect(wallet).connect(wallet);
+
+  console.log(`pair code hash: ${keccak256(await uniswapFactory.pairCreationCode())}`);
 
   const initPair = async (): Promise<string> => {
     console.log(`Approving ${uniswapRouter.address} to spend ${formatEther(amountA)} ${tokenNames[0]} tokens`);

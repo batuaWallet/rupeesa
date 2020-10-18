@@ -4,7 +4,7 @@ import { AddressBook } from "../addressBook";
 
 import { deployContracts } from "./contracts";
 
-const { parseEther } = utils;
+const { formatEther, parseEther } = utils;
 
 export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   console.log(`\nDeploying Pip`);
@@ -36,6 +36,6 @@ export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promi
 
   // TODO: wait until first chainlink update
 
-  console.log(`Pip price: ${BigNumber.from(await pip.read())}`);
+  console.log(`Pip price: ${formatEther(BigNumber.from(await pip.read()))}`);
 
 };
