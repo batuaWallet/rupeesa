@@ -1,23 +1,23 @@
 import { Contract } from "ethers";
 
-import { deployPep } from "../actions";
+import { deployPip } from "../actions";
 import { AddressBook } from "../addressBook";
 
 import { alice } from "./constants";
 import { getTestAddressBook } from "./utils";
 
-describe("Pep", () => {
+describe("Pip", () => {
   let addressBook: AddressBook;
-  let pep: Contract;
+  let pip: Contract;
 
   beforeEach(async () => {
     addressBook = await getTestAddressBook();
-    await deployPep(alice, addressBook);
-    pep = addressBook.getContract("Pep");
+    await deployPip(alice, addressBook);
+    pip = addressBook.getContract("Pip");
   });
 
   it("should be created without error", async () => {
-    console.log(`Pep deployed to ${pep.address} (ready=${await pep.ready()})`);
+    console.log(`Pip deployed to ${pip.address} (ready=${await pip.ready()})`);
   });
 
   // it("should be peek-able", async () => {});

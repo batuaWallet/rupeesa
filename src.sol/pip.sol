@@ -2,10 +2,11 @@
 
 pragma solidity ^0.7.0;
 
+import "./chainlink/ChainlinkClient.sol";
 import "./dappsys/thing.sol";
 import "./interfaces/IPip.sol";
 
-contract Pip is IPip, DSThing  {
+contract Pip is IPip, ChainlinkClient, DSThing  {
     bool    public ready;
     bytes32 val;
 

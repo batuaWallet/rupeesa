@@ -7,7 +7,7 @@ import { deployContracts } from "./contracts";
 const { hexlify, hexZeroPad, parseEther } = utils;
 
 export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
-  console.log(`\nGetting Pip`);
+  console.log(`\nDeploying Pip`);
 
   await deployContracts(wallet, addressBook, [ ["Pip", []] ]);
   const pip = addressBook.getContract("Pip").connect(wallet);

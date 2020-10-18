@@ -6,7 +6,7 @@ import "./Chainlink.sol";
 import "./ChainlinkClient.sol";
 import "./vendor/Ownable.sol";
 
-contract ATestnetConsumer is ChainlinkClient, Ownable {
+contract ChainlinkConsumer is ChainlinkClient, Ownable {
   using Chainlink for Chainlink.Request;
 
   uint256 constant private ORACLE_PAYMENT = 1 * LINK;

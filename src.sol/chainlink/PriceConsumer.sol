@@ -2,11 +2,11 @@
 
 pragma solidity ^0.7.0;
 
-import "./interfaces/AggregatorV3Interface.sol";
+import "./interfaces/AggregatorInterface.sol";
 
-contract PriceConsumerV3 {
+contract PriceConsumer {
 
-    AggregatorV3Interface internal priceFeed;
+    AggregatorInterface internal priceFeed;
 
     /**
      * Network: Kovan
@@ -14,7 +14,7 @@ contract PriceConsumerV3 {
      * Address: 0x9326BFA02ADD2366b30bacB125260Af641031331
      */
     constructor() {
-        priceFeed = AggregatorV3Interface(0x9326BFA02ADD2366b30bacB125260Af641031331);
+        priceFeed = AggregatorInterface(0x9326BFA02ADD2366b30bacB125260Af641031331);
     }
 
     /**
