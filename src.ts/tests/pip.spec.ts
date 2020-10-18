@@ -6,7 +6,7 @@ import { AddressBook } from "../addressBook";
 import { alice } from "./constants";
 import { getTestAddressBook } from "./utils";
 
-describe("Pip", () => {
+describe.only("Pip", () => {
   let addressBook: AddressBook;
   let pip: Contract;
 

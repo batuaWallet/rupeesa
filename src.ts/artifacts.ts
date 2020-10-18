@@ -22,6 +22,7 @@ import * as GemPit from "../artifacts/GemPit.json";
 import * as Gov from "../artifacts/Gov.json";
 import * as Governance from "../artifacts/Governance.json";
 import * as IERC20 from "../artifacts/IERC20.json";
+import * as LinkToken from "../artifacts/LinkToken.json";
 import * as MomFab from "../artifacts/MomFab.json";
 import * as Pep from "../artifacts/Pep.json";
 import * as Pip from "../artifacts/Pip.json";
@@ -79,6 +80,7 @@ export const artifacts: Artifacts = {
   Gov,
   Governance,
   IERC20,
+  LinkToken,
   MomFab,
   Pep,
   Pip,
@@ -125,6 +127,7 @@ export {
   Gov,
   Governance,
   IERC20,
+  LinkToken,
   MomFab,
   Pep,
   Pip,
