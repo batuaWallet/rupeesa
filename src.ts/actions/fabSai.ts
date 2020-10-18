@@ -94,7 +94,7 @@ export const fabSai = async (wallet: Wallet, addressBook: AddressBook): Promise<
 
   if (step.toString() === "5") {
     console.log(`Configuring auth..`);
-    const governance = addressBook.getContract("Governance");
+    const governance = addressBook.getContract("Governance").connect(wallet);
     await (await fab.configAuth(governance.address)).wait();
     step = await fab.step();
     console.log(`Fab ${fab.address} is on step ${step}`);
@@ -102,9 +102,9 @@ export const fabSai = async (wallet: Wallet, addressBook: AddressBook): Promise<
 
   console.log(`Single collateral Sai has been deployed to ${await fab.sai()}`);
 
-  const sai = addressBook.getContract("Sai");
-  const tub = addressBook.getContract("SaiTub");
-  const skr = addressBook.getContract("Skr");
+  const sai = addressBook.getContract("Sai").connect(wallet);
+  const tub = addressBook.getContract("SaiTub").connect(wallet);
+  const skr = addressBook.getContract("Skr").connect(wallet);
 
   const totalSupply = await sai.totalSupply();
 
@@ -143,7 +143,7 @@ export const fabSai = async (wallet: Wallet, addressBook: AddressBook): Promise<
     console.log(`Locked all of our SKRR`);
     console.log(`CDP #${cupi} Status: ${await tub.cups(cup)}`);
 
-    const pip = addressBook.getContract("Pip");
+    const pip = addressBook.getContract("Pip").connect(wallet);
 
     const inrPerEth = formatEther(BigNumber.from(await pip.read())).split(".")[0];
     console.log(`inrPerEth=${inrPerEth}`);

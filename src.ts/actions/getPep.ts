@@ -13,7 +13,7 @@ export const getPep = async (wallet: Wallet, addressBook: AddressBook): Promise<
   await deployContracts(wallet, addressBook, [
     ["Pep", []],
   ]);
-  const pep = addressBook.getContract("Pep");
+  const pep = addressBook.getContract("Pep").connect(wallet);
 
   console.log(`Pep price ready? ${await pep.ready()}`);
 
@@ -23,8 +23,8 @@ export const getPep = async (wallet: Wallet, addressBook: AddressBook): Promise<
 };
 
 export const setPep = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
-  const gov = addressBook.getContract("Gov");
-  const sai = addressBook.getContract("Sai");
+  const gov = addressBook.getContract("Gov").connect(wallet);
+  const sai = addressBook.getContract("Sai").connect(wallet);
   const govAmt = parseEther("100");
   const govPrice = "100";
 
@@ -32,19 +32,21 @@ export const setPep = async (wallet: Wallet, addressBook: AddressBook): Promise<
     Gov: govAmt,
     Sai: govAmt.mul(govPrice),
   }, wallet, addressBook);
-  const pair = addressBook.getContract("UniswapPair-GovSai");
+  const pair = addressBook.getContract("UniswapPair-GovSai").connect(wallet);
 
   const token0 = await pair.token0();
   const token1 = await pair.token1();
   const govIsIndexZero = gov.address == token0;
-  if (gov.address != token1) {
+  if (!govIsIndexZero && gov.address != token1) {
     throw new Error(`Gov=${gov.address} !== token0=${token0} or token1=${token1}`);
   }
 
-  const pep = addressBook.getContract("Pep");
-  console.log(`Pep price ready? ${await pep.ready()}`);
-  await pep.init(pair.address, govIsIndexZero);
-
+  const pep = addressBook.getContract("Pep").connect(wallet);
+  const ready = await pep.ready();
+  if (!ready) {
+    console.log(`Initializing Pep`);
+    await pep.init(pair.address, govIsIndexZero);
+  }
   let [val, has] = await pep.peek();
   console.log(`Pep ready=${has} value=${val}`);
 
@@ -53,7 +55,7 @@ export const setPep = async (wallet: Wallet, addressBook: AddressBook): Promise<
   const saiBal = await sai.balanceOf(wallet.address);
   console.log(`Swapping ${formatEther(inAmt)} gov for sai`);
   console.log(`saiBal=${saiBal} govBal=${await gov.balanceOf(wallet.address)}`);
-  const uniswap = addressBook.getContract("UniswapRouter");
+  const uniswap = addressBook.getContract("UniswapRouter").connect(wallet);
   await(await gov["approve(address,uint256)"](uniswap.address, inAmt)).wait();
   await(await uniswap.swapExactTokensForTokens(
     inAmt,
@@ -67,10 +69,10 @@ export const setPep = async (wallet: Wallet, addressBook: AddressBook): Promise<
   const outAmt = parseEther("100");
   const govBal = await gov.balanceOf(wallet.address);
   console.log(`Swapping gov for ${formatEther(outAmt)} sai`);
-  await(await sai["approve(address,uint256)"](uniswap.address, parseEther("110"))).wait();
+  await(await sai["approve(address,uint256)"](uniswap.address, parseEther("150"))).wait();
   await(await uniswap.swapTokensForExactTokens(
     parseEther("1"),
-    parseEther("110"),
+    parseEther("150"),
     [sai.address, gov.address],
     wallet.address,
     BigNumber.from(Date.now() + 1000 * 60),

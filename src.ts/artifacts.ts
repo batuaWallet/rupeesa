@@ -33,7 +33,6 @@ import * as SaiTop from "../artifacts/SaiTop.json";
 import * as SaiTub from "../artifacts/SaiTub.json";
 import * as SaiVox from "../artifacts/SaiVox.json";
 import * as TapFab from "../artifacts/TapFab.json";
-import * as TestToken from "../artifacts/TestToken.json";
 import * as TopFab from "../artifacts/TopFab.json";
 import * as TubFab from "../artifacts/TubFab.json";
 import * as UniswapFactory from "../artifacts/UniswapFactory.json";
@@ -94,7 +93,6 @@ export const artifacts: Artifacts = {
   Sin,
   Skr,
   TapFab,
-  TestToken,
   TopFab,
   TubFab,
   UniswapFactory,
@@ -141,7 +139,6 @@ export {
   Sin,
   Skr,
   TapFab,
-  TestToken,
   TopFab,
   TubFab,
   UniswapFactory,

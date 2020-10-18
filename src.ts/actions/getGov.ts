@@ -15,7 +15,7 @@ export const getGov = async (wallet: Wallet, addressBook: AddressBook): Promise<
     ["Governance", []],
   ]);
 
-  const gov = addressBook.getContract("Gov");
+  const gov = addressBook.getContract("Gov").connect(wallet);
 
   let balance = await gov.balanceOf(wallet.address);
   if (balance.eq(Zero)) {

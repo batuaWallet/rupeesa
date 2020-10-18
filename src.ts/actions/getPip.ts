@@ -10,7 +10,7 @@ export const getPip = async (wallet: Wallet, addressBook: AddressBook): Promise<
   console.log(`\nGetting Pip`);
 
   await deployContracts(wallet, addressBook, [ ["Pip", []] ]);
-  const pip = addressBook.getContract("Pip");
+  const pip = addressBook.getContract("Pip").connect(wallet);
 
   const inrPerEth = parseEther("28500");
 

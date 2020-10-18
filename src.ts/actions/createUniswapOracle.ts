@@ -15,13 +15,13 @@ export const createUniswapOracle = async (
   const tokenNames = Object.keys(initialReserves);
   const pairName = `UniswapPair-${tokenNames.sort().join("")}`;
 
-  const tokenA = addressBook.getContract(tokenNames[0]);
-  const tokenB = addressBook.getContract(tokenNames[1]);
+  const tokenA = addressBook.getContract(tokenNames[0]).connect(wallet);
+  const tokenB = addressBook.getContract(tokenNames[1]).connect(wallet);
   const amountA = initialReserves[tokenNames[0]];
   const amountB = initialReserves[tokenNames[1]];
 
-  const uniswapFactory = addressBook.getContract("UniswapFactory").connect(wallet);
-  const uniswapRouter = addressBook.getContract("UniswapRouter").connect(wallet);
+  const uniswapFactory = addressBook.getContract("UniswapFactory").connect(wallet).connect(wallet);
+  const uniswapRouter = addressBook.getContract("UniswapRouter").connect(wallet).connect(wallet);
 
   const initPair = async (): Promise<string> => {
     console.log(`Approving ${uniswapRouter.address} to spend ${formatEther(amountA)} ${tokenNames[0]} tokens`);
@@ -57,7 +57,7 @@ export const createUniswapOracle = async (
   }
   console.log(`Uniswap pair is at ${pairAddress} for ${tokenA.address}:${tokenB.address}`);
 
-  const pair = addressBook.getContract(pairName).connect(wallet);
+  const pair = addressBook.getContract(pairName).connect(wallet).connect(wallet);
   let reserves = await pair.getReserves();
   if (reserves[0].eq(Zero)) {
     await initPair();

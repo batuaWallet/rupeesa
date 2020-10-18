@@ -10,15 +10,15 @@ docker network create --attachable --driver overlay "$project" 2> /dev/null || t
 
 image="${project}_ethprovider:latest"
 
-# Add this to trigger migration at startup
+# Mount repo into ethprovider:/root to trigger migration at startup
 #  --mount "type=bind,source=$root,target=/root" \
+#  --env "ADDRESS_BOOK=/data/address-book.json" \
+#  --mount "type=bind,source=$root/address-book.json,target=/data/address-book.json" \
 
 docker run \
   --detach \
   --env "MNEMONIC=candy maple cake sugar pudding cream honey rich smooth crumble sweet treat" \
-  --env "ADDRESS_BOOK=/data/address-book.json" \
   --name "${project}_ethprovider" \
-  --mount "type=bind,source=$root/address-book.json,target=/data/address-book.json" \
   --network "$project" \
   --publish "8545:8545" \
   --rm \
