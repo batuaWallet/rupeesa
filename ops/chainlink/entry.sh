@@ -15,4 +15,9 @@ echo "Waiting for database at $PG_HOST to wake up.."
 wait-for -q -t 60 "$PG_HOST" 2>&1 | sed '/nc: bad address/d'
 echo "Database is awake, launching chainlink node.."
 
-exec chainlink local node
+echo "${API_USER:-user@example.com}" > .api
+echo "${API_PASSWORD:-password}" >> .api
+
+echo "${WALLET_PASSWORD:-super secret password}" > .password
+
+exec chainlink local node -a .api -p .password

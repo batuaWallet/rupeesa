@@ -23,7 +23,7 @@ log_finish=@echo $$((`date "+%s"` - `cat $(startTime)`)) > $(totalTime); rm $(st
 ########################################
 ## Alias Rules
 
-default: transpiled-ts
+default: transpiled-ts chainlink-img
 
 ########################################
 ## Command & Control Rules
