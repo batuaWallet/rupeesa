@@ -81,18 +81,9 @@ export const setPep = async (wallet: Wallet, addressBook: AddressBook): Promise<
   await (await pep.poke()).wait();
   [val, has] = await pep.peek();
   console.log(`Pep ready=${has} value=${val}`);
-  console.log(`Pep gov=${await pep.gov()}`);
-  console.log(`Pep pair=${await pep.pair()}`);
   console.log(`Pep priceCumulativeLast=${await pep.priceCumulativeLast()}`);
   console.log(`Pep blockTimestampLast=${await pep.blockTimestampLast()}`);
   console.log(`Pep priceAverage=${await pep.priceAverage()}`);
-
-  console.log(`\nPair token0=${await pair.token0()}`);
-  console.log(`Pair token1=${await pair.token1()}`);
-  console.log(`Pair reserves=${await pair.getReserves()}`);
-  console.log(`Pair price0CumulativeLast=${await pair.price0CumulativeLast()}`);
-  console.log(`Pair price1CumulativeLast=${await pair.price1CumulativeLast()}`);
-  console.log(`Pair kLast=${await pair.kLast()}`);
 
   console.log(`\nPep price: ${BigNumber.from(val)}`);
 

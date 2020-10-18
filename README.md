@@ -65,4 +65,18 @@ The eth/sai price feed, this one sets the PEG
 
 
 ### Pyorp
-The eth/sai price feed, this one sets the ACTUAL price
+The eth/sai price feed, this one sets the ACTUAL price (can be used to auto-set the stability fee according to demand).
+
+## Oracles
+
+Planning to use ChainLink. A few endpoints that will be aggregated:
+
+```
+curl https://api.wazirx.com/api/v2/tickers/ethinr |\
+  jq '((.ticker.buy | tonumber) + (.ticker.sell | tonumber)) / 2'
+```
+
+```
+curl https://api.coingecko.com/api/v3/coins/ethereum/history?date=18-10-2020 |\
+  jq '.market_data.current_price.inr'
+```
