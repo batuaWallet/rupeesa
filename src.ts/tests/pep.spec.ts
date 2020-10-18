@@ -1,6 +1,6 @@
 import { Contract } from "ethers";
 
-import { getPep } from "../actions";
+import { deployPep } from "../actions";
 import { AddressBook } from "../addressBook";
 
 import { alice } from "./constants";
@@ -12,7 +12,7 @@ describe.skip("Pep", () => {
 
   beforeEach(async () => {
     addressBook = await getTestAddressBook();
-    await getPep(alice, addressBook);
+    await deployPep(alice, addressBook);
     pep = addressBook.getContract("Pep");
   });
 

@@ -2,11 +2,11 @@ import { BigNumber, utils, Wallet } from "ethers";
 
 import { AddressBook } from "../addressBook";
 
-import { deployContracts } from "./deployContracts";
+import { deployContracts } from "./contracts";
 
 const { hexlify, hexZeroPad, parseEther } = utils;
 
-export const getPip = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
+export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   console.log(`\nGetting Pip`);
 
   await deployContracts(wallet, addressBook, [ ["Pip", []] ]);

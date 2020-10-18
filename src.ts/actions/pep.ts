@@ -2,12 +2,12 @@ import { BigNumber, utils, Wallet } from "ethers";
 
 import { AddressBook } from "../addressBook";
 
-import { createUniswapOracle } from "./createUniswapOracle";
-import { deployContracts } from "./deployContracts";
+import { createUniswapPair } from "./uniswapPair";
+import { deployContracts } from "./contracts";
 
 const { formatEther, parseEther } = utils;
 
-export const getPep = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
+export const deployPep = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   console.log(`\nGetting Pep`);
 
   await deployContracts(wallet, addressBook, [
@@ -22,13 +22,13 @@ export const getPep = async (wallet: Wallet, addressBook: AddressBook): Promise<
 
 };
 
-export const setPep = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
+export const initPep = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   const gov = addressBook.getContract("Gov").connect(wallet);
   const sai = addressBook.getContract("Sai").connect(wallet);
   const govAmt = parseEther("100");
   const govPrice = "100";
 
-  await createUniswapOracle({
+  await createUniswapPair({
     Gov: govAmt,
     Sai: govAmt.mul(govPrice),
   }, wallet, addressBook);

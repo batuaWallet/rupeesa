@@ -3,11 +3,11 @@ import { utils, Wallet } from "ethers";
 
 import { AddressBook } from "../addressBook";
 
-import { deployContracts } from "./deployContracts";
+import { deployContracts } from "./contracts";
 
 const { formatEther, hexZeroPad, toUtf8Bytes, parseEther } = utils;
 
-export const getGov = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
+export const deployGov = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   console.log(`\nGetting Gov`);
 
   await deployContracts(wallet, addressBook, [

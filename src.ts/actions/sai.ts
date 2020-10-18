@@ -3,11 +3,11 @@ import { BigNumber, utils, Wallet } from "ethers";
 
 import { AddressBook, AddressBookEntry } from "../addressBook";
 
-import { deployContracts } from "./deployContracts";
+import { deployContracts } from "./contracts";
 
 const { formatEther, hexZeroPad, parseEther } = utils;
 
-export const fabSai = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
+export const deploySai = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   console.log(`\nGetting Sai`);
 
   await deployContracts(wallet, addressBook, [

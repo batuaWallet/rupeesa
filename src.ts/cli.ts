@@ -1,6 +1,6 @@
-import yargs, { Argv } from "yargs";
+import yargs from "yargs";
 
-import { migrateCommand } from "./actions/migrate";
+import { migrateCommand } from "./migrate";
 
 yargs
   .command(migrateCommand)

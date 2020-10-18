@@ -2,13 +2,8 @@ import { EtherSymbol } from "@ethersproject/constants";
 import { providers, utils, Wallet } from "ethers";
 import { Argv } from "yargs";
 
-import { AddressBook, getAddressBook } from "../addressBook";
-
-import { deployContracts } from "./deployContracts";
-import { getPip } from "./getPip";
-import { getGov } from "./getGov";
-import { getPep, setPep } from "./getPep";
-import { fabSai } from "./fabSai";
+import { deployContracts, deployPip, deployGov, deployPep, initPep, deploySai } from "./actions"; 
+import { AddressBook, getAddressBook } from "./addressBook";
 
 const { formatEther } = utils;
 
@@ -37,11 +32,11 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
       ["UniswapRouter", ["UniswapFactory", "Weth"]],
     ]);
 
-    await getPip(wallet, addressBook);
-    await getPep(wallet, addressBook);
-    await getGov(wallet, addressBook);
-    await fabSai(wallet, addressBook);
-    await setPep(wallet, addressBook);
+    await deployPip(wallet, addressBook);
+    await deployPep(wallet, addressBook);
+    await deployGov(wallet, addressBook);
+    await deploySai(wallet, addressBook);
+    await initPep(wallet, addressBook);
 
   } else {
     throw new Error(`Migrations for chain ${chainId} are not supported.`);

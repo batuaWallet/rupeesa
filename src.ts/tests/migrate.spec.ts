@@ -1,4 +1,4 @@
-import { migrate} from "../actions";
+import { migrate} from "../migrate";
 
 import { alice } from "./constants";
 import { expect, getTestAddressBook } from "./utils";

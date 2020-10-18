@@ -5,7 +5,7 @@ import { AddressBook, AddressBookEntry } from "../addressBook";
 
 const { formatEther } = utils;
 
-export const createUniswapOracle = async (
+export const createUniswapPair = async (
   initialReserves: { [name: string]: BigNumber },
   wallet: Wallet,
   addressBook: AddressBook,
