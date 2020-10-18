@@ -8,7 +8,7 @@ interface IPip {
     function read() external view returns (bytes32);
 
     function peek() external view returns (bytes32, bool);
-    function poke(bytes32 wut) external;
+    function poke() external;
 
 }
 

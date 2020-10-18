@@ -22,11 +22,11 @@ contract PriceConsumer {
      */
     function getLatestPrice() public view returns (int) {
         (
-            uint80 roundID, 
+            /* uint80 roundID */, 
             int price,
-            uint startedAt,
+            /* uint startedAt */,
             uint timeStamp,
-            uint80 answeredInRound
+            /* uint80 answeredInRound */
         ) = priceFeed.latestRoundData();
         // If the round is not complete yet, timestamp is 0
         require(timeStamp > 0, "Round not complete");
