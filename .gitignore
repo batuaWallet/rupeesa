@@ -1,6 +1,7 @@
 .chaindata
 *.docker-compose.yml
 .cache
+.migration-complete
 .config
 .flags
 .local

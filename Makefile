@@ -31,7 +31,8 @@ oracle: chainlink ethprovider
 
 start: start-oracle
 restart: restart-oracle
-stop: stop-oracle
+stop: stop-all
+reset: stop-all
 
 start-oracle: oracle
 	bash ops/start-oracle.sh
@@ -50,9 +51,6 @@ stop-ethprovider:
 stop-all:
 	bash ops/stop.sh oracle
 	bash ops/stop.sh ethprovider
-
-reset: stop-all
-	docker volume rm oracle_chaindata oracle_database oracle_oracledata || true
 
 clean: stop-all
 	rm -rf .*.docker-compose.yml
@@ -100,14 +98,14 @@ transpiled-ts: node-modules compiled-sol $(shell find src.ts $(find_options))
 	$(docker_run) "npm run transpile"
 	$(log_finish) && mv -f $(totalTime) .flags/$@
 
+ethprovider: transpiled-ts $(shell find ops/ethprovider $(find_options))
+	$(log_start)
+	docker build --file ops/ethprovider/Dockerfile --tag $(project)_ethprovider ops/ethprovider
+	docker tag ${project}_ethprovider ${project}_ethprovider:$(commit)
+	$(log_finish) && mv -f $(totalTime) .flags/$@
+
 chainlink: $(shell find ops/chainlink $(find_options))
 	$(log_start)
 	docker build --file ops/chainlink/Dockerfile --tag $(project)_chainlink ops/chainlink
 	docker tag ${project}_chainlink ${project}_chainlink:$(commit)
-	$(log_finish) && mv -f $(totalTime) .flags/$@
-
-ethprovider: $(shell find ops/ethprovider $(find_options))
-	$(log_start)
-	docker build --file ops/ethprovider/Dockerfile --tag $(project)_ethprovider ops/ethprovider
-	docker tag ${project}_ethprovider ${project}_ethprovider:$(commit)
 	$(log_finish) && mv -f $(totalTime) .flags/$@

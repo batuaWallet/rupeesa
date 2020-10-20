@@ -5,7 +5,7 @@ import { AddressBook, AddressBookEntry } from "../addressBook";
 
 import { deployContracts } from "./contracts";
 
-const { formatEther, hexZeroPad, parseEther } = utils;
+const { formatEther, hexZeroPad, parseEther, parseUnits } = utils;
 
 export const deploySai = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   console.log(`\nGetting Sai`);
@@ -80,14 +80,14 @@ export const deploySai = async (wallet: Wallet, addressBook: AddressBook): Promi
 
   if (step.toString() === "3") {
     console.log(`Configuring params..`);
-    await (await fab.configParams()).wait();
+    await (await fab.configParams({ gasLimit: parseUnits("50", 6) })).wait();
     step = await fab.step();
     console.log(`Fab ${fab.address} is on step ${step}`);
   }
 
   if (step.toString() === "4") {
     console.log(`Verifying params..`);
-    await (await fab.verifyParams()).wait();
+    await (await fab.verifyParams({ gasLimit: parseUnits("50", 6) })).wait();
     step = await fab.step();
     console.log(`Fab ${fab.address} is on step ${step}`);
   }
