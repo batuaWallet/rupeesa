@@ -1,6 +1,7 @@
-import { BigNumber, utils, Wallet } from "ethers";
+import { BigNumber, providers, utils, Wallet } from "ethers";
+import { Argv } from "yargs";
 
-import { AddressBook } from "../addressBook";
+import { AddressBook, getAddressBook } from "../addressBook";
 
 import { createUniswapPair } from "./uniswapPair";
 import { deployContracts } from "./contracts";
@@ -93,4 +94,47 @@ export const initPep = async (wallet: Wallet, addressBook: AddressBook): Promise
   console.log(`Pep ready=${has} value=${val}`);
   console.log(`\nPep price: ${BigNumber.from(val)}`);
 
+};
+
+export const pokePep = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
+  const pep = addressBook.getContract("Pep").connect(wallet);
+  console.log(`Poking pep..`);
+  await (await pep.poke()).wait();
+  console.log(`Peeking pep..`);
+  const [val, has] = await pep.peek();
+  console.log(`Pep ready=${has} value=${val}`);
+  console.log(`\nPep price: ${BigNumber.from(val)}`);
+};
+
+export const pokePepCommand = {
+  command: "pokePep",
+  describe: "Poke pep",
+  builder: (yargs: Argv): Argv => {
+    return yargs
+      .option("a", {
+        alias: "address-book",
+        description: "The path to your address book file",
+        type: "string",
+        default: "./address-book.json",
+      })
+      .option("m", {
+        alias: "mnemonic",
+        description: "The mnemonic for an account which will pay for gas",
+        type: "string",
+        default: "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat",
+      })
+      .option("p", {
+        alias: "eth-provider",
+        description: "The URL of an Ethereum provider",
+        type: "string",
+        default: "http://localhost:8545",
+      });
+  },
+  handler: async (argv: { [key: string]: any } & Argv["argv"]): Promise<void> => {
+    const provider = new providers.JsonRpcProvider(argv.ethProvider);
+    const wallet = Wallet.fromMnemonic(argv.mnemonic).connect(provider);
+    const chainId = (await provider.getNetwork()).chainId.toString();
+    const addressBook = getAddressBook(argv.addressBook, chainId);
+    await pokePep(wallet, addressBook);
+  },
 };
