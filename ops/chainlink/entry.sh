@@ -21,6 +21,11 @@ echo "Ethprovider is awake, launching chainlink node.."
 echo "${API_USER:-user@example.com}" > .api
 echo "${API_PASSWORD:-password}" >> .api
 
-echo "${WALLET_PASSWORD:-super secret password}" > .password
+echo "${WALLET_PASSWORD:-password}" > .password
+if [[ -f "$WALLET_FILE" ]]
+then
+  echo "Importing wallet file $WALLET_FILE"
+  chainlink local import "$WALLET_FILE"
+fi
 
 exec chainlink local node -a .api -p .password

@@ -26,6 +26,9 @@ pg_password="$project"
 
 link_address=$(jq '.["1337"].LinkToken.address' address-book.json | tr -d '"')
 
+local_wallet_file="$root/.test-wallet.json"
+inner_wallet_file="/test-wallet.json"
+
 docker_compose=$root/.${stack}.docker-compose.yml
 rm -f "$docker_compose"
 cat - > "$docker_compose" <<EOF
@@ -48,11 +51,12 @@ services:
       ALLOW_ORIGINS: '*'
       API_USER: 'user@example.com'
       API_PASSWORD: 'password'
-      WALLET_PASSWORD: 'super secret password'
+      WALLET_PASSWORD: 'password'
+      WALLET_FILE: '$inner_wallet_file'
       CHAINLINK_TLS_PORT: '0'
       DATABASE_URL: 'postgresql://$pg_user:$pg_password@database:5432/$pg_db?sslmode=disable'
       ETH_CHAIN_ID: '1337'
-      ETH_URL: 'ws://ethprovider:8545'
+      ETH_URL: 'ws://${project}_ethprovider:8545'
       GAS_UPDATER_ENABLED: 'false'
       LINK_CONTRACT_ADDRESS: '$link_address'
       LOG_LEVEL: 'info'
@@ -66,6 +70,7 @@ services:
     tmpfs: /tmp
     volumes:
       - 'chainlink:/root'
+      - '$local_wallet_file:$inner_wallet_file'
 
   database:
     image: '$db_image'
