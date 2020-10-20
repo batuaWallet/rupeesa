@@ -8,7 +8,7 @@ import { deployContracts } from "./contracts";
 const { formatEther, parseEther } = utils;
 
 const chainlinkNodeAddress = "0x13cEa1EfD824A2C4F8bd482f7AB9F0ba9D66AF78";
-const chainlinkJobId = "0ac16970f00248439968b162fbb9bf06";
+const chainlinkJobId = "6f9039389ee14bffb51b226035542ab0";
 
 export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
   console.log(`\nDeploying Pip`);
@@ -47,7 +47,10 @@ export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promi
 };
 
 export const pokePip = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
+  const operator = addressBook.getContract("Operator").connect(wallet);
   const pip = addressBook.getContract("Pip").connect(wallet);
+  console.log(`Setting pip's oracle operator to ${operator.address} w job ${chainlinkJobId}`);
+  await (await pip.setOracle(operator.address, chainlinkJobId)).wait();
   console.log(`Poking pip..`);
   await (await pip.poke()).wait();
   console.log(`Peeking pip..`);

@@ -32,7 +32,6 @@ oracle: chainlink ethprovider
 start: start-oracle
 restart: restart-oracle
 stop: stop-all
-reset: stop-all
 
 start-oracle: oracle
 	bash ops/start-oracle.sh
@@ -58,6 +57,10 @@ clean: stop-all
 	rm -rf artifacts
 	rm -rf cache
 	rm -rf dist
+
+reset: stop-all
+	docker volume rm oracle_database 2> /dev/null || true
+	docker volume rm oracle_chainlink 2> /dev/null || true
 
 purge: clean reset
 	#rm -rf node_modules

@@ -1,0 +1,27 @@
+{
+  "initiators": [
+    {
+      "type": "runlog",
+      "params": {
+        "address": "0x8f0483125FCb9aaAEFA9209D8E9d7b9C8B9Fb90F"
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "type": "httpget"
+    },
+    {
+      "type": "jsonparse"
+    },
+    {
+      "type": "multiply"
+    },
+    {
+      "type": "ethuint256"
+    },
+    {
+      "type": "ethtx"
+    }
+  ]
+}

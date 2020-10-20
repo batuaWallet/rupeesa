@@ -68,7 +68,7 @@ export const initPep = async (wallet: Wallet, addressBook: AddressBook): Promise
     BigNumber.from(Date.now() + 1000 * 60),
     { gasLimit: parseUnits("50", 6) },
   )).wait();
-  const saiDiff = (await sai.balanceOf(wallet.address)).sub(saiBal);
+  let saiDiff = (await sai.balanceOf(wallet.address)).sub(saiBal);
   [saiBal, govBal] = [await sai.balanceOf(wallet.address), await gov.balanceOf(wallet.address)];
   console.log(`Received ${saiDiff} new sai (saiBal=${saiBal} govBal=${govBal})`);
 
@@ -83,12 +83,12 @@ export const initPep = async (wallet: Wallet, addressBook: AddressBook): Promise
     BigNumber.from(Date.now() + 1000 * 60),
     { gasLimit: parseUnits("50", 6) },
   )).wait();
-  const govDiff = (await gov.balanceOf(wallet.address)).sub(govBal);
+  saiDiff = saiBal.sub(await sai.balanceOf(wallet.address));
   [saiBal, govBal] = [await sai.balanceOf(wallet.address), await gov.balanceOf(wallet.address)];
-  console.log(`Spent ${govDiff} gov (saiBal=${saiBal} govBal=${govBal})`);
+  console.log(`Spent ${saiDiff} sai (saiBal=${saiBal} govBal=${govBal})`);
 
   console.log(`Poking pep..`);
-  await (await pep.poke()).wait();
+  await (await pep.poke({ gasLimit: parseUnits("50", 6) })).wait();
   console.log(`Peeking pep..`);
   [val, has] = await pep.peek();
   console.log(`Pep ready=${has} value=${val}`);
