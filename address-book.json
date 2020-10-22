@@ -25,7 +25,7 @@
     "LinkToken": {
       "address": "0x87b7693dbb965627DeA17ab3878877Cc2689058E",
       "creationCodeHash": "0xeb280d4e8ee343c1c70d1918843afe8098fecb245028d6f329d0437f2aa0d8b8",
-      "runtimeCodeHash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+      "runtimeCodeHash": "0x334b3f72c3c3adffe5b8484355324fb9e402bf3fd7ab72bb77037ad1b5145640",
       "txHash": "0x907ee04ffdb2039bbde18052508b3cf65285e0024bd43bbbdc1d9cd3917f0f50"
     },
     "Operator": {
@@ -46,6 +46,12 @@
       "creationCodeHash": "0x2e8889da24fe9c51d4393aa47f81efe7be421932ca92ff937c037445a135fde2",
       "runtimeCodeHash": "0x1ccef0aaf56ef27dc8136c046ffa60f4ac62b04dac51d755062984d29e372750",
       "txHash": "0xff8f31113e378c65fc0a23ff07aff311add538c51ac4f4d6be27c512ad652623"
+    },
+    "Pep": {
+      "address": "0x40bC20305d8C2D34d5C0C0699E1d14d8E6A6cf0B",
+      "creationCodeHash": "0x6d862329ca758b1a49f12d0037012bb1e2688802604615124207bbc1f9f2bae4",
+      "runtimeCodeHash": "0x93735ed5b929889d5f673920ddcbbb6bb153e79f357eb8fbf4f772896bd42e91",
+      "txHash": "0x3bec62cbda7597c5a5220fafc39357881b66fa5ac279a85f72458316a7616020"
     }
   },
   "1337": {

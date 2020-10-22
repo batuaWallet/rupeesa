@@ -68,6 +68,8 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
       await (await link["transfer(address,uint256)"](pip.address, amt)).wait();
     }
 
+    await deployPep(wallet, addressBook);
+
   } else {
     throw new Error(`Migrations for chain ${chainId} are not supported.`);
   }
