@@ -24,6 +24,7 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
   // Deploy contracts
 
   if (chainId === "1337") {
+    console.log(`Migrating to local ganache testnet`);
 
     // Deploy "global" things that already exist on mainnet
     await deployContracts(wallet, addressBook, [
@@ -40,6 +41,13 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
 
   } else if (chainId === "5") {
     console.log(`Migrations for Goerli testnet: ACTIVATED!`);
+
+    // Deploy "global" things that already exist on mainnet
+    await deployContracts(wallet, addressBook, [
+      ["Weth", []],
+      ["UniswapFactory", [wallet.address]],
+      ["UniswapRouter", ["UniswapFactory", "Weth"]],
+    ]);
 
   } else {
     throw new Error(`Migrations for chain ${chainId} are not supported.`);

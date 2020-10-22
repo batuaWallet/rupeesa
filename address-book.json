@@ -1,4 +1,28 @@
 {
+  "5": {
+    "Weth": {
+      "address": "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6"
+    },
+    "UniswapFactory": {
+      "address": "0xb50d9c616911c0eD6363e2FB67e7dd45E81279fF",
+      "args": [
+        "0x1f5B3462Da2572d5599d64e837B9BcECB939855E"
+      ],
+      "creationCodeHash": "0x7118324a7e3704b1b452b344dd2c94156c463066943acad4030b819f84dd8348",
+      "runtimeCodeHash": "0x1803526e8b629c6f5552575bef44cbff598f34fd6c7072b77990477c25f23043",
+      "txHash": "0xae0620a7c91edddfa6be0df2d360f3a9c2a888b60fc0eeaff44221192625a2c4"
+    },
+    "UniswapRouter": {
+      "address": "0x9D299bf0751B62FC1d62417D9dcf6C2e7D925B35",
+      "args": [
+        "0xb50d9c616911c0eD6363e2FB67e7dd45E81279fF",
+        "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6"
+      ],
+      "creationCodeHash": "0x92ebcfb1314ad8d769935e83cb79d98e91fb248513ce26911a93e14e2f505c82",
+      "runtimeCodeHash": "0xe3850938ace673b88411962ed979257bf2dcefce1bd7ec3e1866fbada61dce07",
+      "txHash": "0x38dacb99df6490cf4f8d2c52d7f69f390ff3dd6497006fd2719215219246c1f7"
+    }
+  },
   "1337": {
     "Weth": {
       "address": "0x8CdaF0CD259887258Bc13a92C0a6dA92698644C0",
