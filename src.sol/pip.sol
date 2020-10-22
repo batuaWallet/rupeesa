@@ -26,7 +26,7 @@ contract Pip is IPip, ChainlinkClient, DSThing  {
 
     function peek() public override view returns (bytes32, bool) {
         // convert to n INR per wad ETH (wad=10^18).
-        return (bytes32(currentPrice * 1000000000000000000), true);
+        return (bytes32(currentPrice * 10000000000000000), true);
     }
 
     function read() public override view returns (bytes32) {
