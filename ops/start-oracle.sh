@@ -11,7 +11,33 @@ project="$(grep -m 1 '"name":' "$root/package.json" | cut -d '"' -f 4 | tr '-' '
 docker swarm init 2> /dev/null || true
 docker network create --attachable --driver overlay "$project" 2> /dev/null || true
 
-bash ops/start-ethprovider.sh
+####################
+## Load env vars & config
+
+default_eth_url=ws://${project}_ethprovider:8545
+
+WALLET_FILE=${WALLET_FILE:-$root/.test-wallet.json}
+ETH_URL=${ETH_URL:-$default_eth_url}
+
+if [[ "$ETH_URL" == "$default_eth_url" ]]
+then bash ops/start-ethprovider.sh
+fi
+
+chain_id=$(
+  curl -q -k -s -X POST -H "Content-Type: application/json" \
+    --data '{"id":31415,"jsonrpc":"2.0","method":"eth_chainId","params":[]}' \
+    "$ETH_URL"
+)
+
+if [[ -z "$chain_id" ]]
+then echo "Failed to get a chain id from eth url: $ETH_URL" && exit 1
+fi
+
+link_address=$(jq '.["'"$chain_id"'"].LinkToken.address' address-book.json | tr -d '"')
+
+if [[ -z "$link_address" || "$link_address" == "null" ]]
+then echo "Failed to find a LINK token on chain $chain_id"
+fi
 
 link_image="${project}_chainlink:latest"
 db_image="postgres:12-alpine"
@@ -24,9 +50,6 @@ pg_db="$project"
 pg_user="$project"
 pg_password="$project"
 
-link_address=$(jq '.["1337"].LinkToken.address' address-book.json | tr -d '"')
-
-local_wallet_file="$root/.test-wallet.json"
 inner_wallet_file="/test-wallet.json"
 
 docker_compose=$root/.${stack}.docker-compose.yml
@@ -56,7 +79,7 @@ services:
       CHAINLINK_TLS_PORT: '0'
       DATABASE_URL: 'postgresql://$pg_user:$pg_password@database:5432/$pg_db?sslmode=disable'
       ETH_CHAIN_ID: '1337'
-      ETH_URL: 'ws://${project}_ethprovider:8545'
+      ETH_URL: '$ETH_URL'
       GAS_UPDATER_ENABLED: 'false'
       LINK_CONTRACT_ADDRESS: '$link_address'
       LOG_LEVEL: 'info'
@@ -70,7 +93,7 @@ services:
     tmpfs: /tmp
     volumes:
       - 'chainlink:/root'
-      - '$local_wallet_file:$inner_wallet_file'
+      - '$WALLET_FILE:$inner_wallet_file'
 
   database:
     image: '$db_image'
