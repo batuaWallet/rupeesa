@@ -50,7 +50,7 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
     ]);
 
     // Deploy pip stuff manually so we can config it more carefully than on ganache
-    const initialPrice = "28500";
+    const initialPrice = "2850000"; // INR per 100 ETH
     await deployContracts(wallet, addressBook, [
       ["LinkToken", []],
       ["Operator", ["LinkToken"]],

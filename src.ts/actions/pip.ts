@@ -10,7 +10,7 @@ const { formatEther, parseEther } = utils;
 
 // Hardcoded pip values
 const initialPrice = "28500";
-const chainlinkNodeAddress = "0x13cEa1EfD824A2C4F8bd482f7AB9F0ba9D66AF78";
+const defaultChainlinkNodeAddress = "0x13cEa1EfD824A2C4F8bd482f7AB9F0ba9D66AF78";
 const chainlinkJobId = "6f9039389ee14bffb51b226035542ab0";
 
 export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
@@ -20,7 +20,6 @@ export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promi
     ["Operator", ["LinkToken"]],
     ["Pip", ["LinkToken", initialPrice]],
   ]);
-  const operator = addressBook.getContract("Operator").connect(wallet);
   const link = addressBook.getContract("LinkToken").connect(wallet);
   const pip = addressBook.getContract("Pip").connect(wallet);
   // Give pip some LINK if it doesn't have any yet
@@ -29,32 +28,30 @@ export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promi
     await (await link["approve(address,uint256)"](pip.address, parseEther("100"))).wait();
     console.log(`Sending pip some link tokens & eth`);
     await (await link["transfer(address,uint256)"](pip.address, parseEther("100"))).wait();
-    await (await wallet.sendTransaction({ to: chainlinkNodeAddress, value: parseEther("1") })).wait();
+    await (await wallet.sendTransaction({ to: defaultChainlinkNodeAddress, value: parseEther("1") })).wait();
   }
   if ((await pip.oracle()) == AddressZero) {
-    await configPip(wallet, addressBook, operator.address, chainlinkJobId);
+    await configPip(wallet, addressBook, defaultChainlinkNodeAddress, chainlinkJobId);
     await pokePip(wallet, addressBook);
   }
   console.log(`Pip price: ${formatEther(BigNumber.from(await pip.read()))}`);
 };
 
-export const configPip = async (wallet: Wallet, addressBook: AddressBook, operatorAddress?: string, jobId?: string): Promise<void> => {
-  console.log(`\nConfiguring pip..`);
+export const configPip = async (wallet: Wallet, addressBook: AddressBook, chainlinkNodeAddress: string, jobId: string): Promise<void> => {
+  console.log(`\nConfiguring pip for operator node ${chainlinkNodeAddress} w job ${jobId}`);
   const pip = addressBook.getContract("Pip").connect(wallet);
-  let operator;
-  if (!operatorAddress) {
-    console.log(`No operator address provided, using the one we deployed`);
-    operator = addressBook.getContract("Operator").connect(wallet);
-    // Configure the chainlink node operator
-    if ((await operator.getAuthorizationStatus(chainlinkNodeAddress))) {
-      console.log(`Giving ${chainlinkNodeAddress} fulfillment permissions on operator contract`);
-      await (await operator.setFulfillmentPermission(chainlinkNodeAddress, true)).wait();
-    }
-  } else {
-    console.log(`Operator address ${operatorAddress} was given`);
-    addressBook.setEntry("Operator", { address: operatorAddress });
-    operator = addressBook.getContract("Operator").connect(wallet);
+  const operator = addressBook.getContract("Operator").connect(wallet);
+
+  addressBook.setEntry("ChainlinkNode", { address: chainlinkNodeAddress });
+
+  // Configure the chainlink node operator
+  if (!(await operator.getAuthorizationStatus(chainlinkNodeAddress))) {
+    console.log(
+      `Giving ${chainlinkNodeAddress} fulfillment permissions on operator ${operator.address}`,
+    );
+    await (await operator.setFulfillmentPermission(chainlinkNodeAddress, true)).wait();
   }
+
   // Configure Pip's oracle & Job ID
   const currentOracle = await pip.oracle();
   const currentJob = await pip.jobId();
@@ -72,7 +69,6 @@ export const pokePip = async (wallet: Wallet, addressBook: AddressBook): Promise
   console.log(`Pip ready=${has} value=${val}`);
   console.log(`Sending pip.poke()`);
   await (await pip.poke()).wait();
-  console.log("waiting for the chainlink oracle to update");
   /*
   for (let i=0; i<50; i++) {
     if ((await wallet.provider.getNetwork()).chainId === 1337) {
@@ -100,11 +96,13 @@ export const configPipCommand = {
         alias: "operator",
         description: "Address of the operator contract that will fulfil chainlink requests",
         type: "string",
+        required: true,
       })
       .option("j", {
         alias: "job-id",
         description: "Job Id for the oracle's request",
         type: "string",
+        required: true,
       })
       .option("a", {
         alias: "address-book",
