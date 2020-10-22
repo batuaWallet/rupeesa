@@ -16,13 +16,13 @@ docker network create --attachable --driver overlay "$project" 2> /dev/null || t
 
 default_eth_url=ws://${project}_ethprovider:8545
 
+API_PASSWORD=${API_PASSWORD:-password}
+API_USER=${API_USER:-user}
+CHAIN_ID=${CHAIN_ID:-1337}
+DOMAINNAME=${DOMAINNAME:-localhost}
+ETH_URL=${ETH_URL:-$default_eth_url}
 WALLET_FILE=${WALLET_FILE:-$root/.test-wallet.json}
 WALLET_PASSWORD=${WALLET_PASSWORD:-password}
-API_USER=${API_USER:-user}
-API_PASSWORD=${API_PASSWORD:-password}
-ETH_URL=${ETH_URL:-$default_eth_url}
-DOMAINNAME=${DOMAINNAME:-localhost}
-CHAIN_ID=${CHAIN_ID:-1337}
 
 ########################################
 ## Configure Ethereum connection & addresses
