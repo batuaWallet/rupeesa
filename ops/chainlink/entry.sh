@@ -14,10 +14,6 @@ PG_HOST="${PG_HOST%/*}"
 echo "Waiting for database at $PG_HOST to wake up.."
 wait-for -q -t 60 "$PG_HOST" 2>&1 | sed '/nc: bad address/d'
 
-echo "Waiting for ethprovider at ${ETH_URL#*://} to wake up.."
-wait-for -q -t 60 "${ETH_URL#*://}" 2>&1 | sed '/nc: bad address/d'
-echo "Ethprovider is awake, launching chainlink node.."
-
 echo "${API_USER:-user@example.com}" > .api
 echo "${API_PASSWORD:-password}" >> .api
 
