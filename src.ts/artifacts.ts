@@ -27,6 +27,7 @@ import * as MomFab from "../artifacts/MomFab.json";
 import * as Operator from "../artifacts/Operator.json";
 import * as Pep from "../artifacts/Pep.json";
 import * as Pip from "../artifacts/Pip.json";
+import * as Rocket from "../artifacts/Rocket.json";
 import * as SafeMath from "../artifacts/SafeMath.json";
 import * as SaiFab from "../artifacts/SaiFab.json";
 import * as SaiMom from "../artifacts/SaiMom.json";
@@ -86,6 +87,7 @@ export const artifacts: Artifacts = {
   Operator,
   Pep,
   Pip,
+  Rocket,
   SafeMath,
   Sai,
   SaiFab,
@@ -134,6 +136,7 @@ export {
   Operator,
   Pep,
   Pip,
+  Rocket,
   SafeMath,
   Sai,
   SaiFab,
