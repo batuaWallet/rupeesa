@@ -38,6 +38,9 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
     await deploySai(wallet, addressBook);
     await initPep(wallet, addressBook);
 
+  } else if (chainId === "5") {
+    console.log(`Migrations for Goerli testnet: ACTIVATED!`);
+
   } else {
     throw new Error(`Migrations for chain ${chainId} are not supported.`);
   }
