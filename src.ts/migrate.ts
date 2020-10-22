@@ -70,6 +70,7 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
 
     await deployPep(wallet, addressBook);
     await deployGov(wallet, addressBook);
+    await deploySai(wallet, addressBook);
 
   } else {
     throw new Error(`Migrations for chain ${chainId} are not supported.`);
