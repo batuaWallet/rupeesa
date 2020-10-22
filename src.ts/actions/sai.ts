@@ -148,7 +148,7 @@ export const deploySai = async (wallet: Wallet, addressBook: AddressBook): Promi
     const drawAmt = BigNumber.from(inrPerEth).mul(depositAmount).div(Two);
 
     console.log(`Drawing ${formatEther(drawAmt)} Sai from cup ${cup}`);
-    await (await tub.draw(cup, drawAmt)).wait();
+    await (await tub.draw(cup, drawAmt, { gasLimit: parseUnits("50", 6) })).wait();
     console.log(`Drew a bunch of Sai`);
 
   }

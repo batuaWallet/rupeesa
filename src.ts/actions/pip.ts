@@ -1,3 +1,4 @@
+import { Zero } from "@ethersproject/constants";
 import { BigNumber, providers, utils, Wallet } from "ethers";
 import { Argv } from "yargs";
 
@@ -25,12 +26,16 @@ export const deployPip = async (wallet: Wallet, addressBook: AddressBook): Promi
   const pip = addressBook.getContract("Pip").connect(wallet);
   const operator = addressBook.getContract("Operator").connect(wallet);
 
-  console.log(`Approving link tokens`);
-  await (await link["approve(address,uint256)"](pip.address, parseEther("100"))).wait();
+  // Give pip some LINK if it doesn't have any yet
+  if ((await link.balanceOf(pip.address)).eq(Zero)) {
+    console.log(`Approving link tokens`);
+    await (await link["approve(address,uint256)"](pip.address, parseEther("100"))).wait();
+    console.log(`Sending pip some link tokens & eth`);
+    await (await link["transfer(address,uint256)"](pip.address, parseEther("100"))).wait();
+    await (await wallet.sendTransaction({ to: chainlinkNodeAddress, value: parseEther("1") })).wait();
+  }
 
-  console.log(`Sending pip some link tokens & eth`);
-  await (await link["transfer(address,uint256)"](pip.address, parseEther("10"))).wait();
-  await (await wallet.sendTransaction({ to: chainlinkNodeAddress, value: parseEther("1") })).wait();
+  // Configure Pip's operator & Job ID
 
   console.log(`Giving ${chainlinkNodeAddress} fulfillment permissions on operator contract`);
   await (await operator.setFulfillmentPermission(chainlinkNodeAddress, true)).wait();
