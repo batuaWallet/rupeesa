@@ -29,7 +29,7 @@ export const deployContracts = async (
 
     const savedCreationCodeHash = addressBook.getEntry(name).creationCodeHash;
     const creationCodeHash = hash(artifacts[name].bytecode || "0x00");
-    if (!savedCreationCodeHash || savedCreationCodeHash !== creationCodeHash) {
+    if (savedCreationCodeHash && savedCreationCodeHash !== creationCodeHash) {
       log.info(`creationCodeHash in our address book doen't match ${name} artifacts`);
       return false;
     }
@@ -41,7 +41,7 @@ export const deployContracts = async (
       return false;
     }
 
-    if (savedRuntimeCodeHash !== runtimeCodeHash) {
+    if (savedCreationCodeHash && savedRuntimeCodeHash !== runtimeCodeHash) {
       log.info(`runtimeCodeHash for ${address} does not match what's in our address book`);
       return false;
     }
