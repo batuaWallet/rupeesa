@@ -8,7 +8,7 @@ import { deployContracts } from "./contracts";
 const { formatEther, hexZeroPad, parseEther, parseUnits } = utils;
 
 export const deploySai = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
-  console.log(`\nGetting Sai`);
+  console.log(`\nDeploying Sai`);
 
   await deployContracts(wallet, addressBook, [
     ["GemFab", []],
@@ -22,12 +22,10 @@ export const deploySai = async (wallet: Wallet, addressBook: AddressBook): Promi
     ["SaiFab", ["GemFab", "VoxFab", "TubFab", "TapFab", "TopFab", "MomFab", "DadFab"]],
   ]);
 
-  const weth = addressBook.getContract("Weth").connect(wallet);
   const fab = addressBook.getContract("SaiFab").connect(wallet); // builder
-  let tx;
-
-  console.log("\nChecking SCD..");
+  const weth = addressBook.getContract("Weth").connect(wallet);
   let step;
+  let tx;
 
   step = await fab.step();
   console.log(`Fab ${fab.address} is on step ${step}`);

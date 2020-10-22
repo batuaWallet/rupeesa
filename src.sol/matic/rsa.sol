@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 pragma solidity ^0.7.0;
 
-import {StandardToken as ERC20 } from "../chainlink/vendor/StandardToken.sol";
+import "../lib/ERC20.sol";
 import "./MetaTransaction.sol";
 
 contract Rocket is ERC20, MetaTransactionStandard {

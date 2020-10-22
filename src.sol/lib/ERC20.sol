@@ -31,9 +31,10 @@ import "./SafeMath.sol";
 contract ERC20 {
     using SafeMath for uint256;
 
+    uint8 private constant _decimals = 18;
+
     string private _name;
     string private _symbol;
-    uint8 private _decimals;
     uint256 private _totalSupply;
 
     mapping (address => uint256) private _balances;
@@ -60,23 +61,22 @@ contract ERC20 {
      * these values are immutable: they can only be set once during
      * construction.
      */
-    constructor (string memory name, string memory symbol, uint8 decimals) public {
+    constructor (string memory name, string memory symbol) {
         _name = name;
         _symbol = symbol;
-        _decimals = decimals;
     }
 
     /**
      * @dev See {IERC20-totalSupply}.
      */
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() public virtual view returns (uint256) {
         return _totalSupply;
     }
 
     /**
      * @dev See {IERC20-balanceOf}.
      */
-    function balanceOf(address account) public view returns (uint256) {
+    function balanceOf(address account) public virtual view returns (uint256) {
         return _balances[account];
     }
 
@@ -88,7 +88,7 @@ contract ERC20 {
      * - `recipient` cannot be the zero address.
      * - the caller must have a balance of at least `amount`.
      */
-    function transfer(address recipient, uint256 amount) public returns (bool) {
+    function transfer(address recipient, uint256 amount) public virtual returns (bool) {
         _transfer(msg.sender, recipient, amount);
         return true;
     }
@@ -96,7 +96,7 @@ contract ERC20 {
     /**
      * @dev See {IERC20-allowance}.
      */
-    function allowance(address owner, address spender) public view returns (uint256) {
+    function allowance(address owner, address spender) public virtual view returns (uint256) {
         return _allowances[owner][spender];
     }
 
@@ -107,7 +107,7 @@ contract ERC20 {
      *
      * - `spender` cannot be the zero address.
      */
-    function approve(address spender, uint256 amount) public returns (bool) {
+    function approve(address spender, uint256 amount) public virtual returns (bool) {
         _approve(msg.sender, spender, amount);
         return true;
     }
@@ -124,7 +124,7 @@ contract ERC20 {
      * - the caller must have allowance for `sender`'s tokens of at least
      * `amount`.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
+    function transferFrom(address sender, address recipient, uint256 amount) public virtual returns (bool) {
         _transfer(sender, recipient, amount);
         _approve(
             sender,
@@ -149,7 +149,7 @@ contract ERC20 {
      *
      * - `spender` cannot be the zero address.
      */
-    function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
+    function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
         _approve(msg.sender, spender, _allowances[msg.sender][spender].add(addedValue));
         return true;
     }
@@ -168,7 +168,7 @@ contract ERC20 {
      * - `spender` must have allowance for the caller of at least
      * `subtractedValue`.
      */
-    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
+    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
         _approve(
             msg.sender,
             spender,

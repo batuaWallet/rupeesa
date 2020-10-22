@@ -1,4 +1,6 @@
-pragma solidity ^0.7.1;
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+pragma solidity ^0.7.0;
 
 contract EIP712Base {
 
@@ -9,7 +11,9 @@ contract EIP712Base {
         address verifyingContract;
     }
 
-    bytes32 internal constant EIP712_DOMAIN_TYPEHASH = keccak256(bytes("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"));
+    bytes32 internal constant EIP712_DOMAIN_TYPEHASH = keccak256(bytes(
+      "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
+    ));
 
     bytes32 internal domainSeperator;
 

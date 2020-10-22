@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 pragma solidity ^0.7.0;
 
 import "./lib/EIP712Base.sol";
@@ -5,7 +7,9 @@ import "../lib/SafeMath.sol";
 
 contract MetaTransactionStandard is EIP712Base {
     using SafeMath for uint256;
-    bytes32 private constant META_TRANSACTION_TYPEHASH = keccak256(bytes("MetaTransaction(uint256 nonce,address from,bytes functionSignature)"));
+    bytes32 private constant META_TRANSACTION_TYPEHASH = keccak256(bytes(
+      "MetaTransaction(uint256 nonce,address from,bytes functionSignature)"
+    ));
 
     event Msg(bytes32 hash);
     event MetaTransactionExecuted(address userAddress, address payable relayerAddress, bytes functionSignature);

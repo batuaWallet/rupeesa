@@ -27,7 +27,7 @@ const config: BuidlerConfig = {
     buidlerevm: {
       chainId: 1337,
       loggingEnabled: false,
-      blockGasLimit: 9000000,
+      blockGasLimit: 50000000,
       allowUnlimitedContractSize: true,
       accounts: [
         {
