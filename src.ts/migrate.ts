@@ -49,7 +49,7 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
       ["UniswapRouter", ["UniswapFactory", "Weth"]],
     ]);
 
-    // Deploy pip stuff manually so we can config it more carefully than on testnet
+    // Deploy pip stuff manually so we can config it more carefully than on ganache
     const initialPrice = "28500";
     await deployContracts(wallet, addressBook, [
       ["LinkToken", []],
@@ -69,6 +69,7 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
     }
 
     await deployPep(wallet, addressBook);
+    await deployGov(wallet, addressBook);
 
   } else {
     throw new Error(`Migrations for chain ${chainId} are not supported.`);

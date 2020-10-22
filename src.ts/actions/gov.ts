@@ -11,7 +11,7 @@ export const deployGov = async (wallet: Wallet, addressBook: AddressBook): Promi
   console.log(`\nGetting Gov`);
 
   await deployContracts(wallet, addressBook, [
-    ["Gov", [hexZeroPad(toUtf8Bytes("GOV"), 32)]],
+    ["Gov", [hexZeroPad(toUtf8Bytes("COW"), 32)]],
     ["Governance", []],
   ]);
 
@@ -20,7 +20,7 @@ export const deployGov = async (wallet: Wallet, addressBook: AddressBook): Promi
   let balance = await gov.balanceOf(wallet.address);
   if (balance.eq(Zero)) {
     console.log(`Mintin some Govs`);
-    await (await gov["mint(uint256)"](parseEther("10000"))).wait();
+    await (await gov["mint(uint256)"](parseEther("100000"))).wait();
     balance = await gov.balanceOf(wallet.address);
   }
   console.log(`GOV balance: ${formatEther(balance)}`);

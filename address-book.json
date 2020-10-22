@@ -52,6 +52,21 @@
       "creationCodeHash": "0x6d862329ca758b1a49f12d0037012bb1e2688802604615124207bbc1f9f2bae4",
       "runtimeCodeHash": "0x93735ed5b929889d5f673920ddcbbb6bb153e79f357eb8fbf4f772896bd42e91",
       "txHash": "0x3bec62cbda7597c5a5220fafc39357881b66fa5ac279a85f72458316a7616020"
+    },
+    "Gov": {
+      "address": "0x1D2ca639f3DbFE1C30E99b4c88d08Cde1b135513",
+      "args": [
+        "0x0000000000000000000000000000000000000000000000000000000000434f57"
+      ],
+      "creationCodeHash": "0xd47b7abaca82fbf58c9471552f38fbc4ed90917ced41df6f70d3aa2ba17c8336",
+      "runtimeCodeHash": "0xe63c8d28e3f388bb700466179cf4e9de089cc5da8d43567f86ebeb8d110cb673",
+      "txHash": "0x4d2b63b7ea0eeeacd8ee44232169559c7dce7190caa67521ddb756d8a5c6e8ff"
+    },
+    "Governance": {
+      "address": "0x9Bd08D22cCc0d46085394deAFFE05900e5dFafc0",
+      "creationCodeHash": "0x5d036d6fbbe285fa84dbc38836b41627d79f7dd2e7c601f15f1037700f2a9384",
+      "runtimeCodeHash": "0x675099bc29bae6d33cf5ff6d2ad5b891786afd9cf12ebdc600eec7aca00c3d55",
+      "txHash": "0xf60e9dbaa465804d4974a6ac316c8ac34f4f33861b8ce791ad02ab97e620ab0c"
     }
   },
   "1337": {
