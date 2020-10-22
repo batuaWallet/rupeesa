@@ -11,7 +11,6 @@ contract MetaTransactionStandard is EIP712Base {
       "MetaTransaction(uint256 nonce,address from,bytes functionSignature)"
     ));
 
-    event Msg(bytes32 hash);
     event MetaTransactionExecuted(address userAddress, address payable relayerAddress, bytes functionSignature);
     mapping(address => uint256) private nonces;
 
@@ -66,19 +65,6 @@ contract MetaTransactionStandard is EIP712Base {
         nonce = nonces[user];
     }
 
-    function getMsg(address userAddress, bytes memory functionSignature) public returns(bytes32) {
-
-        MetaTransaction memory metaTx = MetaTransaction({
-            nonce: nonces[userAddress],
-            from: userAddress,
-            functionSignature: functionSignature
-        });
-
-
-        emit Msg(META_TRANSACTION_TYPEHASH);
-        emit Msg(toTypedMessageHash(hashMetaTransaction(metaTx)));
-    }
-
     function verify(
         address user,
         MetaTransaction memory metaTx,
@@ -91,17 +77,4 @@ contract MetaTransactionStandard is EIP712Base {
         return signer == user;
     }
 
-    function msgSender() internal view returns(address sender) {
-        if(msg.sender == address(this)) {
-            bytes memory array = msg.data;
-            uint256 index = msg.data.length;
-            assembly {
-                // Load the 32 bytes word from memory with the address on the lower 20 bytes, and mask those.
-                sender := and(mload(add(array, index)), 0xffffffffffffffffffffffffffffffffffffffff)
-            }
-        } else {
-            sender = msg.sender;
-        }
-        return sender;
-    }
 }

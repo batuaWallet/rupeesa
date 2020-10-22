@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/batuaWallet/crypto-inr#readme",
   "dependencies": {
+    "@openzeppelin/contracts": "^3.2.1-solc-0.7",
+    "eth-sig-util": "^2.5.3",
     "ethers": "5.0.17",
     "yargs": "16.0.3"
   },
