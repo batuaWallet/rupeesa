@@ -16,10 +16,13 @@ node /app/ganache-core.docker.cli.js \
   --defaultBalanceEther=1000000000 \
   --gasLimit=50000000 \
   --host=0.0.0.0 \
+  --port=8545 \
   --mnemonic="$mnemonic" > /tmp/ganache.log &
 pid=$!
 
-sleep 2 # Give ganache a sec to wake up
+echo "Waiting for local ganache instance to wake up"
+wait-for -q -t 60 localhost:8545 2>&1 | sed '/nc: bad address/d'
+echo "Good morning, Ganache!"
 
 cli="dist/src.ts/cli.js"
 if [[ -f "$cli" ]]

@@ -61,6 +61,7 @@ clean: stop-all
 reset: stop-all
 	docker volume rm oracle_database 2> /dev/null || true
 	docker volume rm oracle_chainlink 2> /dev/null || true
+	rm -rf .migration-complete
 
 purge: clean reset
 	#rm -rf node_modules
