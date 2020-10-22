@@ -126,7 +126,7 @@ services:
       WALLET_FILE: '$inner_wallet_file'
       CHAINLINK_TLS_PORT: '0'
       DATABASE_URL: 'postgresql://$pg_user:$pg_password@database:5432/$pg_db?sslmode=disable'
-      ETH_CHAIN_ID: '1337'
+      ETH_CHAIN_ID: '$CHAIN_ID'
       ETH_URL: '$ETH_URL'
       GAS_UPDATER_ENABLED: 'false'
       LINK_CONTRACT_ADDRESS: '$link_address'
