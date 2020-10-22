@@ -47,52 +47,46 @@ export const initPep = async (wallet: Wallet, addressBook: AddressBook): Promise
   if (!ready) {
     console.log(`Initializing Pep`);
     await pep.init(pair.address, govIsIndexZero);
+
+    // Swap to register uniswap price updates
+    let saiBal, govBal;
+    [saiBal, govBal] = [await sai.balanceOf(wallet.address), await gov.balanceOf(wallet.address)];
+
+    const inAmt = "100";
+    console.log(`\nSwapping ${inAmt} gov for sai (saiBal=${saiBal} govBal=${govBal})`);
+    const uniswap = addressBook.getContract("UniswapRouter").connect(wallet);
+    await(await gov["approve(address,uint256)"](uniswap.address, parseEther(inAmt))).wait();
+    await(await uniswap.swapExactTokensForTokens(
+      inAmt,
+      inAmt,
+      [gov.address, sai.address],
+      wallet.address,
+      BigNumber.from(Date.now() + 1000 * 60),
+      { gasLimit: parseUnits("50", 6) },
+    )).wait();
+    let saiDiff = (await sai.balanceOf(wallet.address)).sub(saiBal);
+    [saiBal, govBal] = [await sai.balanceOf(wallet.address), await gov.balanceOf(wallet.address)];
+    console.log(`Received ${saiDiff} new sai (saiBal=${saiBal} govBal=${govBal})`);
+
+    const outAmt = "100";
+    console.log(`\nSwapping gov for ${outAmt} sai`);
+    await(await sai["approve(address,uint256)"](uniswap.address, parseEther(outAmt))).wait();
+    await(await uniswap.swapTokensForExactTokens(
+      outAmt,
+      parseEther(outAmt),
+      [sai.address, gov.address],
+      wallet.address,
+      BigNumber.from(Date.now() + 1000 * 60),
+      { gasLimit: parseUnits("50", 6) },
+    )).wait();
+    saiDiff = saiBal.sub(await sai.balanceOf(wallet.address));
+    [saiBal, govBal] = [await sai.balanceOf(wallet.address), await gov.balanceOf(wallet.address)];
+    console.log(`Spent ${saiDiff} sai (saiBal=${saiBal} govBal=${govBal})`);
+
+    await pokePep(wallet, addressBook);
   }
-  let [val, has] = await pep.peek();
+  const [val, has] = await pep.peek();
   console.log(`Pep ready=${has} value=${val}`);
-
-
-  // Swap to register uniswap price updates
-  let saiBal, govBal;
-  [saiBal, govBal] = [await sai.balanceOf(wallet.address), await gov.balanceOf(wallet.address)];
-
-  const inAmt = "100";
-  console.log(`\nSwapping ${inAmt} gov for sai (saiBal=${saiBal} govBal=${govBal})`);
-  const uniswap = addressBook.getContract("UniswapRouter").connect(wallet);
-  await(await gov["approve(address,uint256)"](uniswap.address, parseEther(inAmt))).wait();
-  await(await uniswap.swapExactTokensForTokens(
-    inAmt,
-    inAmt,
-    [gov.address, sai.address],
-    wallet.address,
-    BigNumber.from(Date.now() + 1000 * 60),
-    { gasLimit: parseUnits("50", 6) },
-  )).wait();
-  let saiDiff = (await sai.balanceOf(wallet.address)).sub(saiBal);
-  [saiBal, govBal] = [await sai.balanceOf(wallet.address), await gov.balanceOf(wallet.address)];
-  console.log(`Received ${saiDiff} new sai (saiBal=${saiBal} govBal=${govBal})`);
-
-  const outAmt = "100";
-  console.log(`\nSwapping gov for ${outAmt} sai`);
-  await(await sai["approve(address,uint256)"](uniswap.address, parseEther(outAmt))).wait();
-  await(await uniswap.swapTokensForExactTokens(
-    outAmt,
-    parseEther(outAmt),
-    [sai.address, gov.address],
-    wallet.address,
-    BigNumber.from(Date.now() + 1000 * 60),
-    { gasLimit: parseUnits("50", 6) },
-  )).wait();
-  saiDiff = saiBal.sub(await sai.balanceOf(wallet.address));
-  [saiBal, govBal] = [await sai.balanceOf(wallet.address), await gov.balanceOf(wallet.address)];
-  console.log(`Spent ${saiDiff} sai (saiBal=${saiBal} govBal=${govBal})`);
-
-  console.log(`Poking pep..`);
-  await (await pep.poke({ gasLimit: parseUnits("50", 6) })).wait();
-  console.log(`Peeking pep..`);
-  [val, has] = await pep.peek();
-  console.log(`Pep ready=${has} value=${val}`);
-  console.log(`\nPep price: ${BigNumber.from(val)}`);
 
 };
 

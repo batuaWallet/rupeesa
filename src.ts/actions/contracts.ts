@@ -8,6 +8,8 @@ const { formatEther, keccak256, parseUnits } = utils;
 
 const hash = (input: string): string => keccak256(`0x${input.replace(/^0x/, "")}`);
 
+// TODO: parse dependency tree & redeploy contracts when their dependencies are redeployed
+
 // 3rd arg is: [ContractName, [ConstructorArgs]][]
 // If a ContractName is given as a ConstructorArg, it will be replaced by that contract's address
 export const deployContracts = async (
@@ -29,7 +31,7 @@ export const deployContracts = async (
 
     const savedCreationCodeHash = addressBook.getEntry(name).creationCodeHash;
     const creationCodeHash = hash(artifacts[name].bytecode || "0x00");
-    if (!savedCreationCodeHash || savedCreationCodeHash !== creationCodeHash) {
+    if (savedCreationCodeHash && savedCreationCodeHash !== creationCodeHash) {
       log.info(`creationCodeHash in our address book doen't match ${name} artifacts`);
       return false;
     }
@@ -40,9 +42,9 @@ export const deployContracts = async (
       log.info("No runtimeCode exists at the address in our address book");
       return false;
     }
-
-    if (savedRuntimeCodeHash !== runtimeCodeHash) {
+    if (savedRuntimeCodeHash && savedRuntimeCodeHash !== runtimeCodeHash) {
       log.info(`runtimeCodeHash for ${address} does not match what's in our address book`);
+      log.info(`Saved runtime hash ${savedRuntimeCodeHash} !== onchain ${runtimeCodeHash}`);
       return false;
     }
 

@@ -1,11 +1,11 @@
-import { EtherSymbol } from "@ethersproject/constants";
+import { EtherSymbol, Zero } from "@ethersproject/constants";
 import { providers, utils, Wallet } from "ethers";
 import { Argv } from "yargs";
 
 import { deployContracts, deployPip, deployGov, deployPep, initPep, deploySai } from "./actions"; 
 import { AddressBook, getAddressBook } from "./addressBook";
 
-const { formatEther } = utils;
+const { formatEther, parseEther } = utils;
 
 export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise<void> => {
 
@@ -24,6 +24,7 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
   // Deploy contracts
 
   if (chainId === "1337") {
+    console.log(`Migrating to local ganache testnet`);
 
     // Deploy "global" things that already exist on mainnet
     await deployContracts(wallet, addressBook, [
@@ -37,6 +38,38 @@ export const migrate = async (wallet: Wallet, addressBook: AddressBook): Promise
     await deployGov(wallet, addressBook);
     await deploySai(wallet, addressBook);
     await initPep(wallet, addressBook);
+
+  } else if (chainId === "5") {
+    console.log(`Migrations for Goerli testnet: ACTIVATED!`);
+
+    // Deploy "global" things that already exist on mainnet
+    await deployContracts(wallet, addressBook, [
+      ["Weth", []],
+      ["UniswapFactory", [wallet.address]],
+      ["UniswapRouter", ["UniswapFactory", "Weth"]],
+    ]);
+
+    // Deploy pip stuff manually so we can config it more carefully than on ganache
+    const initialPrice = "28500";
+    await deployContracts(wallet, addressBook, [
+      ["LinkToken", []],
+      ["Operator", ["LinkToken"]],
+      ["Pip", ["LinkToken", initialPrice]],
+    ]);
+
+    // Give pip some LINK if it doesn't have any yet
+    const link = addressBook.getContract("LinkToken").connect(wallet);
+    const pip = addressBook.getContract("Pip").connect(wallet);
+    if ((await link.balanceOf(pip.address)).eq(Zero)) {
+      const amt = parseEther("100");
+      console.log(`Approving link tokens`);
+      await (await link["approve(address,uint256)"](pip.address, amt)).wait();
+      console.log(`Sending pip ${amt} link tokens & eth`);
+      await (await link["transfer(address,uint256)"](pip.address, amt)).wait();
+    }
+
+    await deployPep(wallet, addressBook);
+    await deployGov(wallet, addressBook);
 
   } else {
     throw new Error(`Migrations for chain ${chainId} are not supported.`);
