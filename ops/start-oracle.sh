@@ -17,6 +17,9 @@ docker network create --attachable --driver overlay "$project" 2> /dev/null || t
 default_eth_url=ws://${project}_ethprovider:8545
 
 WALLET_FILE=${WALLET_FILE:-$root/.test-wallet.json}
+WALLET_PASSWORD=${WALLET_PASSWORD:-password}
+API_USER=${API_USER:-user}
+API_PASSWORD=${API_PASSWORD:-password}
 ETH_URL=${ETH_URL:-$default_eth_url}
 DOMAINNAME=${DOMAINNAME:-localhost}
 CHAIN_ID=${CHAIN_ID:-1337}
@@ -117,9 +120,9 @@ services:
     command: ["local", "n"]
     environment:
       ALLOW_ORIGINS: '*'
-      API_USER: 'user@example.com'
-      API_PASSWORD: 'password'
-      WALLET_PASSWORD: 'password'
+      API_USER: '$API_USER'
+      API_PASSWORD: '$API_PASSWORD'
+      WALLET_PASSWORD: '$WALLET_PASSWORD'
       WALLET_FILE: '$inner_wallet_file'
       CHAINLINK_TLS_PORT: '0'
       DATABASE_URL: 'postgresql://$pg_user:$pg_password@database:5432/$pg_db?sslmode=disable'
