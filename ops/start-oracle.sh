@@ -19,6 +19,7 @@ default_eth_url=ws://${project}_ethprovider:8545
 WALLET_FILE=${WALLET_FILE:-$root/.test-wallet.json}
 ETH_URL=${ETH_URL:-$default_eth_url}
 DOMAINNAME=${DOMAINNAME:-localhost}
+CHAIN_ID=${CHAIN_ID:-1337}
 
 ########################################
 ## Configure Ethereum connection & addresses
@@ -27,25 +28,10 @@ if [[ "$ETH_URL" == "$default_eth_url" ]]
 then bash ops/start-ethprovider.sh
 fi
 
-localEthUrl=$(sed "s|${project}_ethprovider|localhost|" <<<"http://${ETH_URL#*://}" )
-
-chain_id=$(
-  payload='{"id":31415,"jsonrpc":"2.0","method":"eth_chainId","params":[]}'
-  curl -q -k -s -X POST -H "Content-Type: application/json" --data "$payload" "$localEthUrl" |\
-    jq '.result' |\
-    tr -d '"' |\
-   xargs printf "%d\n"
-)
-
-if [[ -z "$chain_id" ]]
-then echo "Failed to get a chain id from eth url: $ETH_URL" && exit 1
-else echo "Connecting to ethprovider for chain $chain_id at url $ETH_URL"
-fi
-
-link_address=$(jq '.["'"$chain_id"'"].LinkToken.address' address-book.json | tr -d '"')
+link_address=$(jq '.["'"$CHAIN_ID"'"].LinkToken.address' address-book.json | tr -d '"')
 
 if [[ -z "$link_address" || "$link_address" == "null" ]]
-then echo "Failed to find a LINK token on chain $chain_id"
+then echo "Failed to find a LINK token on chain $CHAIN_ID"
 fi
 
 ########################################
