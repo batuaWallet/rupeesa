@@ -11,26 +11,35 @@ project="$(grep -m 1 '"name":' "$root/package.json" | cut -d '"' -f 4 | tr '-' '
 docker swarm init 2> /dev/null || true
 docker network create --attachable --driver overlay "$project" 2> /dev/null || true
 
-####################
+########################################
 ## Load env vars & config
 
 default_eth_url=ws://${project}_ethprovider:8545
 
 WALLET_FILE=${WALLET_FILE:-$root/.test-wallet.json}
 ETH_URL=${ETH_URL:-$default_eth_url}
+DOMAINNAME=${DOMAINNAME:-localhost}
+
+########################################
+## Configure Ethereum connection & addresses
 
 if [[ "$ETH_URL" == "$default_eth_url" ]]
 then bash ops/start-ethprovider.sh
 fi
 
+localEthUrl=$(sed "s|${project}_ethprovider|localhost|" <<<"http://${ETH_URL#*://}" )
+
 chain_id=$(
-  curl -q -k -s -X POST -H "Content-Type: application/json" \
-    --data '{"id":31415,"jsonrpc":"2.0","method":"eth_chainId","params":[]}' \
-    "$ETH_URL"
+  payload='{"id":31415,"jsonrpc":"2.0","method":"eth_chainId","params":[]}'
+  curl -q -k -s -X POST -H "Content-Type: application/json" --data "$payload" "$localEthUrl" |\
+    jq '.result' |\
+    tr -d '"' |\
+   xargs printf "%d\n"
 )
 
 if [[ -z "$chain_id" ]]
 then echo "Failed to get a chain id from eth url: $ETH_URL" && exit 1
+else echo "Connecting to ethprovider for chain $chain_id at url $ETH_URL"
 fi
 
 link_address=$(jq '.["'"$chain_id"'"].LinkToken.address' address-book.json | tr -d '"')
@@ -38,6 +47,9 @@ link_address=$(jq '.["'"$chain_id"'"].LinkToken.address' address-book.json | tr 
 if [[ -z "$link_address" || "$link_address" == "null" ]]
 then echo "Failed to find a LINK token on chain $chain_id"
 fi
+
+########################################
+## Configure Docker Images
 
 link_image="${project}_chainlink:latest"
 db_image="postgres:12-alpine"
@@ -50,7 +62,50 @@ pg_db="$project"
 pg_user="$project"
 pg_password="$project"
 
-inner_wallet_file="/test-wallet.json"
+common="networks:
+      - '$project'
+    logging:
+      driver: 'json-file'
+      options:
+          max-size: '10m'"
+
+########################################
+## Configure Proxy/HTTPS
+
+if [[ -n "$DOMAINNAME" && "$DOMAINNAME" != "localhost" ]]
+then
+  proxy_service="
+
+  proxy:
+    $common
+    networks:
+      - '$project'
+    logging:
+      driver: 'json-file'
+      options:
+          max-size: '100m'
+    image: '${project}_proxy:latest'
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      DOMAINNAME: '$DOMAINNAME'
+      CHAINLINK_URL: 'chainlink:6688'
+    volumes:
+      - 'certs:/etc/letsencrypt'
+
+  "
+  node_ports=""
+else
+  proxy_service=""
+  node_ports="ports:
+      - '6688:6688'"
+fi
+
+########################################
+## Launch it
+
+inner_wallet_file="/wallet.json"
 
 docker_compose=$root/.${stack}.docker-compose.yml
 rm -f "$docker_compose"
@@ -62,13 +117,17 @@ networks:
     external: true
 
 volumes:
+  certs:
   chainlink:
   database:
 
 services:
 
+  $proxy_service
+
   chainlink:
     image: '$link_image'
+    $common
     command: ["local", "n"]
     environment:
       ALLOW_ORIGINS: '*'
@@ -86,10 +145,7 @@ services:
       MIN_OUTGOING_CONFIRMATIONS: '1'
       ROOT: '/root'
       SECURE_COOKIES: 'false'
-    networks:
-      - '$project'
-    ports:
-      - '6688:6688'
+    $node_ports
     tmpfs: /tmp
     volumes:
       - 'chainlink:/root'
@@ -97,14 +153,11 @@ services:
 
   database:
     image: '$db_image'
+    $common
     environment:
       POSTGRES_DB: '$pg_db'
       POSTGRES_PASSWORD: '$pg_password'
       POSTGRES_USER: '$pg_user'
-    networks:
-      - '$project'
-    ports:
-      - '5432:5432'
     tmpfs: '/tmp'
     volumes:
       - 'database:/var/lib/postgresql/data'
