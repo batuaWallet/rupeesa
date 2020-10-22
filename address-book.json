@@ -1,4 +1,9 @@
 {
+  "80001": {
+    "Rocket": {
+      "address": "0x522C4bfB9E0467c2797B74eac9E10C8d6bE3C1B4"
+    }
+  },
   "5": {
     "Weth": {
       "address": "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6"
